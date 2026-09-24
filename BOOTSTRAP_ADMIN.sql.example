@@ -1,0 +1,15 @@
+-- ONE-TIME DATA STEP AFTER YOUR FIRST ADMIN ACCOUNT HAS SIGNED UP.
+-- Replace the placeholder email before running.
+-- This does not alter the schema; it assigns an existing Auth user the Admin role.
+
+insert into public.user_roles (user_id, role)
+select id, 'admin'
+from auth.users
+where lower(email) = lower('YOUR_ADMIN_EMAIL@COMPANY.COM')
+on conflict (user_id, role) do nothing;
+
+-- Optional verification:
+select u.email, r.role
+from public.user_roles r
+join auth.users u on u.id = r.user_id
+where r.role = 'admin';
