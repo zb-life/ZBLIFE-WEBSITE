@@ -243,7 +243,14 @@
       homepage:{
         eyebrow:hero.eyebrow||'',
         title:hero.title||'',
-        subtitle:hero.subtitle||''
+        subtitle:hero.subtitle||'',
+        signature:{
+          eyebrow:featured.eyebrow||'OUR SIGNATURE',
+          title:featured.title||'REFRESHING\nBODY WIPES',
+          description:featured.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',
+          buttonLabel:featured.button_label||'SHOP NOW',
+          buttonLink:featured.button_link||'product.html'
+        }
       },
       homepageMedia:{
         hero:mediaObj(hero.media),
@@ -493,7 +500,7 @@
     const homeMedia=site.homepageMedia||{};
     const blockDefs=[
       ['hero',1,{eyebrow:site.homepage?.eyebrow||'',title:site.homepage?.title||'',subtitle:site.homepage?.subtitle||'',media:homeMedia.hero||{}}],
-      ['featured_product',2,{product_id:site.catalogProducts?.[0]?.id||null,media:homeMedia.signature||{}}],
+      ['featured_product',2,{product_id:site.catalogProducts?.[0]?.id||null,media:homeMedia.signature||{},eyebrow:site.homepage?.signature?.eyebrow||'OUR SIGNATURE',title:site.homepage?.signature?.title||'REFRESHING\nBODY WIPES',description:site.homepage?.signature?.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',button_label:site.homepage?.signature?.buttonLabel||'SHOP NOW',button_link:site.homepage?.signature?.buttonLink||'product.html'}],
       ['lifestyle_grid',3,{items:homeMedia.lifestyle||[]}],
       ['commitment',4,{media:homeMedia.commitment||{}}]
     ];
