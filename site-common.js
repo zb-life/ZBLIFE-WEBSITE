@@ -59,7 +59,7 @@ const defaults={
     id:'col-body-refresh',title:'Body Refresh',handle:'body-refresh',status:'active',description:'Refreshing essentials designed for movement, travel and everyday resets.',productIds:['prod-refreshing-wipes']
   }],
   subscriptions:{enabled:true,storefrontVisible:true,label:'Subscribe & save',discount:10,plans:[{label:'Every 4 weeks',value:'4-weeks'},{label:'Every 6 weeks',value:'6-weeks'},{label:'Every 8 weeks',value:'8-weeks'}]},
-  features:{bundlesStorefrontVisible:false,customerAccounts:true},
+  features:{bundlesStorefrontVisible:false,customerAccounts:true,announcementEnabled:true,announcementText:''},
   bundles:[
     {id:'bundle-single',name:'Single pack',qty:1,price:null,badge:'',active:true,scopeType:'product',scopeId:'prod-refreshing-wipes'},
     {id:'bundle-three',name:'3-pack',qty:3,price:230,badge:'SAVE 13%',active:true,scopeType:'product',scopeId:'prod-refreshing-wipes'},
@@ -249,7 +249,12 @@ function renderBenefits(){const site=getSite();document.querySelectorAll('.benef
 function renderShipping(){
   const site=getSite(),m=currentMarket(site),threshold=Number(m.freeShippingThreshold??site.shipping?.threshold??0),zh=currentLocale()==='zh-HK';
   const tail=site.features?.bundlesStorefrontVisible!==false?(zh?'組合更優惠':'SHOP BUNDLES & SAVE'):(zh?'日常潔淨護理':'CLEAN CARE FOR EVERYDAY MOVEMENT');
+  const announcementEnabled=site.features?.announcementEnabled!==false;
+  const customAnnouncement=String(site.features?.announcementText||'').trim();
   document.querySelectorAll('[data-shipping-announcement]').forEach(el=>{
+    if(!announcementEnabled){el.style.display='none';el.innerHTML='';return}
+    el.style.display='';
+    if(customAnnouncement){el.textContent=customAnnouncement;return}
     if(zh){
       const marketName=m.name==='Hong Kong'?'香港':m.name;
       el.innerHTML=threshold>0?`${marketName}訂單滿 ${money(threshold,m)} 免運費 <span>•</span> ${tail}`:`${marketName} ${tr('freeDelivery','FREE DELIVERY')} <span>•</span> ${tail}`;
