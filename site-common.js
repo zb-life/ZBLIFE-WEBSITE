@@ -34,7 +34,7 @@ const defaults={
     {label:'Stockists',type:'link',href:'stockists.html',visible:true},
     {label:'Community',type:'link',href:'community.html',visible:true}
   ],
-  homepage:{eyebrow:'PERFORMANCE MEETS WELLNESS',title:'CLEAN CARE\nFURTHER',subtitle:'Refresh your day. A cleaner tomorrow.'},
+  homepage:{eyebrow:'PERFORMANCE MEETS WELLNESS',title:'CLEAN CARE\nFURTHER',subtitle:'Refresh your day. A cleaner tomorrow.',signature:{eyebrow:'OUR SIGNATURE',title:'REFRESHING\nBODY WIPES',description:'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',buttonLabel:'SHOP NOW',buttonLink:'product.html'}},
   homepageMedia:{
     hero:{type:'image',src:'assets/hero-editorial.jpg',poster:'',alt:'ZIONBURG performance wellness lifestyle',autoplay:true,loop:true,controls:false},
     signature:{type:'image',src:'assets/product-editorial.jpg',poster:'',alt:'ZIONBURG Refreshing Body Wipes',autoplay:true,loop:true,controls:false},
