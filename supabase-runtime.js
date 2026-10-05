@@ -129,7 +129,7 @@
         translations:translations.get(`product:${p.id}`)||{},
         variants:variants.filter(v=>v.product_id===p.id).sort((a,b)=>(a.position||0)-(b.position||0)).map(v=>({
           id:v.id,name:v.title,state:v.state_label||'',editorialDescriptor:v.option_values?.EditorialDescriptor||'',price:major(v.price_minor),sku:v.sku||'',
-          color:v.color_hex||'#d8d8d8',image:'',inventory:invMap.get(v.id)?.quantity_on_hand||0,
+          color:v.color_hex||'#d8d8d8',image:v.option_values?.VariantImage||'',inventory:invMap.get(v.id)?.quantity_on_hand||0,
           active:v.active!==false,translations:translations.get(`variant:${v.id}`)||{}
         })),
         media:mediaByProduct.get(p.id)||[]
@@ -387,7 +387,7 @@
       const variants=(p.variants||[]).map((v,i)=>({
         id:v.id,product_id:p.id,title:v.name||`Variant ${i+1}`,sku:v.sku||null,
         price_minor:minor(v.price),currency:'HKD',state_label:v.state||null,color_hex:v.color||null,
-        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
+        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||'',VariantImage:v.image||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
         position:i+1,active:v.active!==false
       }));
       await upsert('product_variants',variants,'id');
@@ -567,5 +567,23 @@
     return data||[];
   }
 
-  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser};
+  async function uploadMedia(file,{bucket='product-media',folder='uploads'}={}){
+    if(!file) throw new Error('Choose a file to upload.');
+    if(!String(file.type||'').startsWith('image/')) throw new Error('Variant photos must be image files.');
+    const maxBytes=12*1024*1024;
+    if(file.size>maxBytes) throw new Error('Please use an image smaller than 12 MB.');
+    const access=await requireRole(['admin','editor']);
+    if(!access.ok) throw new Error('Please sign in with an Admin or Editor account.');
+    const sb=await client();
+    const ext=(String(file.name||'image').split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+    const base=String(file.name||'image').replace(/\.[^.]+$/,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,50)||'image';
+    const path=`${folder.replace(/^\/+|\/+$/g,'')}/${Date.now()}-${base}.${ext}`;
+    const {error}=await sb.storage.from(bucket).upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type||undefined});
+    if(error) throw new Error(error.message);
+    const {data}=sb.storage.from(bucket).getPublicUrl(path);
+    if(!data?.publicUrl) throw new Error('Upload completed but no public image URL was returned.');
+    return data.publicUrl;
+  }
+
+  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser,uploadMedia};
 })();
