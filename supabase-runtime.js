@@ -42,20 +42,9 @@
     clientPromise = (async()=>{
       if(!window.supabase?.createClient) throw new Error('Supabase JS library did not load.');
       const cfg=await loadSupabaseConfig();
-      const sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{
+      return window.supabase.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{
         auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
       });
-      try{
-        const probe=await fetch(cfg.supabaseUrl.replace(/\/$/,'')+'/auth/v1/health',{
-          method:'GET',
-          headers:{apikey:cfg.supabasePublishableKey,authorization:`Bearer ${cfg.supabasePublishableKey}`},
-          cache:'no-store'
-        });
-        if(!probe.ok && probe.status>=500) throw new Error(`Supabase Auth health check returned HTTP ${probe.status}`);
-      }catch(err){
-        throw new Error('Cannot reach Supabase Auth. Verify SUPABASE_URL in Netlify and that the Supabase project is running. '+(err?.message||err));
-      }
-      return sb;
     })().catch(err=>{ clientPromise=null; throw err; });
     return clientPromise;
   }
