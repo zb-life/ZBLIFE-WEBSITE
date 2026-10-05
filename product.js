@@ -46,7 +46,7 @@ function moveGallery(delta){const items=getProductMedia(currentCatalogProduct);i
 function renderEditorial(variant,product){
   const ptitle=localize(product,'title'),pdesc=localize(product,'description'),vname=variantName(variant),vstate=variantState(variant),editorials=currentLocale()==='zh-HK'?variantEditorialZh:variantEditorial;const x=editorials[variant.name]||{descriptor:(vstate||product.productType||'').toUpperCase(),headline:`MEET YOUR\n${ptitle.toUpperCase()}.`,feels:pdesc||'Designed for easy, everyday use.',made:'Movement, travel and everyday routines.',mood:vstate||'Everyday',state:vstate||'RESET'};
   const set=(id,val)=>{const el=document.getElementById(id);if(el)el.innerHTML=String(val||'').replace(/\n/g,'<br>')};
-  set('productScentTitle',vname||ptitle);set('productState',String(vstate||x.state).toUpperCase());set('productDescriptor',x.descriptor);set('meetName',(vname||ptitle).toUpperCase());set('meetHeadline',x.headline);set('feelsLike',x.feels);set('madeFor',x.made);set('moodCopy',x.mood);set('stateCopy',x.state);
+  set('productScentTitle',vname||ptitle);set('productState',String(vstate||x.state).toUpperCase());set('productDescriptor',variant.editorialDescriptor||x.descriptor);set('meetName',(vname||ptitle).toUpperCase());set('meetHeadline',x.headline);set('feelsLike',x.feels);set('madeFor',x.made);set('moodCopy',x.mood);set('stateCopy',x.state);
   const kicker=document.getElementById('productKicker');if(kicker)kicker.textContent=ptitle.toUpperCase();
   const lede=document.querySelector('.pdp-lede');if(lede)lede.textContent=pdesc||'Designed to fit naturally into an active routine.';
 }
