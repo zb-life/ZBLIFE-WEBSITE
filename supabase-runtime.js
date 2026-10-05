@@ -17,18 +17,46 @@
     'Marketplace':'marketplace','Distributor':'distributor','Pop-up':'popup','Partner':'other','Other':'other'
   }[v] || 'other');
 
+  const cleanEnvValue = value => String(value||'').trim().replace(/^['"]|['"]$/g,'');
+  async function loadSupabaseConfig(){
+    const endpoints=['/supabase-config.json','/.netlify/functions/supabase-config'];
+    const errors=[];
+    for(const endpoint of endpoints){
+      try{
+        const res=await fetch(endpoint,{cache:'no-store',headers:{accept:'application/json'}});
+        if(!res.ok){ errors.push(`${endpoint}: HTTP ${res.status}`); continue; }
+        const cfg=await res.json();
+        const supabaseUrl=cleanEnvValue(cfg.supabaseUrl||cfg.url);
+        const supabasePublishableKey=cleanEnvValue(cfg.supabasePublishableKey||cfg.supabaseAnonKey||cfg.anonKey);
+        if(supabaseUrl && supabasePublishableKey) return {supabaseUrl,supabasePublishableKey};
+        errors.push(`${endpoint}: configuration values missing`);
+      }catch(err){
+        errors.push(`${endpoint}: ${err?.message||err}`);
+      }
+    }
+    throw new Error('Supabase configuration could not be loaded. Check the Netlify SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY environment variables. '+errors.join(' | '));
+  }
+
   async function client(){
     if(clientPromise) return clientPromise;
     clientPromise = (async()=>{
       if(!window.supabase?.createClient) throw new Error('Supabase JS library did not load.');
-      const res = await fetch('/supabase-config.json', {cache:'no-store'});
-      if(!res.ok) throw new Error('Could not load Supabase configuration. Please redeploy Netlify after adding SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY.');
-      const cfg = await res.json();
-      if(!cfg.supabaseUrl || !cfg.supabasePublishableKey) throw new Error('Supabase environment variables are missing in Netlify.');
-      return window.supabase.createClient(cfg.supabaseUrl, cfg.supabasePublishableKey, {
-        auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}
+      const cfg=await loadSupabaseConfig();
+      const sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{
+        auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
       });
-    })();
+      try{
+        const probe=await fetch(cfg.supabaseUrl.replace(/\/$/,'')+'/auth/v1/health',{
+          method:'GET',
+          headers:{apikey:cfg.supabasePublishableKey,authorization:`Bearer ${cfg.supabasePublishableKey}`},
+          cache:'no-store'
+        });
+        if(!probe.ok && probe.status>=500) throw new Error(`Supabase Auth health check returned HTTP ${probe.status}`);
+      }catch(err){
+        throw new Error('Cannot reach Supabase Auth. Verify SUPABASE_URL in Netlify and that the Supabase project is running. '+(err?.message||err));
+      }
+      return sb;
+    })().catch(err=>{ clientPromise=null; throw err; });
     return clientPromise;
   }
 
