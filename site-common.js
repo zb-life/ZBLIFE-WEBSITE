@@ -349,8 +349,26 @@ function openInlineTranslationEditor(target){
   const locale=inlineEditLocale(),rec=inlineTranslationRecord(target,locale),panel=document.getElementById('zbInlineEditPanel');if(!panel)return;panel.dataset.kind=target.kind;panel._target=target;panel.querySelector('[data-inline-kind]').textContent=rec.label;panel.querySelector('[data-inline-source]').textContent=rec.source||'—';panel.querySelector('[data-inline-value]').value=rec.current||'';panel.classList.add('open');target.el?.classList.add('zb-edit-selected');panel.querySelector('[data-inline-value]').focus()
 }
 function closeInlineTranslationEditor(){const panel=document.getElementById('zbInlineEditPanel');document.querySelectorAll('.zb-edit-selected').forEach(x=>x.classList.remove('zb-edit-selected'));panel?.classList.remove('open')}
-function initStorefrontTranslationEdit(){
-  if(!storefrontTranslationEditActive()||document.body.classList.contains('admin-page'))return;const site=getSite(),admins=adminEmailList(site);if(admins.length&&!currentCustomerIsAdmin(site)){const back=encodeURIComponent(location.pathname+location.search);location.replace(`account.html?admin=1&return=${back}`);return}
+async function initStorefrontTranslationEdit(){
+  if(!storefrontTranslationEditActive()||document.body.classList.contains('admin-page'))return;
+  const site=getSite();
+  let authorised=false;
+  try{
+    if(window.ZBSupa?.requireRole){
+      const access=await ZBSupa.requireRole(['admin','editor']);
+      authorised=!!access.ok;
+    }else{
+      const admins=adminEmailList(site);
+      authorised=!admins.length||currentCustomerIsAdmin(site);
+    }
+  }catch(err){
+    console.warn('[ZB storefront edit auth]',err);
+  }
+  if(!authorised){
+    const back=encodeURIComponent(location.pathname+location.search);
+    location.replace(`account.html?admin=1&return=${back}`);
+    return;
+  }
   document.body.classList.add('storefront-edit-mode');const locale=inlineEditLocale(),langs=(site.localization?.languages||[]).filter(x=>x.enabled!==false&&x.code!=='en');
   const toolbar=document.createElement('div');toolbar.className='zb-edit-toolbar';toolbar.innerHTML=`<div class="zb-edit-toolbar-brand"><b>ZB</b><span>Translation edit mode</span></div><label>Language<select id="zbEditLocale">${langs.map(x=>`<option value="${x.code}" ${x.code===locale?'selected':''}>${x.label}</option>`).join('')}</select></label><button type="button" id="zbEditToggle" class="active">EDITING</button><a href="admin.html#markets">ADMIN</a><a href="${location.pathname}${location.search.replace(/([?&])edit=translate&?/, '$1').replace(/([?&])locale=[^&]*&?/, '$1').replace(/[?&]$/,'')||''}" id="zbEditExit">EXIT</a>`;document.body.appendChild(toolbar);
   const panel=document.createElement('aside');panel.id='zbInlineEditPanel';panel.className='zb-inline-edit-panel';panel.innerHTML=`<div class="zb-inline-edit-head"><div><span data-inline-kind>Translation</span><strong>Edit text</strong></div><button type="button" data-inline-close>×</button></div><div class="zb-inline-edit-body"><label>Source (English)<div class="zb-inline-source" data-inline-source></div></label><label>Translation<textarea rows="5" data-inline-value></textarea></label><p>Blank fields fall back to the default translation.</p><button type="button" class="btn btn-dark full" data-inline-save>SAVE TRANSLATION</button></div>`;document.body.appendChild(panel);
