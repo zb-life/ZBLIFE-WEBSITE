@@ -44,13 +44,13 @@ export async function handler(event){
 
   const productMap=new Map(products.map(p=>[p.id,p])),variantMap=new Map(variants.map(v=>[v.id,v]));
   const lineItems=[];let subtotal=0;const metadataVariants=[];
-  items.forEach((item,idx)=>{
-    const qty=Math.max(1,Math.min(50,Number(item.qty||1))),bundleQty=Math.max(1,Math.min(50,Number(item.bundleQty||1)));
+  for(let idx=0;idx<items.length;idx++){
+    const item=items[idx],qty=Math.max(1,Math.min(50,Number(item.qty||1))),bundleQty=Math.max(1,Math.min(50,Number(item.bundleQty||1)));
     const v=variantMap.get(String(item.variantId||''));const p=v&&productMap.get(v.product_id);
-    if(!v||!p||String(item.productId||'')!==p.id)throw new Error(`Item ${idx+1} is no longer available.`);
+    if(!v||!p||String(item.productId||'')!==p.id)return json(400,{error:`Item ${idx+1} is no longer available.`});
     const packs=qty*bundleQty,unit=Number(v.price_minor||0);subtotal+=unit*packs;metadataVariants.push(`${v.id}:${packs}`);
     lineItems.push({name:`${p.title} — ${v.title}`,description:'1 pack = 6 wipes',unit_amount:unit,currency:String(v.currency||'HKD').toLowerCase(),quantity:packs});
-  });
+  }
   const shipAmount=rate.free_over_minor!=null&&subtotal>=Number(rate.free_over_minor)?0:Number(rate.price_minor||0);
   const params={
     mode:'payment',
