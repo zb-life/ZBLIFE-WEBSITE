@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('heroEyebrow').textContent=ct.heroEyebrow||s.homepage.eyebrow;
   document.getElementById('heroTitle').innerHTML=(ct.heroTitle||s.homepage.title).replace(/\n/g,'<br>');
   document.getElementById('heroSubtitle').textContent=ct.heroSubtitle||s.homepage.subtitle;
+  const sig=s.homepage?.signature||defaults.homepage.signature;
+  document.getElementById('signatureEyebrow').textContent=sig.eyebrow||defaults.homepage.signature.eyebrow;
+  document.getElementById('signatureTitle').innerHTML=String(sig.title||defaults.homepage.signature.title).replace(/\n/g,'<br>');
+  document.getElementById('signatureDescription').textContent=sig.description||defaults.homepage.signature.description;
+  const signatureButton=document.getElementById('signatureButton');signatureButton.textContent=`${sig.buttonLabel||'SHOP NOW'} →`;signatureButton.href=sig.buttonLink||'product.html';
   const hm=s.homepageMedia||defaults.homepageMedia;
   renderMediaInto(document.getElementById('homeHeroMedia'),hm.hero);
   renderMediaInto(document.getElementById('homeSignatureMedia'),hm.signature);
