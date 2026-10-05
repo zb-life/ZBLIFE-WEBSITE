@@ -1,5 +1,3 @@
-let applied=null;
-
 function checkoutCountry(){return document.getElementById('country')?.value||''}
 function checkoutMarket(){
   const country=checkoutCountry();
@@ -8,9 +6,8 @@ function checkoutMarket(){
   return enabled.find(m=>(m.countries||[]).includes(country))||enabled.find(m=>(m.countries||[]).includes('Other'))||null;
 }
 function calc(){
-  const c=getCart(),sub=cartSubtotal();let disc=0;
-  if(applied)disc=applied.type==='percent'?Math.round(sub*Number(applied.value)/100):Number(applied.value||0);
-  const after=Math.max(0,sub-disc),country=checkoutCountry(),market=checkoutMarket(),ship=market?shippingFor(after,country):0,tax=market?taxFor(after,ship,country):0,total=after+ship+tax;
+  const c=getCart(),sub=cartSubtotal(),disc=0;
+  const after=sub,country=checkoutCountry(),market=checkoutMarket(),ship=market?shippingFor(after,country):0,tax=market?taxFor(after,ship,country):0,total=after+ship+tax;
   document.getElementById('checkoutItems').innerHTML=c.length?c.map(i=>`<div class="order-item"><span>${i.name}<br><small>${i.detail||''}</small></span><b>${money(i.price*i.qty,market||currentMarket())}</b></div>`).join(''):`<p>${tr('bagEmpty','Your bag is empty.')}</p>`;
   document.getElementById('coSubtotal').textContent=money(sub,market||currentMarket());document.getElementById('discountRow').style.display=disc?'flex':'none';document.getElementById('coDiscount').textContent='−'+money(disc,market||currentMarket());document.getElementById('coShipping').textContent=market?(ship?money(ship,market):tr('freeDelivery','FREE')):'—';document.getElementById('shipPrice').textContent=market?(ship?money(ship,market):tr('freeDelivery','FREE')):'—';document.getElementById('coTax').textContent=market?(tax?money(tax,market):money(0,market)):'—';document.getElementById('taxRow').style.display=getSite().markets?.taxEngine==='none'?'none':'flex';document.getElementById('coTotal').textContent=market?money(total,market):money(after,currentMarket());
   const estimate=document.getElementById('shipEstimate');if(estimate)estimate.textContent=market?.deliveryEstimate||tr('deliveryTiming','Delivery timing shown at checkout');
@@ -38,7 +35,6 @@ function clearCheckoutError(){const el=document.getElementById('checkoutError');
 document.addEventListener('DOMContentLoaded',()=>{
   renderCheckoutCountries();renderCheckoutAccount();calc();
   document.getElementById('country')?.addEventListener('change',()=>{updatePostalRequirement();const m=checkoutMarket();if(m)setMarket(m.id);calc()});
-  document.getElementById('applyDiscount').addEventListener('click',()=>{const code=document.getElementById('discountCode').value.trim().toUpperCase();applied=getSite().discounts.find(d=>d.enabled!==false&&d.code.toUpperCase()===code)||null;document.getElementById('discountMessage').textContent=applied?`${code} ${currentLocale()==='zh-HK'?'已套用。':'applied.'}`:tr('codeNotFound','Code not found.');calc()});
   document.getElementById('checkoutForm').addEventListener('submit',async e=>{
     e.preventDefault();clearCheckoutError();
     const form=e.currentTarget;if(!form.checkValidity()){form.reportValidity();return}
@@ -47,7 +43,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     const submit=document.getElementById('checkoutSubmit'),old=submit.textContent;submit.disabled=true;submit.textContent='OPENING SECURE PAYMENT…';
     const payload={
       items:c.map(i=>({productId:i.productId,variantId:i.variantId,qty:Number(i.qty||1),bundleQty:Number(i.bundleQty||1),subscription:!!i.subscription,cadence:i.cadence||null})),
-      discountCode:applied?.code||'',
       customer:{
         email:document.getElementById('email').value.trim().toLowerCase(),
         firstName:document.getElementById('firstName').value.trim(),
