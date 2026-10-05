@@ -1,13 +1,104 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZIONBURG — Cleaner Bodies. Brighter Days.</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head><body>
-<div class="announcement" data-shipping-announcement></div>
-<header class="site-header"><a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a><nav data-site-nav></nav><div class="header-actions"><button class="icon-btn" id="cartBtn">BAG <span id="cartCount">0</span></button></div></header>
-<main>
-<section class="editorial-hero"><div class="hero-copy"><span class="eyebrow" id="heroEyebrow"></span><h1 id="heroTitle"></h1><p id="heroSubtitle"></p><a class="btn btn-dark" href="product.html">EXPLORE PRODUCTS →</a></div><div class="hero-photo media-slot" id="homeHeroMedia"></div></section>
-<section class="benefit-strip"><div class="benefit"><img src="assets/plant.svg"><div><strong>PLANT-BASED</strong><small>100% plant fibre</small></div></div><div class="benefit"><img src="assets/alcohol-free.svg"><div><strong>ALCOHOL-FREE</strong><small>Gentle on skin</small></div></div><div class="benefit"><img src="assets/vitamin.svg"><div><strong>INFUSED WITH VITAMIN E</strong><small>Nourish & protect</small></div></div><div class="benefit"><img src="assets/cooling.svg"><div><strong>INSTANTLY REFRESHING</strong><small>Cools up to 3°C</small></div></div></section>
-<section class="signature" id="signature"><div class="signature-copy"><span class="eyebrow">OUR SIGNATURE</span><h2>REFRESHING<br>BODY WIPES</h2><p>A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.</p><a class="btn btn-dark" href="product.html">SHOP NOW →</a></div><div class="signature-photo media-slot" id="homeSignatureMedia"></div><div class="signature-points"><div><strong>PURIFY</strong><span>Effectively cleanses without irritation</span></div><div><strong>REFRESH</strong><span>Cooling sensation up to 3°C</span></div><div><strong>NOURISH</strong><span>With Vitamin E</span></div><div><strong>FOR A BETTER TOMORROW</strong><span>100% plant fibre</span></div></div></section>
-<section class="lifestyle-editorial"><article class="life-card"><div class="life-media media-slot" data-home-life-media="0"></div><div class="life-card-copy"><h3>FOR MOVEMENT</h3><p>Stay fresh through every workout and beyond.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="1"></div><div class="life-card-copy"><h3>FOR TRAVEL</h3><p>A clean companion, wherever you go.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="2"></div><div class="life-card-copy"><h3>FOR EVERYDAY</h3><p>Refresh, reset, repeat.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="3"></div><div class="life-card-copy"><h3>FOR A CLEANER TOMORROW</h3><p>Small choices make a bigger impact.</p><a href="page.html?slug=sustainability">OUR SUSTAINABILITY →</a></div></article></section>
-<section class="scents"><div class="scents-copy"><span class="eyebrow">A SCENT FOR EVERY YOU</span><h2>DISCOVER<br>OUR SCENTS</h2><p>Elevate your everyday with refreshing scents inspired by nature.</p><a href="product.html" class="text-link">EXPLORE ALL SCENTS →</a></div><div class="scent-grid" id="scentGrid"></div></section>
-<section class="commitment" id="about"><div class="commitment-media media-slot" id="homeCommitmentMedia"></div><div class="commitment-content"><span class="eyebrow">OUR COMMITMENT</span><h2>CLEANER BODIES.<br>BRIGHTER DAYS.</h2></div><p>We create high-performance, low-impact personal care products for a cleaner, healthier and more active world.</p></section>
-</main>
-<footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script><script src="site-common.js"></script><script src="home.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZB — Post-Sweat Reset</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="announcement" data-shipping-announcement>FREE HK DELIVERY OVER HK$300 <span>•</span> SHOP BUNDLES & SAVE</div>
+  <header class="site-header">
+    <a class="brand" href="index.html">ZB</a>
+    <nav data-site-nav></nav>
+    <div class="header-actions">
+      <button class="icon-btn" id="cartBtn" aria-label="Open cart">BAG <span id="cartCount">0</span></button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero">
+      <div class="hero-media">
+        <video id="heroVideo" autoplay muted loop playsinline poster="hero-poster.svg">
+          <source src="" type="video/mp4">
+        </video>
+        <div class="hero-fallback"></div>
+      </div>
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <div class="eyebrow" id="heroEyebrow">REFRESH ANYWHERE</div>
+        <h1 id="heroTitle">POST-SWEAT<br>RESET</h1>
+        <p id="heroSubtitle">Clean, refreshed skin for whatever’s next.</p>
+        <a class="btn btn-light" href="#shop">SHOP NOW <span>→</span></a>
+      </div>
+      <div class="hero-state">MOVE<br>RECOVER<br>REFRESH<br>GO</div>
+    </section>
+
+    <section class="section" id="shop">
+      <div class="section-head">
+        <div><h2>DISCOVER OUR SCENTS</h2><p>Six scents. Different moods. A cleaner you.</p></div>
+        <a href="#shop" class="text-link">SHOP ALL →</a>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="lifestyle-grid">
+      <article class="lifestyle-card ls1"><div><h3>POST-SWEAT RESET</h3><a href="#shop">SHOP →</a></div></article>
+      <article class="lifestyle-card ls2"><div><h3>BODY REFRESH</h3><a href="#shop">SHOP →</a></div></article>
+      <article class="lifestyle-card ls3"><div><h3>FROM WORKOUT TO WHATEVER’S NEXT</h3><a href="#shop">SHOP →</a></div></article>
+      <article class="lifestyle-card ls4"><div><h3>BETWEEN SWEAT AND SHOWER</h3><a href="#shop">SHOP →</a></div></article>
+    </section>
+
+    <section class="benefits" aria-label="Product benefits">
+      <div class="benefit-item"><img class="benefit-icon" src="assets/plant-fibre.svg" alt="" aria-hidden="true"><strong>PLANT-BASED FIBRE</strong><small>Soft, strong and effective</small></div>
+      <div class="benefit-item"><img class="benefit-icon" src="assets/alcohol-free.svg" alt="" aria-hidden="true"><strong>ALCOHOL-FREE</strong><small>Gentle on skin</small></div>
+      <div class="benefit-item"><img class="benefit-icon" src="assets/cooling-refresh.svg" alt="" aria-hidden="true"><strong>COOLING REFRESH</strong><small>Anytime, anywhere</small></div>
+      <div class="benefit-item"><img class="benefit-icon" src="assets/travel-friendly.svg" alt="" aria-hidden="true"><strong>TRAVEL-FRIENDLY</strong><small>Fits your routine</small></div>
+    </section>
+
+    <section class="bundle-section" id="bundles">
+      <div class="bundle-copy">
+        <span class="eyebrow dark">BUILD YOUR RESET</span>
+        <h2>CHOOSE ANY 3.<br>MAKE IT YOURS.</h2>
+        <p>Create a three-scent set for gym bags, commutes, travel and recovery days.</p>
+        <button class="btn btn-dark" id="bundleBtn">CHOOSE YOUR PACK →</button>
+      </div>
+      <div class="bundle-visual" id="bundleVisual"></div>
+    </section>
+
+    <section class="story" id="story">
+      <div class="story-copy">
+        <span class="eyebrow dark">MOVE WELL. LIVE BRIGHTER.</span>
+        <h2>A CLEANER<br>BRIGHTER NEXT.</h2>
+        <p>Thoughtfully designed for movement, recovery and everyday moments.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="brand">ZB</div>
+    <div>MOVE • RECOVER • REFRESH • GO</div>
+    <div class="footer-nav" data-footer-nav></div>
+    <div></div>
+  </footer>
+
+  <aside class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head"><h3>YOUR BAG</h3><button id="closeCart" class="icon-btn">✕</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="summary-row"><span>Subtotal</span><strong id="subtotal">HK$0</strong></div>
+      <p class="cart-note" data-shipping-note>Shipping calculated at checkout.</p>
+      <a href="checkout.html" class="btn btn-dark full">CHECKOUT →</a>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+
+
+  <script src="site-common.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

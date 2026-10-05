@@ -1,75 +1,116 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>ZIONBURG — Refreshing Body Wipes</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ZB — Refreshing Body Wipes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="pdp-v2">
-  <div class="announcement" data-shipping-announcement></div>
+<body>
+  <div class="announcement" data-shipping-announcement>FREE HK DELIVERY OVER HK$300 <span>•</span> SHOP BUNDLES & SAVE</div>
   <header class="site-header product-site-header">
-    <a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a>
+    <a class="brand" href="index.html">ZB</a>
     <nav data-site-nav></nav>
-    <div class="header-actions"><button class="icon-btn bag-pill" id="cartBtn">BAG <span id="cartCount">0</span></button></div>
+    <div class="header-actions">
+      <button class="icon-btn" id="cartBtn" aria-label="Open cart">BAG <span id="cartCount">0</span></button>
+    </div>
   </header>
 
-  <main class="pdp-shell">
-    <section class="pdp-top-v2">
-      <div class="pdp-gallery-v2">
-        <div class="pdp-gallery-stage media-slot" id="productGalleryMain"></div>
-        <button class="gallery-nav gallery-nav-prev" type="button" id="galleryPrev" aria-label="Previous media">←</button>
-        <button class="gallery-nav gallery-nav-next" type="button" id="galleryNext" aria-label="Next media">→</button>
-        <div class="gallery-count"><span id="galleryCurrent">01</span><i></i><span id="galleryTotal">03</span></div>
-        <div class="product-gallery-thumbs" id="productGalleryThumbs"></div>
+  <main class="pdp" id="pdpRoot">
+    <section class="pdp-top">
+      <div class="pdp-gallery-shell" aria-label="Product gallery">
+        <div class="pdp-gallery" id="pdpGallery">
+          <div class="pdp-gallery-track" id="pdpGalleryTrack">
+            <div class="pdp-media pdp-packshot pdp-slide" data-gallery-index="0">
+              <div class="pdp-pouch"><span>ZB</span><small>REFRESHING<br>BODY WIPES</small><b id="galleryScent1">MINT</b></div>
+            </div>
+            <div class="pdp-media pdp-texture pdp-slide" data-gallery-index="1">
+              <div class="wipe-fold"><i></i><i></i><i></i></div>
+              <span class="media-caption">CLEAN FEEL. ZERO FUSS.</span>
+            </div>
+            <div class="pdp-media pdp-motion pdp-slide" data-gallery-index="2">
+              <div class="motion-copy"><small>POST-SWEAT</small><strong>RESET.</strong></div>
+              <div class="mini-pouch">ZB</div>
+              <span class="media-caption">FROM WORKOUT TO WHATEVER'S NEXT.</span>
+            </div>
+          </div>
+          <button class="gallery-arrow gallery-prev" id="galleryPrev" aria-label="Previous product image">←</button>
+          <button class="gallery-arrow gallery-next" id="galleryNext" aria-label="Next product image">→</button>
+          <div class="gallery-status" aria-live="polite"><span id="galleryCurrent">1</span> / <span id="galleryTotal">3</span></div>
+          <div class="gallery-dots" id="galleryDots" aria-label="Choose product image"></div>
+        </div>
       </div>
 
-      <aside class="pdp-info-v2">
-        <div class="pdp-info-sticky">
-          <div class="pdp-kicker-row"><span class="eyebrow" id="productKicker">REFRESHING BODY WIPES</span><span class="soft-badge">ZB SIGNATURE</span></div>
-          <h1 id="productScentTitle">MINT</h1>
-          <div class="pdp-state-line"><span id="productState">ENERGISING</span><span class="dot-sep">•</span><span id="productDescriptor">COOL + CRISP</span></div>
-          <p class="pdp-lede">A portable body refresh for the moments between sweat and shower — made to slip into your gym bag, carry-on or everyday routine.</p>
-          <div class="pdp-price" id="pdpPrice">HK$88</div>
+      <aside class="pdp-info">
+        <div class="pdp-info-inner">
+          <div class="pdp-kicker">REFRESHING BODY WIPES</div>
+          <h1 id="productName">Mint</h1>
+          <div class="pdp-state" id="productState">RESET</div>
+          <p class="pdp-lede" id="productMoment">Post-workout, boxing, running, hot weather.</p>
+          <p class="pdp-desc">A portable body refresh designed for the moments between sweat and shower — made to slip into your gym bag, carry-on or everyday routine.</p>
+          <div class="pdp-price">HK$<span id="productPrice">88</span></div>
 
-          <div class="selector selector-soft">
-            <div class="selector-title"><span>CHOOSE YOUR SCENT</span><span class="muted-label" id="variantCountLabel">6 SCENTS</span></div>
-            <div class="scent-options cute-options" id="scentOptions"></div>
-          </div>
+          <div class="pdp-selector-head"><span>CHOOSE YOUR SCENT</span><strong id="selectedDescriptor">Cool • Crisp • Revived</strong></div>
+          <div class="scent-selector" id="scentSelector"></div>
 
-          <div class="selector selector-soft" id="bundleSelector">
-            <div class="selector-title"><span>CHOOSE YOUR PACK</span><span class="muted-label">BUNDLE & SAVE</span></div>
-            <div class="bundle-options cute-options" id="bundleOptions"></div>
-          </div>
+          <div class="inline-bundle" id="inlineBundle">
+            <div class="pdp-selector-head bundle-head"><span>CHOOSE YOUR PACK</span><strong id="bundleHint">BUNDLE & SAVE</strong></div>
+            <div class="pack-options" id="packOptions"></div>
 
-          <div class="selector selector-soft" id="purchaseSelector">
-            <div class="selector-title"><span>PURCHASE OPTION</span><span id="subscriptionSavings"></span></div>
-            <div class="purchase-options segmented-soft" id="purchaseOptions"></div>
-            <div id="frequencyWrap" class="frequency-wrap" style="display:none">
-              <label class="select-pill"><span>DELIVER</span><select id="subscriptionPlan"></select></label>
+            <div class="bundle-mode-wrap" id="bundleModeWrap" hidden>
+              <div class="bundle-mode" id="bundleMode">
+                <button type="button" class="active" data-mode="same">SAME SCENT</button>
+                <button type="button" data-mode="mix">MIX & MATCH</button>
+              </div>
+              <div class="same-scent-summary" id="sameScentSummary"></div>
+              <div class="mix-builder" id="mixBuilder" hidden>
+                <div class="mix-progress"><span>BUILD YOUR PACK</span><strong id="mixProgress">0 / 3 SELECTED</strong></div>
+                <div class="mix-scent-list" id="mixScentList"></div>
+              </div>
             </div>
           </div>
 
-          <button class="pdp-buy cute-primary" id="addToBag"><span>ADD TO BAG</span><b>HK$88</b></button>
-          <div class="pdp-mini-trust"><span>Plant-based fibre</span><span>Alcohol-free</span><span>Vitamin E</span></div>
+          <div class="subscription-purchase" id="subscriptionPurchase">
+            <div class="pdp-selector-head"><span>PURCHASE OPTION</span><strong id="subscriptionSavingsLabel">SUBSCRIBE & SAVE</strong></div>
+            <div class="purchase-type-options" id="purchaseTypeOptions">
+              <button type="button" class="purchase-type active" data-purchase-type="one_time"><span>ONE-TIME PURCHASE</span><strong id="oneTimePrice">HK$88</strong></button>
+              <button type="button" class="purchase-type" data-purchase-type="subscription"><span id="subscribeOptionLabel">SUBSCRIBE & SAVE</span><strong id="subscribePrice">HK$79</strong><small id="subscribeDiscountText">SAVE 10%</small></button>
+            </div>
+            <div class="subscription-frequency" id="subscriptionFrequency" hidden>
+              <label>DELIVERY FREQUENCY<select id="subscriptionPlan"></select></label>
+              <p>Recurring orders keep the same pack and scent selection until changed or cancelled. Subscription billing is handled through Stripe in the live site.</p>
+            </div>
+          </div>
 
-          <div class="accordions soft-accordions">
-            <details open><summary>THE RESET <span>+</span></summary><p id="resetCopy">Made for post-workout, running, hot-weather refresh moments and everyday movement.</p></details>
-            <details><summary>HOW TO USE <span>+</span></summary><p>Unfold, refresh where needed, and dispose after use. Ideal when a shower is not immediately available.</p></details>
-            <details><summary>PRODUCT DETAILS <span>+</span></summary><p>32 × 28 cm body wipes made with 100% plant fibre, alcohol-free and enriched with Vitamin E.</p></details>
+          <button class="pdp-buy" id="pdpAdd">ADD TO BAG — HK$88</button>
+
+          <div class="pdp-accordions">
+            <details open>
+              <summary>THE RESET</summary>
+              <p id="resetCopy">Made for post-workout, boxing, running and hot-weather refresh moments.</p>
+            </details>
+            <details>
+              <summary>HOW TO USE</summary>
+              <p>Unfold, refresh where needed, and dispose after use. Ideal for the in-between moments when a shower is not immediately available.</p>
+            </details>
+            <details>
+              <summary>PRODUCT DETAILS</summary>
+              <p>Replace any material, ingredient, dermatology and sustainability claims with your verified final product specifications before publishing.</p>
+            </details>
           </div>
         </div>
       </aside>
     </section>
 
-    <section class="pdp-editorial-v2">
-      <div class="pdp-editorial-intro">
-        <span class="eyebrow">MEET <b id="meetName">MINT</b></span>
+    <section class="pdp-editorial" id="editorialSection">
+      <div class="editorial-title">
+        <span>MEET <b id="meetName">MINT</b> —</span>
         <h2 id="meetHeadline">YOUR COOL, CRISP<br>POST-MOVEMENT RESET.</h2>
       </div>
-      <div class="pdp-fact-grid">
+      <div class="editorial-panels">
         <article><span>FEELS LIKE</span><p id="feelsLike">A clean, cooling reset after movement.</p></article>
         <article><span>MADE FOR</span><p id="madeFor">Training days, warm commutes and whatever comes next.</p></article>
         <article><span>MOOD</span><p id="moodCopy">Cool • Crisp • Revived</p></article>
@@ -77,23 +118,43 @@
       </div>
     </section>
 
-    <section class="pdp-ritual-v2">
-      <div class="ritual-media-card"><div class="ritual-media-inner" id="ritualMedia"></div><span class="floating-pill">BETWEEN SWEAT + SHOWER</span></div>
-      <div class="ritual-copy-v2">
-        <span class="eyebrow">THE EVERYDAY RESET</span>
-        <h2>THE IN-BETWEEN<br>IS THE RITUAL.</h2>
-        <p>Not every reset needs a full routine. ZB is designed for the gap between movement and your next plan — a small, easy refresh that keeps pace with the day.</p>
-        <a class="btn btn-dark cute-cta" href="index.html"><span>EXPLORE ZB</span><b>→</b></a>
+    <section class="pdp-ritual" id="ritualSection">
+      <div class="ritual-image" id="ritualMedia"><div class="ritual-pouch">ZB</div></div>
+      <div class="ritual-copy">
+        <span class="eyebrow dark" id="ritualEyebrowText">BETWEEN SWEAT AND SHOWER</span>
+        <h2 id="ritualHeadlineText">THE IN-BETWEEN IS THE RITUAL.</h2>
+        <p id="ritualBodyText">Not every reset needs a full routine. ZB is designed for the gap between movement and your next plan — a small, easy refresh that keeps pace with the day.</p>
+        <a class="btn btn-dark" id="ritualCta" href="index.html#bundles">SHOP BUNDLES →</a>
       </div>
     </section>
 
-    <section class="related-v2">
-      <div class="section-head-v2"><div><span class="eyebrow">YOUR NEXT STATE</span><h2>FIND YOUR SCENT</h2></div><a class="text-pill" href="index.html">VIEW ALL →</a></div>
-      <div class="related-scent-grid" id="relatedGrid"></div>
+    <section class="pdp-related">
+      <div class="section-head">
+        <div><h2>FIND YOUR STATE</h2><p>Six scents. Six ways to reset.</p></div>
+      </div>
+      <div class="product-grid" id="relatedGrid"></div>
     </section>
   </main>
 
-  <footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script><script src="site-common.js"></script><script src="product.js"></script>
+  <footer>
+    <div class="brand">ZB</div>
+    <div>MOVE • RECOVER • REFRESH • GO</div>
+    <div class="footer-nav" data-footer-nav></div>
+    <div></div>
+  </footer>
+
+  <aside class="drawer" id="cartDrawer" aria-hidden="true">
+    <div class="drawer-head"><h3>YOUR BAG</h3><button id="closeCart" class="icon-btn">✕</button></div>
+    <div id="cartItems" class="cart-items"></div>
+    <div class="cart-footer">
+      <div class="summary-row"><span>Subtotal</span><strong id="subtotal">HK$0</strong></div>
+      <p class="cart-note" data-shipping-note>Shipping calculated at checkout.</p>
+      <a href="checkout.html" class="btn btn-dark full">CHECKOUT →</a>
+    </div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+
+  <script src="site-common.js"></script>
+  <script src="product.js"></script>
 </body>
 </html>
