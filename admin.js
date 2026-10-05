@@ -238,7 +238,7 @@ function bindEvents(){
     const ril=e.target.closest('[data-remove-invoice-line]');if(ril){invoiceLines.splice(+ril.dataset.removeInvoiceLine,1);renderInvoiceLines();return}
     const sh=e.target.closest('[data-ship-order]');if(sh){openShipmentDialog(+sh.dataset.shipOrder);return}
   });
-  document.addEventListener('change',e=>{
+  document.addEventListener('change',async e=>{
     if(e.target.id==='interfaceTranslationLocale'){captureInterfaceTranslations(selectedInterfaceLocale);selectedInterfaceLocale=e.target.value;renderInterfaceTranslationEditor();return}
     const cu=e.target.closest('[data-community-upload]');if(cu){const type=cu.dataset.communityUpload,i=+cu.dataset.communityIndex;readAssetUpload(cu,data=>{captureGenericEditors();const key=type==='partner'?'partners':'friends';if(adminState[key]?.[i])adminState[key][i].image=data;renderGenericEditors()});return}
     if(e.target.matches('[data-language-index],#defaultLocale')){captureLanguageSettings();renderLanguageSettings();const p=currentProduct();if(p&&$('productTranslationEditors'))$('productTranslationEditors').innerHTML=translationFieldsHTML(p,'product');const c=currentCollection();if(c&&$('collectionTranslationEditors'))$('collectionTranslationEditors').innerHTML=translationFieldsHTML(c,'collection');return}
