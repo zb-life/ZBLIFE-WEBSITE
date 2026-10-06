@@ -34,13 +34,16 @@ function bundlePrice(variant,bundle){return bundle?.price==null?Number(variant.p
 
 function galleryItems(product){
   const variant=selectedVariant(product),items=[...(getProductMedia(product)||[])];
+  const variantItems=[];
   if(variant?.image){
-    const variantMedia={type:'image',src:variant.image,poster:'',alt:`${variantName(variant)} — ${localize(product,'title')}`,autoplay:false,loop:false,controls:false,_variantImage:true};
-    const duplicateIndex=items.findIndex(m=>m?.src===variant.image);
-    if(duplicateIndex>=0)items.splice(duplicateIndex,1);
-    items.unshift(variantMedia);
+    variantItems.push({type:'image',src:variant.image,poster:'',alt:`${variantName(variant)} — ${localize(product,'title')}`,autoplay:false,loop:false,controls:false,_variantImage:true});
   }
-  return items;
+  if(variant?.video){
+    variantItems.push({type:'video',src:variant.video,poster:variant.image||'',alt:`${variantName(variant)} video — ${localize(product,'title')}`,autoplay:true,loop:true,controls:true,_variantVideo:true});
+  }
+  const variantSources=new Set(variantItems.map(m=>m.src));
+  const filtered=items.filter(m=>!variantSources.has(m?.src));
+  return [...variantItems,...filtered];
 }
 function renderProductGallery(product){
   const items=galleryItems(product),main=document.getElementById('productGalleryMain'),thumbs=document.getElementById('productGalleryThumbs');
