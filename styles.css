@@ -617,3 +617,25 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
     padding:8px;
   }
 }
+
+
+/* v15.9 — keep variant product renders proportional in PDP gallery */
+.pdp-gallery-stage img.managed-media{
+  width:100%;
+  height:100%;
+  object-fit:contain!important;
+  object-position:center center!important;
+  background:#fff;
+  padding:clamp(14px,2vw,28px);
+}
+.pdp-gallery-stage video.managed-media{
+  width:100%;
+  height:100%;
+  object-fit:cover!important;
+  object-position:center center!important;
+}
+@media(max-width:600px){
+  .pdp-gallery-stage img.managed-media{
+    padding:10px;
+  }
+}
