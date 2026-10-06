@@ -670,3 +670,12 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 @media(max-width:700px){
   .variant-media-grid{grid-template-columns:1fr}
 }
+
+
+/* v16.1 — hero label follows Admin Alt / label field */
+.hero-photo:after{
+  content:attr(data-hero-label)!important;
+}
+.hero-photo[data-hero-label=""]:after{
+  display:none!important;
+}
