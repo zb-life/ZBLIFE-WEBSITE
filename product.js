@@ -32,8 +32,18 @@ function bundlesFor(site,product){const bs=getBundlesForProduct(site,product);re
 function selectedBundle(site,product){const bs=bundlesFor(site,product);return bs.find(b=>b.id===selectedBundleId)||bs[0]}
 function bundlePrice(variant,bundle){return bundle?.price==null?Number(variant.price||0):Number(bundle.price||0)}
 
+function galleryItems(product){
+  const variant=selectedVariant(product),items=[...(getProductMedia(product)||[])];
+  if(variant?.image){
+    const variantMedia={type:'image',src:variant.image,poster:'',alt:`${variantName(variant)} — ${localize(product,'title')}`,autoplay:false,loop:false,controls:false,_variantImage:true};
+    const duplicateIndex=items.findIndex(m=>m?.src===variant.image);
+    if(duplicateIndex>=0)items.splice(duplicateIndex,1);
+    items.unshift(variantMedia);
+  }
+  return items;
+}
 function renderProductGallery(product){
-  const items=getProductMedia(product),main=document.getElementById('productGalleryMain'),thumbs=document.getElementById('productGalleryThumbs');
+  const items=galleryItems(product),main=document.getElementById('productGalleryMain'),thumbs=document.getElementById('productGalleryThumbs');
   if(!main||!thumbs)return;
   if(!items.length){main.innerHTML='<div class="media-empty">NO PRODUCT MEDIA</div>';thumbs.innerHTML='';return}
   if(activeMediaIndex>=items.length)activeMediaIndex=0;
@@ -41,7 +51,7 @@ function renderProductGallery(product){
   const cur=document.getElementById('galleryCurrent'),total=document.getElementById('galleryTotal');if(cur)cur.textContent=pad2(activeMediaIndex+1);if(total)total.textContent=pad2(items.length);
   thumbs.innerHTML=items.map((m,i)=>`<button type="button" class="gallery-thumb ${i===activeMediaIndex?'active':''}" data-gallery-index="${i}" aria-label="Open gallery item ${i+1}">${m.type==='video'||m.type==='youtube'?`<span class="video-badge">PLAY</span>${m.poster?`<img src="${m.poster}" alt="">`:'<span class="thumb-video-icon">▶</span>'}`:`<img src="${m.src}" alt="">`}</button>`).join('');
 }
-function moveGallery(delta){const items=getProductMedia(currentCatalogProduct);if(!items.length)return;activeMediaIndex=(activeMediaIndex+delta+items.length)%items.length;renderProductGallery(currentCatalogProduct)}
+function moveGallery(delta){const items=galleryItems(currentCatalogProduct);if(!items.length)return;activeMediaIndex=(activeMediaIndex+delta+items.length)%items.length;renderProductGallery(currentCatalogProduct)}
 
 function renderEditorial(variant,product){
   const ptitle=localize(product,'title'),pdesc=localize(product,'description'),vname=variantName(variant),vstate=variantState(variant),editorials=currentLocale()==='zh-HK'?variantEditorialZh:variantEditorial;const x=editorials[variant.name]||{descriptor:(vstate||product.productType||'').toUpperCase(),headline:`MEET YOUR\n${ptitle.toUpperCase()}.`,feels:pdesc||'Designed for easy, everyday use.',made:'Movement, travel and everyday routines.',mood:vstate||'Everyday',state:vstate||'RESET'};
@@ -94,7 +104,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.addEventListener('click',e=>{
     const gi=e.target.closest('[data-gallery-index]');if(gi){activeMediaIndex=Number(gi.dataset.galleryIndex);renderProductGallery(currentCatalogProduct);return}
     if(e.target.closest('#galleryPrev')){moveGallery(-1);return}if(e.target.closest('#galleryNext')){moveGallery(1);return}
-    const v=e.target.closest('[data-variant]');if(v){selectedVariantId=v.dataset.variant;const variant=selectedVariant(currentCatalogProduct),url=new URL(location.href);url.searchParams.set('product',currentCatalogProduct.handle);url.searchParams.set('scent',variant.name);history.replaceState({},'',url);renderPDP();return}
+    const v=e.target.closest('[data-variant]');if(v){selectedVariantId=v.dataset.variant;activeMediaIndex=0;const variant=selectedVariant(currentCatalogProduct),url=new URL(location.href);url.searchParams.set('product',currentCatalogProduct.handle);url.searchParams.set('scent',variant.name);history.replaceState({},'',url);renderPDP();return}
     const b=e.target.closest('[data-bundle-id]');if(b){selectedBundleId=b.dataset.bundleId;renderPDP();return}
     const p=e.target.closest('[data-purchase]');if(p){purchaseType=p.dataset.purchase;renderPDP();return}
     if(e.target.closest('#addToBag')){
