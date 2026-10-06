@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('signatureDescription').textContent=sig.description||defaults.homepage.signature.description;
   const signatureButton=document.getElementById('signatureButton');signatureButton.textContent=`${sig.buttonLabel||'SHOP NOW'} →`;signatureButton.href=sig.buttonLink||'product.html';
   const hm=s.homepageMedia||defaults.homepageMedia;
-  renderMediaInto(document.getElementById('homeHeroMedia'),hm.hero);
+  const heroHost=document.getElementById('homeHeroMedia');
+  if(heroHost)heroHost.dataset.heroLabel=String(hm.hero?.alt||'').trim();
+  renderMediaInto(heroHost,hm.hero);
   renderMediaInto(document.getElementById('homeSignatureMedia'),hm.signature);
   document.querySelectorAll('[data-home-life-media]').forEach((el,i)=>renderMediaInto(el,(hm.lifestyle||[])[i]));
   renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
