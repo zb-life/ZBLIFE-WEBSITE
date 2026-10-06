@@ -129,7 +129,7 @@
         translations:translations.get(`product:${p.id}`)||{},
         variants:variants.filter(v=>v.product_id===p.id).sort((a,b)=>(a.position||0)-(b.position||0)).map(v=>({
           id:v.id,name:v.title,state:v.state_label||'',editorialDescriptor:v.option_values?.EditorialDescriptor||'',price:major(v.price_minor),sku:v.sku||'',
-          color:v.color_hex||'#d8d8d8',image:v.option_values?.VariantImage||'',inventory:invMap.get(v.id)?.quantity_on_hand||0,
+          color:v.color_hex||'#d8d8d8',image:v.option_values?.VariantImage||'',video:v.option_values?.VariantVideo||'',inventory:invMap.get(v.id)?.quantity_on_hand||0,
           active:v.active!==false,translations:translations.get(`variant:${v.id}`)||{}
         })),
         media:mediaByProduct.get(p.id)||[]
@@ -387,7 +387,7 @@
       const variants=(p.variants||[]).map((v,i)=>({
         id:v.id,product_id:p.id,title:v.name||`Variant ${i+1}`,sku:v.sku||null,
         price_minor:minor(v.price),currency:'HKD',state_label:v.state||null,color_hex:v.color||null,
-        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||'',VariantImage:v.image||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
+        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||'',VariantImage:v.image||'',VariantVideo:v.video||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
         position:i+1,active:v.active!==false
       }));
       await upsert('product_variants',variants,'id');
@@ -569,9 +569,11 @@
 
   async function uploadMedia(file,{bucket='product-media',folder='uploads'}={}){
     if(!file) throw new Error('Choose a file to upload.');
-    if(!String(file.type||'').startsWith('image/')) throw new Error('Variant photos must be image files.');
-    const maxBytes=12*1024*1024;
-    if(file.size>maxBytes) throw new Error('Please use an image smaller than 12 MB.');
+    const type=String(file.type||'');
+    const isImage=type.startsWith('image/'),isVideo=type.startsWith('video/');
+    if(!isImage&&!isVideo) throw new Error('Please upload an image or video file.');
+    const maxBytes=(isVideo?60:12)*1024*1024;
+    if(file.size>maxBytes) throw new Error(isVideo?'Please use a video smaller than 60 MB.':'Please use an image smaller than 12 MB.');
     const access=await requireRole(['admin','editor']);
     if(!access.ok) throw new Error('Please sign in with an Admin or Editor account.');
     const sb=await client();
