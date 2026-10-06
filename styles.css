@@ -639,3 +639,34 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
     padding:10px;
   }
 }
+
+
+/* v16.0 — variant photo + video editor */
+.variant-media-editor{padding-top:8px}
+.variant-media-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.variant-media-grid>div{min-width:0}
+.variant-image-preview,.variant-video-preview{
+  width:100%;
+  aspect-ratio:4/3;
+  border:1px solid var(--line-solid,#ddd);
+  border-radius:14px;
+  overflow:hidden;
+  background:#f5f3ef;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#777;
+  font-size:12px;
+  margin:7px 0 10px;
+}
+.variant-image-preview img,.variant-video-preview video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  background:#fff;
+}
+.variant-media-editor label{margin:9px 0}
+.variant-media-editor input[type=file]{background:#fff}
+@media(max-width:700px){
+  .variant-media-grid{grid-template-columns:1fr}
+}
