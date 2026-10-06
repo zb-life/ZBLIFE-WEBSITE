@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   const visibleLifeCount=lifeCards.filter((card,i)=>lifeItems[i]?.visible!==false).length;
   const lifeGrid=document.querySelector('.lifestyle-editorial');
-  if(lifeGrid&&visibleLifeCount)lifeGrid.style.gridTemplateColumns=`repeat(${visibleLifeCount},minmax(0,1fr))`;
+  if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
   renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
   document.getElementById('scentGrid').innerHTML=variants.map(v=>{const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'';return `<a class="scent-card" href="product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}"><img src="${v.image||''}" alt="${vn}"><strong>${vn.toUpperCase()}</strong><small>${vs}</small></a>`}).join('');
 });
