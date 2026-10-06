@@ -185,7 +185,7 @@
     const featured = homeBlocks.find(b=>b.block_type==='featured_product')?.settings||{};
     const lifestyle = homeBlocks.find(b=>b.block_type==='lifestyle_grid')?.settings||{};
     const commitment = homeBlocks.find(b=>b.block_type==='commitment')?.settings||{};
-    const mediaObj = m => m ? {type:m.type||'image',src:String(m.src||'').replace(/^\//,''),poster:m.poster||'',alt:m.alt||'',autoplay:m.autoplay!==false,loop:m.loop!==false,controls:!!m.controls} : null;
+    const mediaObj = m => m ? {type:m.type||'image',src:String(m.src||'').replace(/^\//,''),poster:m.poster||'',alt:m.alt||'',autoplay:m.autoplay!==false,loop:m.loop!==false,controls:!!m.controls,visible:m.visible!==false} : null;
 
     const legacyPages = pages.filter(p=>p.handle!=='home').map(p=>{
       const b=blocks.find(x=>x.page_id===p.id && x.block_type==='editorial_text');
