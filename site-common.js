@@ -39,10 +39,10 @@ const defaults={
     hero:{type:'image',src:'assets/hero-editorial.jpg',poster:'',alt:'ZIONBURG performance wellness lifestyle',autoplay:true,loop:true,controls:false},
     signature:{type:'image',src:'assets/product-editorial.jpg',poster:'',alt:'ZIONBURG Refreshing Body Wipes',autoplay:true,loop:true,controls:false},
     lifestyle:[
-      {type:'image',src:'assets/movement.jpg',poster:'',alt:'For movement',autoplay:true,loop:true,controls:false},
-      {type:'image',src:'assets/travel.jpg',poster:'',alt:'For travel',autoplay:true,loop:true,controls:false},
-      {type:'image',src:'assets/everyday.jpg',poster:'',alt:'For everyday',autoplay:true,loop:true,controls:false},
-      {type:'image',src:'assets/nature.jpg',poster:'',alt:'For a cleaner tomorrow',autoplay:true,loop:true,controls:false}
+      {type:'image',src:'assets/movement.jpg',poster:'',alt:'For movement',autoplay:true,loop:true,controls:false,visible:true},
+      {type:'image',src:'assets/travel.jpg',poster:'',alt:'For travel',autoplay:true,loop:true,controls:false,visible:true},
+      {type:'image',src:'assets/everyday.jpg',poster:'',alt:'For everyday',autoplay:true,loop:true,controls:false,visible:true},
+      {type:'image',src:'assets/nature.jpg',poster:'',alt:'For a cleaner tomorrow',autoplay:true,loop:true,controls:false,visible:true}
     ],
     commitment:{type:'image',src:'assets/nature.jpg',poster:'',alt:'A cleaner tomorrow',autoplay:true,loop:true,controls:false}
   },
