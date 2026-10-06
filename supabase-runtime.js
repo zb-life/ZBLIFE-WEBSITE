@@ -587,5 +587,33 @@
     return data.publicUrl;
   }
 
-  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser,uploadMedia};
+  async function syncHomepageMedia(slot,media,index=0){
+    const access=await requireRole(['admin','editor']);
+    if(!access.ok) throw new Error('Please sign in with an Admin or Editor account.');
+    const sb=await client();
+    let {data:homeRows,error:homeErr}=await sb.from('pages').select('id').eq('handle','home').limit(1);
+    if(homeErr) throw new Error('pages: '+homeErr.message);
+    const homeId=homeRows?.[0]?.id;
+    if(!homeId) throw new Error('Homepage record was not found.');
+    const blockType=slot==='hero'?'hero':slot==='signature'?'featured_product':slot==='commitment'?'commitment':'lifestyle_grid';
+    const {data:rows,error}=await sb.from('page_blocks').select('id,settings').eq('page_id',homeId).eq('block_type',blockType).limit(1);
+    if(error) throw new Error('page_blocks: '+error.message);
+    const row=rows?.[0];
+    if(!row) throw new Error('Homepage '+blockType+' block was not found.');
+    const settings={...(row.settings||{})};
+    if(slot==='lifestyle'){
+      const items=Array.isArray(settings.items)?[...settings.items]:[];
+      while(items.length<=index) items.push({});
+      items[index]=media||{};
+      settings.items=items;
+    }else{
+      settings.media=media||{};
+    }
+    const {error:updateError}=await sb.from('page_blocks').update({settings}).eq('id',row.id);
+    if(updateError) throw new Error('page_blocks: '+updateError.message);
+    sessionStorage.removeItem(HYDRATED_KEY);
+    return true;
+  }
+
+  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser,uploadMedia,syncHomepageMedia};
 })();
