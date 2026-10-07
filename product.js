@@ -33,17 +33,19 @@ function selectedBundle(site,product){const bs=bundlesFor(site,product);return b
 function bundlePrice(variant,bundle){return bundle?.price==null?Number(variant.price||0):Number(bundle.price||0)}
 
 function galleryItems(product){
-  const variant=selectedVariant(product),items=[...(getProductMedia(product)||[])];
-  const variantItems=[];
+  const variant=selectedVariant(product),variantItems=[];
   if(variant?.image){
     variantItems.push({type:'image',src:variant.image,poster:'',alt:`${variantName(variant)} — ${localize(product,'title')}`,autoplay:false,loop:false,controls:false,_variantImage:true});
   }
-  if(variant?.video){
+  for(const m of (Array.isArray(variant?.gallery)?variant.gallery:[])){
+    if(!m?.src)continue;
+    variantItems.push({type:m.type||'image',src:m.src,poster:m.poster||variant?.image||'',alt:m.alt||`${variantName(variant)} — ${localize(product,'title')}`,autoplay:m.type==='video',loop:m.type==='video',controls:m.type==='video'});
+  }
+  if(variant?.video && !variantItems.some(m=>m.src===variant.video)){
     variantItems.push({type:'video',src:variant.video,poster:variant.image||'',alt:`${variantName(variant)} video — ${localize(product,'title')}`,autoplay:true,loop:true,controls:true,_variantVideo:true});
   }
-  const variantSources=new Set(variantItems.map(m=>m.src));
-  const filtered=items.filter(m=>!variantSources.has(m?.src));
-  return [...variantItems,...filtered];
+  if(variantItems.length)return variantItems;
+  return [...(getProductMedia(product)||[])];
 }
 function renderProductGallery(product){
   const items=galleryItems(product),main=document.getElementById('productGalleryMain'),thumbs=document.getElementById('productGalleryThumbs');
