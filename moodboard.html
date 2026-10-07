@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ZIONBURG — Moodboard Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="moodboard.css">
+</head>
+<body class="moodboard-page">
+  <div class="announcement" data-shipping-announcement></div>
+  <header class="site-header moodboard-header">
+    <a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a>
+    <nav data-site-nav></nav>
+    <div class="header-actions"><button class="icon-btn" id="cartBtn">BAG <span id="cartCount">0</span></button></div>
+  </header>
+
+  <main class="moodboard-shell">
+    <section class="moodboard-intro">
+      <div>
+        <span class="eyebrow">ZB / VISUAL JOURNAL</span>
+        <h1>MOVE.<br>RESET.<br>REFRESH.</h1>
+      </div>
+      <div class="moodboard-intro-copy">
+        <p>A living moodboard for movement, scent, recovery and everyday rituals.</p>
+        <a class="moodboard-pill moodboard-pill-dark" href="product.html">SHOP THE WIPES ↗</a>
+      </div>
+    </section>
+
+    <section class="moodboard-filter" aria-label="Moodboard filters">
+      <button class="active" data-board-filter="all">ALL</button>
+      <button data-board-filter="product">PRODUCT</button>
+      <button data-board-filter="movement">MOVEMENT</button>
+      <button data-board-filter="scent">SCENTS</button>
+      <button data-board-filter="ritual">RITUALS</button>
+    </section>
+
+    <section class="moodboard-grid" id="moodboardGrid"></section>
+  </main>
+
+  <footer></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-runtime.js"></script>
+  <script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script>
+  <script src="site-common.js"></script>
+  <script src="moodboard.js"></script>
+</body>
+</html>
