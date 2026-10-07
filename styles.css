@@ -1540,5 +1540,6 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 .pj-mood-cta-wrap .pj-text-link{margin-top:0}
 
 /* v17.4 — variant-colour editorial mood section */
+.pinterest-pdp .pdp-editorial-v2{transition:background-color .25s ease}
 .pinterest-pdp .pdp-editorial-intro .eyebrow,
-.pinterest-pdp #meetHeadline{transition:color .25s ease}
+.pinterest-pdp #meetHeadline{color:inherit!important}
