@@ -100,3 +100,19 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(a)a.href=href;if(shop)shop.href=href;if(img&&m.image){img.src=m.image;img.alt=m.title||''}if(title)title.textContent=m.title||'';if(sub)sub.textContent=m.subtitle||'';
   });
 });
+
+
+// v17.2 dedicated editable Visual Journal
+document.addEventListener('DOMContentLoaded',()=>{
+  const site=getSite(),host=document.getElementById('visualJournalGrid');if(!host)return;
+  const life=site.homepageMedia?.lifestyle||[];
+  const stored=Array.isArray(site.homepage?.journal)?site.homepage.journal:[];
+  const journal=(stored.length?stored:life.slice(0,4).map((m,i)=>({image:m?.src||'',alt:m?.alt||'',size:i===0||i===2?'tall':'standard',visible:m?.visible!==false}))).filter(x=>x?.visible!==false);
+  const cards=[];
+  journal.forEach((j,i)=>{
+    cards.push(`<article class="pj-pin ${j.size==='tall'?'pj-pin-tall':''}"><img class="pj-journal-image" src="${String(j.image||'').replace(/"/g,'&quot;')}" alt="${String(j.alt||'Visual journal image').replace(/"/g,'&quot;')}" loading="lazy"></article>`);
+    if(i===1)cards.push('<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>FOR THE IN-BETWEEN</h3><p>Between shower and everywhere else.</p></div></article>');
+  });
+  if(journal.length<2)cards.push('<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>FOR THE IN-BETWEEN</h3><p>Between shower and everywhere else.</p></div></article>');
+  host.innerHTML=cards.join('');
+});

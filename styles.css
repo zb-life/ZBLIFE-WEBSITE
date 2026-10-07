@@ -1524,3 +1524,13 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 .pj-mood-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.pj-mood-options .scent-chip{position:relative;min-height:150px;padding:0!important;border-radius:0!important;overflow:hidden;background:#e7e0d7!important}.pj-mood-options .scent-chip img.pj-mood-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.pj-mood-options .scent-chip:after{content:"";position:absolute;inset:42% 0 0;background:linear-gradient(0deg,rgba(0,0,0,.6),transparent)}.pj-mood-options .scent-chip-copy{position:absolute;z-index:2;left:12px;right:12px;bottom:11px;color:#fff}.pj-mood-options .scent-chip-copy strong{display:block;font-family:"DM Serif Display",Georgia,serif;font-size:20px;font-weight:400}.pj-mood-options .scent-chip-copy small{color:rgba(255,255,255,.78);font-size:8px;letter-spacing:.1em}.pj-mood-options .scent-chip-dot,.pj-mood-options .chip-check{display:none!important}
 @media(max-width:920px){.pj-hero{grid-template-columns:1fr;min-height:0}.pj-hero-media{min-height:70vw;order:-1}.pj-hero-copy{padding:48px 24px 54px}.pj-mood-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pj-masonry{columns:3 210px}.pj-story{grid-template-columns:1fr!important}.pj-signature-media{min-height:75vw}}
 @media(max-width:600px){.pj-hero-media{min-height:118vw}.pj-hero-copy h1{font-size:clamp(54px,17vw,76px)}.pj-mood-section,.pj-journal{padding:48px 16px}.pj-section-head{align-items:start}.pj-section-head>a{display:none}.pj-mood-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 10px}.pj-mood-meta{display:block;padding-top:9px}.pj-mood-meta h3{font-size:20px}.pj-mood-meta p{display:none}.pj-mood-meta>a{display:inline-block;margin-top:7px;font-size:7px}.pj-masonry{columns:2 140px;column-gap:10px}.pj-masonry .pj-pin{margin-bottom:10px}.pj-masonry .life-media{min-height:240px}.pj-masonry .pj-pin-tall .life-media{min-height:340px}.pj-quote{min-height:220px}.pj-quote .life-card-copy{padding:22px 16px}.pj-quote .life-card-copy h3{font-size:24px}.pj-story-copy{padding:52px 20px}.pj-signature-media{min-height:115vw}.pj-mood-options .scent-chip{min-height:135px}}
+
+
+/* v17.2 — editable Visual Journal + trimmed product page */
+.pj-masonry .pj-pin>.pj-journal-image{display:block;width:100%;height:360px;object-fit:cover;object-position:center}
+.pj-masonry .pj-pin-tall>.pj-journal-image{height:520px}
+.pinterest-pdp .pdp-editorial-v2{margin-bottom:0}
+@media(max-width:600px){
+  .pj-masonry .pj-pin>.pj-journal-image{height:240px}
+  .pj-masonry .pj-pin-tall>.pj-journal-image{height:340px}
+}
