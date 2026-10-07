@@ -1622,3 +1622,84 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
   .pinterest-home .pj-mood-meta h3{font-size:25px}
   .pinterest-home .pj-mood-meta p{font-size:12px}
 }
+
+/* v17.9 — contemporary all-serif public homepage */
+.pinterest-home{
+  font-family:"Newsreader",Georgia,serif!important;
+}
+.pinterest-home .site-header,
+.pinterest-home .site-header a,
+.pinterest-home .site-header button,
+.pinterest-home footer,
+.pinterest-home footer a{
+  font-family:"Newsreader",Georgia,serif!important;
+}
+.pinterest-home #heroEyebrow{
+  font-family:"Instrument Serif",Georgia,serif!important;
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(24px,2.2vw,38px);
+  line-height:1;
+  letter-spacing:-.025em;
+  text-transform:none;
+}
+.pinterest-home .pj-hero-copy h1,
+.pinterest-home .pj-section-head h2,
+.pinterest-home .pj-mood-meta h3,
+.pinterest-home .pj-quote .life-card-copy h3,
+.pinterest-home .pj-products .scents-copy h2,
+.pinterest-home .commitment h2{
+  font-family:"Instrument Serif",Georgia,serif!important;
+  font-weight:400;
+}
+.pinterest-home .pj-hero-copy h1{
+  font-size:clamp(68px,7.4vw,122px);
+  line-height:.84;
+  letter-spacing:-.045em;
+}
+.pinterest-home .pj-section-head h2{
+  font-size:clamp(50px,5.4vw,84px);
+  letter-spacing:-.03em;
+}
+.pinterest-home .pj-mood-meta h3{
+  font-size:clamp(30px,2.4vw,40px);
+  line-height:1;
+  letter-spacing:-.02em;
+}
+.pinterest-home .pj-products .scents-copy h2{
+  font-size:clamp(58px,6vw,92px);
+  line-height:.9;
+}
+.pinterest-home .pj-hero-copy p,
+.pinterest-home .pj-mood-meta p,
+.pinterest-home .pj-products .scents-copy p,
+.pinterest-home .commitment p,
+.pinterest-home .pj-quote .life-card-copy p{
+  font-family:"Newsreader",Georgia,serif!important;
+  font-weight:400;
+}
+.pinterest-home .pj-hero-copy p{
+  font-size:clamp(16px,1.25vw,20px);
+}
+.pinterest-home .pj-mood-meta p{
+  font-size:clamp(13px,1vw,16px);
+}
+.pinterest-home .pj-text-link,
+.pinterest-home .eyebrow,
+.pinterest-home .scent-card>strong,
+.pinterest-home .scent-card>small{
+  font-family:"Newsreader",Georgia,serif!important;
+}
+.pinterest-home .pj-text-link{
+  font-size:clamp(12px,.95vw,15px);
+  letter-spacing:.1em;
+}
+.pinterest-home .eyebrow:not(#heroEyebrow){
+  font-size:clamp(12px,.9vw,15px);
+  letter-spacing:.14em;
+}
+@media(max-width:600px){
+  .pinterest-home #heroEyebrow{font-size:26px}
+  .pinterest-home .pj-hero-copy h1{font-size:clamp(54px,15vw,76px)}
+  .pinterest-home .pj-section-head h2{font-size:48px}
+}
