@@ -1534,3 +1534,7 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
   .pj-masonry .pj-pin>.pj-journal-image{height:240px}
   .pj-masonry .pj-pin-tall>.pj-journal-image{height:340px}
 }
+
+/* v17.3 — single mood CTA */
+.pj-mood-cta-wrap{display:flex;justify-content:center;padding-top:34px}
+.pj-mood-cta-wrap .pj-text-link{margin-top:0}
