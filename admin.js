@@ -89,6 +89,45 @@ function mediaEditor(m,i,scope,label,removable=false){m=m||{};return `<div class
 function renderHomeMediaEditors(){$('homepageMediaEditors').innerHTML=homeMediaFlat().map((m,i)=>mediaEditor(m,i,'home',HOME_MEDIA_LABELS[i],false)).join('')}
 function captureHomeMedia(){const items=homeMediaFlat();document.querySelectorAll('[data-media-scope="home"]').forEach(el=>{const i=+el.dataset.mediaIndex;if(!items[i])return;el.querySelectorAll('[data-media-k]').forEach(inp=>{let v=inp.value;if(['autoplay','loop','controls','visible'].includes(inp.dataset.mediaK))v=v==='true';items[i][inp.dataset.mediaK]=v})});setHomeMediaFlat(items)}
 
+const DEFAULT_HOME_MOODS=[
+  {key:'post',title:'Post-workout',subtitle:'Cool down. Clean up. Keep moving.',scent:'Mint',image:'assets/movement.jpg',visible:true},
+  {key:'beach',title:'Beach',subtitle:'Salt, sun and somewhere to be next.',scent:'Cucumber',image:'assets/hero-editorial.jpg',visible:true},
+  {key:'travel',title:'Travel',subtitle:'A carry-on reset between places.',scent:'Amber',image:'assets/travel.jpg',visible:true},
+  {key:'slow',title:'Slow morning',subtitle:'Soft routines and nowhere to rush.',scent:'Lavender',image:'assets/everyday.jpg',visible:true},
+  {key:'night',title:'Night out',subtitle:'Refresh before the next plan.',scent:'Rose',image:'assets/product-editorial.jpg',visible:true},
+  {key:'outdoors',title:'Outdoors',subtitle:'Fresh air, long days, easy resets.',scent:'Orange',image:'assets/nature.jpg',visible:true}
+];
+function homepageMoods(){
+  adminState.homepage=adminState.homepage||{};
+  const existing=Array.isArray(adminState.homepage.moods)?adminState.homepage.moods:[];
+  adminState.homepage.moods=DEFAULT_HOME_MOODS.map((d,i)=>({...d,...(existing.find(x=>x.key===d.key)||existing[i]||{})}));
+  return adminState.homepage.moods;
+}
+function moodScentOptions(selected){
+  const p=(adminState.catalogProducts||[]).find(x=>x.status==='active')||adminState.catalogProducts?.[0];
+  const names=(p?.variants||[]).map(v=>v.name).filter(Boolean);
+  return names.map(n=>`<option value="${esc(n)}" ${n===selected?'selected':''}>${esc(n)}</option>`).join('');
+}
+function renderHomepageMoodEditors(){
+  const host=$('homepageMoodEditors');if(!host)return;
+  host.innerHTML=homepageMoods().map((m,i)=>`<div class="media-editor" data-home-mood="${i}">
+    <div class="media-editor-head"><strong>${esc(m.title||`Mood ${i+1}`)}</strong></div>
+    <div class="asset-preview media-asset-preview">${m.image?`<img src="${esc(m.image)}" alt="">`:'<div class="media-preview-empty">No image</div>'}</div>
+    <div class="two-col"><label>Title<input data-mood-k="title" value="${esc(m.title||'')}"></label><label>Linked scent<select data-mood-k="scent">${moodScentOptions(m.scent)}</select></label></div>
+    <label>Description<input data-mood-k="subtitle" value="${esc(m.subtitle||'')}"></label>
+    <label>Image URL<input data-mood-k="image" value="${esc(m.image||'')}" placeholder="https://... or uploaded image URL"></label>
+    <label>Upload image<input type="file" accept="image/*" data-mood-upload="${i}"></label>
+    <label>Visible<select data-mood-k="visible">${boolOptions(m.visible!==false)}</select></label>
+  </div>`).join('');
+}
+function captureHomepageMoods(){
+  const moods=homepageMoods();
+  document.querySelectorAll('[data-home-mood]').forEach(el=>{
+    const i=+el.dataset.homeMood,m=moods[i];if(!m)return;
+    el.querySelectorAll('[data-mood-k]').forEach(inp=>{let v=inp.value;if(inp.dataset.moodK==='visible')v=v==='true';m[inp.dataset.moodK]=v});
+  });
+}
+
 function renderBenefitEditors(){$('benefitEditors').innerHTML=(adminState.benefits||[]).map((b,i)=>`<div class="asset-editor" data-benefit="${i}"><div class="asset-preview"><img src="${esc(b.icon)}" alt=""></div><label>Title<input data-k="title" value="${esc(b.title)}"></label><label>Subtext<input data-k="subtitle" value="${esc(b.subtitle)}"></label>${miniTranslations(b,[{key:'title',label:'Title'},{key:'subtitle',label:'Subtext'}])}<label>Icon URL / data URI<input data-k="icon" value="${esc(b.icon)}"></label><label>Upload SVG / image<input class="benefit-upload" data-benefit-upload="${i}" type="file" accept="image/svg+xml,image/png,image/jpeg,image/webp"></label></div>`).join('')}
 function captureBenefits(){document.querySelectorAll('[data-benefit]').forEach(el=>{const i=+el.dataset.benefit;if(!adminState.benefits[i])return;el.querySelectorAll('[data-k]').forEach(inp=>adminState.benefits[i][inp.dataset.k]=inp.value);el.querySelectorAll('[data-trans-locale]').forEach(inp=>{const b=adminState.benefits[i];b.translations=b.translations||{};const loc=inp.dataset.transLocale;b.translations[loc]=b.translations[loc]||{};b.translations[loc][inp.dataset.transField]=inp.value})})}
 function renderBrandingPreviews(){const b=adminState.branding||defaults.branding;$('navLogoPreview').innerHTML=b.logo?`<img src="${esc(b.logo)}" alt="logo preview">`:`<strong class="text-logo-preview">${esc(b.logoText||'ZIONBURG')}</strong>`;$('faviconPreview').innerHTML=b.favicon?`<img src="${esc(b.favicon)}" alt="favicon preview">`:''}
@@ -188,7 +227,7 @@ function renderSettings(){
   const f=adminState.footer||defaults.footer;$('footerTagline').value=f.tagline||'';$('socialInstagram').value=f.socials?.instagram||'';$('socialTiktok').value=f.socials?.tiktok||'';$('socialYoutube').value=f.socials?.youtube||'';$('socialFacebook').value=f.socials?.facebook||'';$('socialLinkedin').value=f.socials?.linkedin||'';
   const t=adminState.theme||defaults.theme;$('editFont').value=t.font||'Instrument Sans';$('editBodySize').value=String(t.bodySize||defaults.theme.bodySize||18);$('editBg').value=t.bg||defaults.theme.bg;$('editText').value=t.text||defaults.theme.text;$('editSurface').value=t.surface||defaults.theme.surface;$('editSoftSurface').value=t.softSurface||defaults.theme.softSurface;$('editSelectedFill').value=t.selectedFill||defaults.theme.selectedFill;$('editAccent').value=t.accent||defaults.theme.accent;$('editButton').value=t.button||defaults.theme.button;$('editButtonText').value=t.buttonText||defaults.theme.buttonText;$('editLine').value=t.line||defaults.theme.line;
   const b=adminState.branding||defaults.branding;$('navLogoUrl').value=b.logo||'';$('faviconUrl').value=b.favicon||'assets/favicon.svg';$('navLogoText').value=b.logoText||'ZIONBURG';$('mobileLogoText').value=b.mobileLogoText||'ZB';$('navLogoWidth').value=b.logoWidth||132;$('mobileLogoWidth').value=b.mobileLogoWidth||44;
-  renderGenericEditors();renderHomeMediaEditors();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
+  renderGenericEditors();renderHomeMediaEditors();renderHomepageMoodEditors();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
 }
 function captureSettings(){
   adminState.homepage={...(adminState.homepage||{}),eyebrow:$('editEyebrow').value,title:$('editTitle').value,subtitle:$('editSubtitle').value,signature:{...(adminState.homepage?.signature||defaults.homepage.signature),visible:$('signatureSectionVisible').checked,eyebrow:$('editSignatureEyebrow').value,title:$('editSignatureTitle').value,description:$('editSignatureDescription').value,buttonLabel:$('editSignatureButtonLabel').value,buttonLink:$('editSignatureButtonLink').value}};adminState.subscriptions.enabled=true;adminState.subscriptions.storefrontVisible=$('subscriptionStorefrontVisible').checked;adminState.subscriptions.label=$('subscriptionLabel').value;adminState.subscriptions.discount=Number($('subscriptionDiscount').value||0);
@@ -198,7 +237,7 @@ function captureSettings(){
   adminState.theme={font:$('editFont').value,bodySize:Number($('editBodySize').value||18),bg:$('editBg').value,text:$('editText').value,surface:$('editSurface').value,softSurface:$('editSoftSurface').value,selectedFill:$('editSelectedFill').value,accent:$('editAccent').value,button:$('editButton').value,buttonText:$('editButtonText').value,line:$('editLine').value};
   adminState.branding={...adminState.branding,logo:$('navLogoUrl').value.trim(),favicon:$('faviconUrl').value.trim()||'assets/favicon.svg',logoText:$('navLogoText').value.trim()||'ZIONBURG',mobileLogoText:$('mobileLogoText').value.trim()||'ZB',logoAlt:$('navLogoText').value.trim()||'ZIONBURG',logoWidth:Number($('navLogoWidth').value||132),mobileLogoWidth:Number($('mobileLogoWidth').value||44)};
 }
-function captureAll(){try{captureProductEditor();captureCollectionEditor();captureBundles();captureGenericEditors();captureFooterLinks();captureHomeMedia();captureBenefits();captureLanguageSettings();captureMarketEditors();captureSettings()}catch(e){console.warn('Admin capture skipped:',e)}}
+function captureAll(){try{captureProductEditor();captureCollectionEditor();captureBundles();captureGenericEditors();captureFooterLinks();captureHomeMedia();captureHomepageMoods();captureBenefits();captureLanguageSettings();captureMarketEditors();captureSettings()}catch(e){console.warn('Admin capture skipped:',e)}}
 
 function addGeneric(type,obj){captureAll();const map={page:'pages',nav:'nav',stockist:'stockists',partner:'partners',friend:'friends',discount:'discounts'};if(type==='subplan')adminState.subscriptions.plans.push(obj);else adminState[map[type]].push(obj);renderGenericEditors()}
 function removeGeneric(type,i){captureAll();const map={page:'pages',nav:'nav',stockist:'stockists',partner:'partners',friend:'friends',discount:'discounts'};if(type==='subplan')adminState.subscriptions.plans.splice(i,1);else adminState[map[type]].splice(i,1);renderGenericEditors()}
@@ -249,6 +288,8 @@ function bindEvents(){
     if(e.target.matches('[data-language-index],#defaultLocale')){captureLanguageSettings();renderLanguageSettings();const p=currentProduct();if(p&&$('productTranslationEditors'))$('productTranslationEditors').innerHTML=translationFieldsHTML(p,'product');const c=currentCollection();if(c&&$('collectionTranslationEditors'))$('collectionTranslationEditors').innerHTML=translationFieldsHTML(c,'collection');return}
     const scope=e.target.closest('[data-bk="scopeType"]');if(scope){captureBundles();const b=scope.closest('[data-bundle]'),obj=adminState.bundles[+b.dataset.bundle];obj.scopeType=scope.value;obj.scopeId=scope.value==='product'?adminState.catalogProducts[0]?.id||'':scope.value==='collection'?adminState.collections[0]?.id||'':'';renderBundleEditors();return}
     const bu=e.target.closest('[data-benefit-upload]');if(bu){const i=+bu.dataset.benefitUpload;readAssetUpload(bu,data=>{captureBenefits();adminState.benefits[i].icon=data;renderBenefitEditors()});return}
+    const hmu=e.target.closest('[data-mood-upload]');if(hmu){const i=+hmu.dataset.moodUpload,file=hmu.files?.[0];if(!file)return;hmu.disabled=true;try{captureHomepageMoods();const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/moods/${homepageMoods()[i]?.key||i}`});homepageMoods()[i].image=url;saveSite(adminState);renderHomepageMoodEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload mood image: '+err.message)}finally{hmu.disabled=false}return}
+    if(e.target.closest('[data-mood-k]')){captureHomepageMoods();return}
     const vu=e.target.closest('[data-variant-image-upload]');if(vu){const i=+vu.dataset.variantImageUpload,file=vu.files?.[0],p=currentProduct();if(!file||!p?.variants?.[i])return;captureVariants();vu.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`variants/${p.id}/${p.variants[i].id}/images`});p.variants[i].image=url;saveSite(adminState);renderVariantEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload variant photo: '+err.message);vu.disabled=false}return}
     const vv=e.target.closest('[data-variant-video-upload]');if(vv){const i=+vv.dataset.variantVideoUpload,file=vv.files?.[0],p=currentProduct();if(!file||!p?.variants?.[i])return;captureVariants();vv.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`variants/${p.id}/${p.variants[i].id}/videos`});p.variants[i].video=url;saveSite(adminState);renderVariantEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload variant video: '+err.message);vv.disabled=false}return}
     const mu=e.target.closest('[data-media-upload-scope]');if(mu){const scopeName=mu.dataset.mediaUploadScope,i=+mu.dataset.mediaUploadIndex,file=mu.files?.[0];if(!file)return;mu.disabled=true;try{if(scopeName==='home'){captureHomeMedia();const arr=homeMediaFlat();const folder=i===0?'hero':i===1?'signature':i===6?'commitment':`lifestyle-${i-1}`;const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/${folder}`});arr[i]={...(arr[i]||{}),src:url,type:file.type.startsWith('video/')?'video':'image'};setHomeMediaFlat(arr);saveSite(adminState);const slot=i===0?'hero':i===1?'signature':i===6?'commitment':'lifestyle';await ZBSupa.syncHomepageMedia(slot,arr[i],Math.max(0,i-2));renderHomeMediaEditors();showSaveToast()}else{captureProductMedia();const p=currentProduct();if(!p?.media?.[i])return;const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`products/${p.id}/media`});p.media[i].src=url;p.media[i].type=file.type.startsWith('video/')?'video':'image';saveSite(adminState);renderProductMediaEditors();showSaveToast()}}catch(err){console.error(err);alert('Could not upload media: '+err.message)}finally{mu.disabled=false}return}
