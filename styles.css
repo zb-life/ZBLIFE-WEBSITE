@@ -964,3 +964,131 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
   .signature-copy h2{font-size:32px!important}
   .scent-grid{grid-template-columns:1fr!important}
 }
+
+
+/* v16.5 — playful scent discovery hover cards */
+.scent-card{
+  position:relative;
+  min-width:0;
+}
+.scent-card-media{
+  position:relative;
+  display:block;
+  overflow:hidden;
+  border-radius:18px;
+  background:#fff;
+}
+.scent-card-media>img{
+  display:block;
+  transition:transform .42s cubic-bezier(.2,.8,.2,1),filter .3s ease;
+}
+.scent-hover-card{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  z-index:4;
+  padding:14px 14px 12px;
+  border-radius:16px;
+  background:rgba(255,255,255,.91);
+  border:1px solid rgba(255,255,255,.75);
+  box-shadow:0 14px 35px rgba(25,24,21,.15);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  opacity:0;
+  transform:translateY(14px) scale(.97);
+  pointer-events:none;
+  transition:opacity .24s ease,transform .28s cubic-bezier(.2,.8,.2,1);
+}
+.scent-hover-top{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  margin-bottom:8px;
+}
+.scent-hover-dot{
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  flex:0 0 auto;
+  background:var(--scent-color,#ddd);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--scent-color,#ddd) 18%,transparent);
+}
+.scent-hover-top b{
+  font-size:8px;
+  font-weight:400;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
+.scent-hover-copy{
+  display:block;
+  font-size:10px;
+  line-height:1.45;
+  color:#5f5c56;
+  text-transform:none;
+}
+.scent-hover-cta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:11px;
+  padding-top:10px;
+  border-top:1px solid rgba(23,23,23,.1);
+  font-size:8px;
+  letter-spacing:.12em;
+}
+.scent-hover-cta span{
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#171717;
+  color:#fff;
+  font-size:10px;
+}
+.scent-card:hover .scent-hover-card,
+.scent-card:focus-visible .scent-hover-card{
+  opacity:1;
+  transform:none;
+}
+.scent-card:hover .scent-card-media>img{
+  transform:scale(1.035);
+  filter:saturate(.94);
+}
+@media(max-width:920px){
+  .scent-hover-card{
+    left:8px;
+    right:8px;
+    bottom:8px;
+    padding:11px;
+  }
+  .scent-hover-copy{font-size:9px}
+}
+@media(max-width:600px){
+  .scent-hover-card{
+    position:relative;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    margin:-8px 8px 0;
+    opacity:1;
+    transform:none;
+    border-radius:14px;
+    box-shadow:0 8px 22px rgba(25,24,21,.08);
+    background:#fff;
+    backdrop-filter:none;
+    -webkit-backdrop-filter:none;
+  }
+  .scent-hover-top{margin-bottom:6px}
+  .scent-hover-copy{
+    font-size:9px;
+    line-height:1.4;
+  }
+  .scent-hover-cta{
+    margin-top:8px;
+    padding-top:8px;
+  }
+}
