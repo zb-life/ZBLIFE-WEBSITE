@@ -4,11 +4,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('heroEyebrow').textContent=ct.heroEyebrow||s.homepage.eyebrow;
   document.getElementById('heroTitle').innerHTML=(ct.heroTitle||s.homepage.title).replace(/\n/g,'<br>');
   document.getElementById('heroSubtitle').textContent=ct.heroSubtitle||s.homepage.subtitle;
-  const hm={...defaults.homepageMedia,...(s.homepageMedia||{})};
+  const hm=s.homepageMedia||defaults.homepageMedia;
   const heroHost=document.getElementById('homeHeroMedia');
-  const heroMedia=hm.hero?.src?hm.hero:defaults.homepageMedia.hero;
-  if(heroHost)heroHost.dataset.heroLabel=String(heroMedia?.alt||'').trim();
-  renderMediaInto(heroHost,heroMedia);
+  if(heroHost)heroHost.dataset.heroLabel=String(hm.hero?.alt||'').trim();
+  renderMediaInto(heroHost,hm.hero);
   const lifeItems=hm.lifestyle||[];
   const lifeCards=[...document.querySelectorAll('.lifestyle-editorial .life-card')];
   document.querySelectorAll('[data-home-life-media]').forEach((el,i)=>{
@@ -19,34 +18,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const visibleLifeCount=lifeCards.filter((card,i)=>lifeItems[i]?.visible!==false).length;
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
-  const commitment=s.homepage?.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES. BRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.',tabs:[]};
-  const commitmentSection=document.getElementById('about');
-  if(commitmentSection)commitmentSection.hidden=commitment.visible===false;
-  const ce=document.getElementById('commitmentEyebrow'),ct=document.getElementById('commitmentTitle'),cc=document.getElementById('commitmentCopy');
-  if(ce)ce.textContent=commitment.eyebrow||'OUR COMMITMENT';
-  if(ct)ct.innerHTML=String(commitment.title||'CLEANER BODIES. BRIGHTER DAYS.').replace(/\n/g,'<br>');
-  if(cc)cc.textContent=commitment.copy||'';
-  const commitmentMedia=hm.commitment?.src?hm.commitment:defaults.homepageMedia.commitment;
-  renderMediaInto(document.getElementById('homeCommitmentMedia'),commitmentMedia);
-  const visibleTabs=(commitment.tabs||[]).filter(t=>t?.visible!==false);
-  const tabsHost=document.getElementById('commitmentTabs'),tabCopy=document.getElementById('commitmentTabCopy');
-  if(tabsHost){
-    tabsHost.innerHTML=visibleTabs.map((t,i)=>`<button type="button" class="commitment-tab ${i===0?'active':''}" data-commitment-tab-index="${i}">${String(t.title||`Tab ${i+1}`)}</button>`).join('');
-    tabsHost.hidden=!visibleTabs.length;
-  }
-  if(tabCopy){tabCopy.textContent=visibleTabs[0]?.copy||'';tabCopy.hidden=!visibleTabs.length}
-  if(tabsHost&&visibleTabs.length)tabsHost.addEventListener('click',e=>{const b=e.target.closest('[data-commitment-tab-index]');if(!b)return;tabsHost.querySelectorAll('.commitment-tab').forEach(x=>x.classList.toggle('active',x===b));if(tabCopy)tabCopy.textContent=visibleTabs[+b.dataset.commitmentTabIndex]?.copy||''});
-
-  const extra=(s.homepage?.extraMedia||[]).filter(x=>x?.visible!==false&&x?.media?.src);
-  const extraSection=document.getElementById('homepageFlexibleMedia'),extraTabs=document.getElementById('homepageMediaTabs'),extraStage=document.getElementById('homepageMediaStage');
-  if(extraSection&&extraStage){
-    extraSection.hidden=!extra.length;
-    if(extra.length){
-      if(extraTabs){extraTabs.innerHTML=extra.map((x,i)=>`<button type="button" class="pj-flex-media-tab ${i===0?'active':''}" data-home-media-tab="${i}">${String(x.title||`Media ${i+1}`)}</button>`).join('');extraTabs.hidden=extra.length<2}
-      renderMediaInto(extraStage,extra[0].media);
-      extraTabs?.addEventListener('click',e=>{const b=e.target.closest('[data-home-media-tab]');if(!b)return;extraTabs.querySelectorAll('.pj-flex-media-tab').forEach(x=>x.classList.toggle('active',x===b));renderMediaInto(extraStage,extra[+b.dataset.homeMediaTab]?.media)});
-    }
-  }
+  renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
 
   const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
   const videoVariants=variants.filter(v=>v.video);
@@ -75,7 +47,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   }
 
-  document.getElementById('scentGrid').innerHTML=variants.map(v=>{const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'',descriptor=v.editorialDescriptor||'',hover=v.hoverDescription||`${descriptor ? descriptor+'. ' : ''}${vs ? 'A '+vs.toLowerCase()+' scent for an easy everyday reset.' : 'A refreshing scent for your everyday reset.'}`,photo=v.moodCardImage||v.image||'';return `<a class="scent-card collection-scent-card" href="product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}" style="--scent-color:${v.color||'#ddd'}"><span class="scent-card-media"><img src="${photo}" alt="${vn}"><span class="scent-hover-card"><span class="scent-hover-top"><i class="scent-hover-dot"></i><b>${descriptor||vs||'YOUR RESET'}</b></span><span class="scent-hover-copy">${hover}</span><span class="scent-hover-cta">MEET ${vn.toUpperCase()} <span>↗</span></span></span></span><strong>${vn.toUpperCase()}</strong><small>${vs}</small></a>`}).join('');
+  document.getElementById('scentGrid').innerHTML=variants.map(v=>{const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'',descriptor=v.editorialDescriptor||'',hover=v.hoverDescription||`${descriptor ? descriptor+'. ' : ''}${vs ? 'A '+vs.toLowerCase()+' scent for an easy everyday reset.' : 'A refreshing scent for your everyday reset.'}`;return `<a class="scent-card" href="product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}" style="--scent-color:${v.color||'#ddd'}"><span class="scent-card-media"><img src="${v.image||''}" alt="${vn}"><span class="scent-hover-card"><span class="scent-hover-top"><i class="scent-hover-dot"></i><b>${descriptor||vs||'YOUR RESET'}</b></span><span class="scent-hover-copy">${hover}</span><span class="scent-hover-cta">MEET ${vn.toUpperCase()} <span>↗</span></span></span></span><strong>${vn.toUpperCase()}</strong><small>${vs}</small></a>`}).join('');
 
   document.addEventListener('click',e=>{
     const btn=e.target.closest('[data-shoppable-add]');
