@@ -1543,3 +1543,11 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 .pinterest-pdp .pdp-editorial-v2{transition:background-color .25s ease}
 .pinterest-pdp .pdp-editorial-intro .eyebrow,
 .pinterest-pdp #meetHeadline{color:inherit!important}
+
+/* v17.5 — clean/even desktop Visual Journal */
+@media(min-width:601px){
+  .pj-masonry{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;columns:auto!important}
+  .pj-masonry .pj-pin,.pj-masonry .pj-pin-tall{margin:0!important;min-height:0!important;aspect-ratio:4/5!important}
+  .pj-masonry .pj-pin>.pj-journal-image,.pj-masonry .pj-pin-tall>.pj-journal-image{width:100%;height:100%!important;object-fit:cover;display:block}
+  .pj-masonry .pj-quote{display:flex!important;align-items:flex-end;min-height:0!important}
+}

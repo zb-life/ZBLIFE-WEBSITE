@@ -108,14 +108,20 @@ document.addEventListener('DOMContentLoaded',()=>{
 // v17.2 dedicated editable Visual Journal
 document.addEventListener('DOMContentLoaded',()=>{
   const site=getSite(),host=document.getElementById('visualJournalGrid');if(!host)return;
+  const eyebrow=document.getElementById('journalEyebrow'),title=document.getElementById('journalTitle');
+  if(eyebrow)eyebrow.textContent=site.homepage?.journalEyebrow||'ZB / VISUAL JOURNAL';
+  if(title)title.textContent=site.homepage?.journalTitle||'Save the feeling.';
   const life=site.homepageMedia?.lifestyle||[];
   const stored=Array.isArray(site.homepage?.journal)?site.homepage.journal:[];
   const journal=(stored.length?stored:life.slice(0,4).map((m,i)=>({image:m?.src||'',alt:m?.alt||'',size:i===0||i===2?'tall':'standard',visible:m?.visible!==false}))).filter(x=>x?.visible!==false);
+  const quoteTitle=site.homepage?.journalQuoteTitle||'FOR THE IN-BETWEEN';
+  const quoteText=site.homepage?.journalQuoteText||'Between shower and everywhere else.';
+  const escHtml=s=>String(s||'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const cards=[];
   journal.forEach((j,i)=>{
-    cards.push(`<article class="pj-pin ${j.size==='tall'?'pj-pin-tall':''}"><img class="pj-journal-image" src="${String(j.image||'').replace(/"/g,'&quot;')}" alt="${String(j.alt||'Visual journal image').replace(/"/g,'&quot;')}" loading="lazy"></article>`);
-    if(i===1)cards.push('<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>FOR THE IN-BETWEEN</h3><p>Between shower and everywhere else.</p></div></article>');
+    cards.push(`<article class="pj-pin ${j.size==='tall'?'pj-pin-tall':''}"><img class="pj-journal-image" src="${escHtml(j.image)}" alt="${escHtml(j.alt||'Visual journal image')}" loading="lazy"></article>`);
+    if(i===1)cards.push(`<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>${escHtml(quoteTitle)}</h3><p>${escHtml(quoteText)}</p></div></article>`);
   });
-  if(journal.length<2)cards.push('<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>FOR THE IN-BETWEEN</h3><p>Between shower and everywhere else.</p></div></article>');
+  if(journal.length<2)cards.push(`<article class="pj-pin pj-quote"><div class="life-card-copy"><h3>${escHtml(quoteTitle)}</h3><p>${escHtml(quoteText)}</p></div></article>`);
   host.innerHTML=cards.join('');
 });
