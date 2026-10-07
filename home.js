@@ -24,9 +24,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   const commitmentEyebrow=commitmentSection?.querySelector('.commitment-content .eyebrow');
   const commitmentTitle=commitmentSection?.querySelector('.commitment-content h2');
   const commitmentCopy=commitmentSection?.querySelector(':scope > p');
-  if(commitmentEyebrow)commitmentEyebrow.textContent=commitment.eyebrow||'OUR COMMITMENT';
-  if(commitmentTitle)commitmentTitle.innerHTML=String(commitment.title||'CLEANER BODIES.\nBRIGHTER DAYS.').replace(/\n/g,'<br>');
-  if(commitmentCopy)commitmentCopy.textContent=commitment.copy||'';
+  if(commitmentEyebrow){commitmentEyebrow.textContent=commitment.eyebrow??'OUR COMMITMENT';commitmentEyebrow.hidden=(commitment.eyebrow??'')==='';}
+  if(commitmentTitle){commitmentTitle.innerHTML=String(commitment.title??'CLEANER BODIES.\nBRIGHTER DAYS.').replace(/\n/g,'<br>');commitmentTitle.hidden=(commitment.title??'')==='';}
+  if(commitmentCopy){commitmentCopy.textContent=commitment.copy??'';commitmentCopy.hidden=(commitment.copy??'')==='';}
   renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
 
   const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
