@@ -95,10 +95,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.querySelectorAll('.pj-mood-card').forEach((card,i)=>{
     const m=moods[i];if(!m)return;
     card.style.display=m.visible===false?'none':'';
-    const a=card.querySelector('.pj-mood-media'),img=a?.querySelector('img'),title=card.querySelector('h3'),sub=card.querySelector('p'),shop=card.querySelector('.pj-mood-meta>a');
+    const a=card.querySelector('.pj-mood-media'),img=a?.querySelector('img'),title=card.querySelector('h3'),sub=card.querySelector('p');
     const href=`product.html?mood=${encodeURIComponent(m.key)}&scent=${encodeURIComponent(m.scent||'')}`;
-    if(a)a.href=href;if(shop)shop.href=href;if(img&&m.image){img.src=m.image;img.alt=m.title||''}if(title)title.textContent=m.title||'';if(sub)sub.textContent=m.subtitle||'';
+    if(a)a.href=href;if(img&&m.image){img.src=m.image;img.alt=m.title||''}if(title)title.textContent=m.title||'';if(sub)sub.textContent=m.subtitle||'';
   });
+  const cta=site.homepage?.moodCta||{label:'FIND YOUR MOOD →',link:'product.html',visible:true};
+  const ctaEl=document.getElementById('moodGridCta');
+  if(ctaEl){ctaEl.textContent=cta.label||'FIND YOUR MOOD →';ctaEl.href=cta.link||'product.html';ctaEl.closest('.pj-mood-cta-wrap').style.display=cta.visible===false?'none':''}
 });
 
 
