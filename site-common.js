@@ -59,7 +59,7 @@ const defaults={
     id:'col-body-refresh',title:'Body Refresh',handle:'body-refresh',status:'active',description:'Refreshing essentials designed for movement, travel and everyday resets.',productIds:['prod-refreshing-wipes']
   }],
   subscriptions:{enabled:true,storefrontVisible:true,label:'Subscribe & save',discount:10,plans:[{label:'Every 4 weeks',value:'4-weeks'},{label:'Every 6 weeks',value:'6-weeks'},{label:'Every 8 weeks',value:'8-weeks'}]},
-  features:{bundlesStorefrontVisible:false,customerAccounts:true,announcementEnabled:true,announcementText:''},
+  features:{bundlesStorefrontVisible:false,customerAccounts:true,announcementEnabled:true,announcementText:'',announcementCards:[{text:'New here? Get 25% off your first order',bg:'#e6e5d4',color:'#171717',href:''},{text:'Free shipping on qualifying orders',bg:'#d9f3f4',color:'#171717',href:''}]},
   bundles:[
     {id:'bundle-single',name:'Single pack',qty:1,price:null,badge:'',active:true,scopeType:'product',scopeId:'prod-refreshing-wipes'},
     {id:'bundle-three',name:'3-pack',qty:3,price:230,badge:'SAVE 13%',active:true,scopeType:'product',scopeId:'prod-refreshing-wipes'},
@@ -248,24 +248,15 @@ function applyBranding(){
 function renderBenefits(){const site=getSite();document.querySelectorAll('.benefit-strip .benefit').forEach((el,i)=>{const item=(site.benefits||[])[i];if(!item)return;const img=el.querySelector('img'),strong=el.querySelector('strong'),small=el.querySelector('small');if(img){img.src=item.icon||defaults.benefits[i]?.icon||'';img.alt=item.title||''}if(strong)strong.textContent=localize(item,'title')||item.title||'';if(small)small.textContent=localize(item,'subtitle')||item.subtitle||''})}
 function renderShipping(){
   const site=getSite(),m=currentMarket(site),threshold=Number(m.freeShippingThreshold??site.shipping?.threshold??0),zh=currentLocale()==='zh-HK';
-  const tail=site.features?.bundlesStorefrontVisible!==false?(zh?'組合更優惠':'SHOP BUNDLES & SAVE'):(zh?'日常潔淨護理':'CLEAN CARE FOR EVERYDAY MOVEMENT');
   const announcementEnabled=site.features?.announcementEnabled!==false;
-  const customAnnouncement=String(site.features?.announcementText||'').trim();
+  const fallback=String(site.features?.announcementText||'').trim()||(threshold>0?`FREE ${m.name.toUpperCase()} DELIVERY OVER ${money(threshold,m)}`:`FREE DELIVERY — ${m.name.toUpperCase()}`);
+  const cards=(Array.isArray(site.features?.announcementCards)&&site.features.announcementCards.length?site.features.announcementCards:[{text:fallback,bg:'#171918',color:'#fff',href:''}]).filter(x=>String(x?.text||'').trim());
   document.querySelectorAll('[data-shipping-announcement]').forEach(el=>{
-    if(!announcementEnabled){el.style.display='none';el.innerHTML='';return}
+    if(!announcementEnabled||!cards.length){el.style.display='none';el.innerHTML='';return}
     el.style.display='';
-    let message='';
-    if(customAnnouncement)message=customAnnouncement;
-    else if(zh){
-      const marketName=m.name==='Hong Kong'?'香港':m.name;
-      message=threshold>0?`${marketName}訂單滿 ${money(threshold,m)} 免運費 • ${tail}`:`${marketName} ${tr('freeDelivery','FREE DELIVERY')} • ${tail}`;
-    }else{
-      message=threshold>0?`FREE ${m.name.toUpperCase()} DELIVERY OVER ${money(threshold,m)} • ${tail}`:`${tr('freeDelivery','FREE DELIVERY').toUpperCase()} — ${m.name.toUpperCase()} • ${tail}`;
-    }
-    const repeated=Array.from({length:6},()=>`<span class="announcement-item">${message}</span>`).join('');
-    el.innerHTML=`<div class="announcement-marquee"><div class="announcement-track">${repeated}</div></div>`;
+    el.innerHTML=`<button class="announcement-arrow announcement-prev" type="button" aria-label="Previous announcement">‹</button><div class="announcement-scroll">${cards.map(x=>{const body=`<span>${String(x.text||'')}</span>`;return x.href?`<a class="announcement-card" href="${x.href}" style="--ann-bg:${x.bg||'#e6e5d4'};--ann-color:${x.color||'#171717'}">${body}</a>`:`<div class="announcement-card" style="--ann-bg:${x.bg||'#e6e5d4'};--ann-color:${x.color||'#171717'}">${body}</div>`}).join('')}</div><button class="announcement-arrow announcement-next" type="button" aria-label="Next announcement">›</button>`;
   });
-  document.querySelectorAll('[data-shipping-note]').forEach(el=>el.textContent=zh?(threshold>0?`訂單滿 ${money(threshold,m)} 免運費。`:'所有訂單免運費。'):(threshold>0?`Free delivery over ${money(threshold,m)}.`:'Free delivery on every order.'));
+  document.querySelectorAll('[data-shipping-note]').forEach(el=>el.textContent=threshold>0?`Free delivery over ${money(threshold,m)}.`:'Free delivery on every order.');
 }
 function productNavLinks(site){return getActiveProducts(site).filter(p=>p.status==='active'&&p.showInNav!==false).map(p=>({label:localize(p,'title'),href:`product.html?product=${encodeURIComponent(p.handle)}`}))}
 function renderFooter(){
@@ -385,5 +376,5 @@ async function initStorefrontTranslationEdit(){
   setTimeout(markInlineContentTargets,60);setTimeout(markInlineContentTargets,300);new MutationObserver(()=>markInlineContentTargets()).observe(document.body,{childList:true,subtree:true})
 }
 
-document.addEventListener('DOMContentLoaded',()=>{applyTheme();renderNav();applyBranding();renderBenefits();bindNav();bindStorePreferences();ensureCartDrawer();renderCartUI();bindCart();renderShipping();requestAnimationFrame(()=>applyStorefrontTranslations())});
+document.addEventListener('DOMContentLoaded',()=>{applyTheme();renderNav();applyBranding();renderBenefits();bindNav();bindStorePreferences();ensureCartDrawer();renderCartUI();bindCart();renderShipping();document.addEventListener('click',e=>{const b=e.target.closest('.announcement-arrow');if(!b)return;const row=b.parentElement?.querySelector('.announcement-scroll');if(row)row.scrollBy({left:(b.classList.contains('announcement-next')?1:-1)*Math.max(280,row.clientWidth*.72),behavior:'smooth'})});requestAnimationFrame(()=>applyStorefrontTranslations())});
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initStorefrontTranslationEdit,0));
