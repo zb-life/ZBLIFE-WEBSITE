@@ -1538,3 +1538,7 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 /* v17.3 — single mood CTA */
 .pj-mood-cta-wrap{display:flex;justify-content:center;padding-top:34px}
 .pj-mood-cta-wrap .pj-text-link{margin-top:0}
+
+/* v17.4 — variant-colour editorial mood section */
+.pinterest-pdp .pdp-editorial-intro .eyebrow,
+.pinterest-pdp #meetHeadline{transition:color .25s ease}

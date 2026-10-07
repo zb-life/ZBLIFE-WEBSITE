@@ -64,6 +64,11 @@ function renderEditorial(variant,product){
   set('productScentTitle',vname||ptitle);set('productState',String(vstate||variant.editorialState||x.state).toUpperCase());set('productDescriptor',variant.editorialDescriptor||x.descriptor);set('meetName',(vname||ptitle).toUpperCase());set('meetHeadline',variant.editorialHeadline||x.headline);set('feelsLike',variant.editorialFeels||x.feels);set('madeFor',variant.editorialMadeFor||x.made);set('moodCopy',variant.editorialMood||x.mood);set('stateCopy',variant.editorialState||x.state);
   const kicker=document.getElementById('productKicker');if(kicker)kicker.textContent=ptitle.toUpperCase();
   const lede=document.querySelector('.pdp-lede');if(lede)lede.textContent=pdesc||'Designed to fit naturally into an active routine.';
+  const accent=/^#[0-9a-f]{3,8}$/i.test(String(variant?.color||''))?variant.color:'#1a1917';
+  const moodName=document.getElementById('meetName'),headline=document.getElementById('meetHeadline');
+  const moodEyebrow=moodName?.closest('.eyebrow');
+  if(moodEyebrow)moodEyebrow.style.color=accent;
+  if(headline)headline.style.color=accent;
 }
 function renderRelated(product){
   const grid=document.getElementById('relatedGrid');if(!grid)return;
