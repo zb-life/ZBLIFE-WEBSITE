@@ -25,5 +25,53 @@ document.addEventListener('DOMContentLoaded',()=>{
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
   renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
+
+  const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
+  const videoVariants=variants.filter(v=>v.video);
+  if(videoSection&&videoTrack){
+    if(videoVariants.length){
+      videoSection.hidden=false;
+      videoTrack.innerHTML=videoVariants.map(v=>{
+        const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'';
+        return `<article class="shoppable-video-card" style="--scent-color:${v.color||'#ddd'}">
+          <div class="shoppable-video-media">
+            <video src="${v.video}" poster="${v.image||''}" muted playsinline loop autoplay preload="metadata"></video>
+            <div class="shoppable-video-badge">${String(v.editorialDescriptor||vs||'REFRESH').toUpperCase()}</div>
+          </div>
+          <div class="shoppable-video-product">
+            <div><small>${localize(product,'title')}</small><strong>${vn.toUpperCase()}</strong><span>${vs}</span></div>
+            <div class="shoppable-video-buy">
+              <b>${money(Number(v.price||0))}</b>
+              <button type="button" data-shoppable-add="${v.id}">ADD TO BAG</button>
+            </div>
+          </div>
+        </article>`;
+      }).join('');
+    }else{
+      videoSection.hidden=true;
+      videoTrack.innerHTML='';
+    }
+  }
+
   document.getElementById('scentGrid').innerHTML=variants.map(v=>{const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'',descriptor=v.editorialDescriptor||'',hover=v.hoverDescription||`${descriptor ? descriptor+'. ' : ''}${vs ? 'A '+vs.toLowerCase()+' scent for an easy everyday reset.' : 'A refreshing scent for your everyday reset.'}`;return `<a class="scent-card" href="product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}" style="--scent-color:${v.color||'#ddd'}"><span class="scent-card-media"><img src="${v.image||''}" alt="${vn}"><span class="scent-hover-card"><span class="scent-hover-top"><i class="scent-hover-dot"></i><b>${descriptor||vs||'YOUR RESET'}</b></span><span class="scent-hover-copy">${hover}</span><span class="scent-hover-cta">MEET ${vn.toUpperCase()} <span>↗</span></span></span></span><strong>${vn.toUpperCase()}</strong><small>${vs}</small></a>`}).join('');
+
+  document.addEventListener('click',e=>{
+    const btn=e.target.closest('[data-shoppable-add]');
+    if(!btn)return;
+    e.preventDefault();
+    const variant=variants.find(v=>v.id===btn.dataset.shoppableAdd);
+    if(!variant)return;
+    addCart({
+      name:`${localize(product,'title')} — ${localize(variant,'name')||variant.name}`,
+      detail:tr('single','Single'),
+      price:Number(variant.price||0),
+      qty:1,
+      bundleQty:1,
+      color:variant.color,
+      productId:product.id,
+      variantId:variant.id,
+      subscription:false,
+      cadence:null
+    });
+  });
 });
