@@ -1,20 +1,53 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZIONBURG — Cleaner Bodies. Brighter Days.</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Carme&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head><body>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZIONBURG — Move. Reset. Refresh.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Carme&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="pinterest-home">
 <div class="announcement" data-shipping-announcement></div>
 <header class="site-header"><a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a><nav data-site-nav></nav><div class="header-actions"><button class="icon-btn" id="cartBtn">BAG <span id="cartCount">0</span></button></div></header>
 <main>
-<section class="editorial-hero"><div class="hero-copy"><span class="eyebrow" id="heroEyebrow"></span><h1 id="heroTitle"></h1><p id="heroSubtitle"></p><a class="btn btn-dark" href="product.html">EXPLORE PRODUCTS →</a></div><div class="hero-photo media-slot" id="homeHeroMedia"></div></section>
-<section class="benefit-strip"><div class="benefit"><img src="assets/plant.svg"><div><strong>PLANT-BASED</strong><small>100% plant fibre</small></div></div><div class="benefit"><img src="assets/alcohol-free.svg"><div><strong>ALCOHOL-FREE</strong><small>Gentle on skin</small></div></div><div class="benefit"><img src="assets/vitamin.svg"><div><strong>INFUSED WITH VITAMIN E</strong><small>Nourish & protect</small></div></div><div class="benefit"><img src="assets/cooling.svg"><div><strong>INSTANTLY REFRESHING</strong><small>Cools up to 3°C</small></div></div></section>
-<section class="signature" id="signature"><div class="signature-copy"><span class="eyebrow" id="signatureEyebrow">OUR SIGNATURE</span><h2 id="signatureTitle">REFRESHING<br>BODY WIPES</h2><p id="signatureDescription">A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.</p><a class="btn btn-dark" id="signatureButton" href="product.html">SHOP NOW →</a></div><div class="signature-photo media-slot" id="homeSignatureMedia"></div><div class="signature-points"><div><strong>PURIFY</strong><span>Effectively cleanses without irritation</span></div><div><strong>REFRESH</strong><span>Cooling sensation up to 3°C</span></div><div><strong>NOURISH</strong><span>With Vitamin E</span></div><div><strong>FOR A BETTER TOMORROW</strong><span>100% plant fibre</span></div></div></section>
-<section class="shoppable-video-section" id="shopVideos" hidden>
-  <div class="shoppable-video-head">
-    <div><span class="eyebrow">SHOP THE MOMENT</span><h2>WATCH.<br>REFRESH. GO.</h2></div>
-    <p>Swipe through the scents, see them in motion, and add your favourite straight to your bag.</p>
-  </div>
-  <div class="shoppable-video-track" id="shoppableVideoTrack"></div>
+<section class="pj-hero">
+  <div class="pj-hero-copy"><span class="eyebrow" id="heroEyebrow"></span><h1 id="heroTitle"></h1><p id="heroSubtitle"></p><a class="pj-text-link" href="#shopMood">EXPLORE THE MOOD →</a></div>
+  <div class="pj-hero-media media-slot" id="homeHeroMedia"></div>
 </section>
-<section class="lifestyle-editorial"><article class="life-card"><div class="life-media media-slot" data-home-life-media="0"></div><div class="life-card-copy"><h3>FOR MOVEMENT</h3><p>Stay fresh through every workout and beyond.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="1"></div><div class="life-card-copy"><h3>FOR TRAVEL</h3><p>A clean companion, wherever you go.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="2"></div><div class="life-card-copy"><h3>FOR EVERYDAY</h3><p>Refresh, reset, repeat.</p><a href="product.html">LEARN MORE →</a></div></article><article class="life-card"><div class="life-media media-slot" data-home-life-media="3"></div><div class="life-card-copy"><h3>FOR A CLEANER TOMORROW</h3><p>Small choices make a bigger impact.</p><a href="page.html?slug=sustainability">OUR SUSTAINABILITY →</a></div></article></section>
-<section class="scents"><div class="scents-copy"><span class="eyebrow">A SCENT FOR EVERY YOU</span><h2>DISCOVER<br>OUR SCENTS</h2><p>Elevate your everyday with refreshing scents inspired by nature.</p><a href="product.html" class="text-link">EXPLORE ALL SCENTS →</a></div><div class="scent-grid" id="scentGrid"></div></section>
-<section class="commitment" id="about"><div class="commitment-media media-slot" id="homeCommitmentMedia"></div><div class="commitment-content"><span class="eyebrow">OUR COMMITMENT</span><h2>CLEANER BODIES.<br>BRIGHTER DAYS.</h2></div><p>We create high-performance, low-impact personal care products for a cleaner, healthier and more active world.</p></section>
+
+<section class="pj-mood-section" id="shopMood">
+  <div class="pj-section-head"><div><span class="eyebrow">SHOP BY MOMENT</span><h2>Shop the mood.</h2></div><a href="product.html" class="pj-text-link">ALL MOMENTS →</a></div>
+  <div class="pj-mood-grid">
+    <article class="pj-mood-card"><a href="product.html?mood=post" class="pj-mood-media"><img src="assets/movement.jpg" alt="Post-workout"></a><div class="pj-mood-meta"><div><h3>Post-workout</h3><p>Cool down. Clean up. Keep moving.</p></div><a href="product.html?mood=post">SHOP →</a></div></article>
+    <article class="pj-mood-card"><a href="product.html?mood=beach" class="pj-mood-media"><img src="assets/hero-editorial.jpg" alt="Beach"></a><div class="pj-mood-meta"><div><h3>Beach</h3><p>Salt, sun and somewhere to be next.</p></div><a href="product.html?mood=beach">SHOP →</a></div></article>
+    <article class="pj-mood-card"><a href="product.html?mood=travel" class="pj-mood-media"><img src="assets/travel.jpg" alt="Travel"></a><div class="pj-mood-meta"><div><h3>Travel</h3><p>A carry-on reset between places.</p></div><a href="product.html?mood=travel">SHOP →</a></div></article>
+    <article class="pj-mood-card"><a href="product.html?mood=slow" class="pj-mood-media"><img src="assets/everyday.jpg" alt="Slow morning"></a><div class="pj-mood-meta"><div><h3>Slow morning</h3><p>Soft routines and nowhere to rush.</p></div><a href="product.html?mood=slow">SHOP →</a></div></article>
+    <article class="pj-mood-card"><a href="product.html?mood=night" class="pj-mood-media"><img src="assets/product-editorial.jpg" alt="Night out"></a><div class="pj-mood-meta"><div><h3>Night out</h3><p>Refresh before the next plan.</p></div><a href="product.html?mood=night">SHOP →</a></div></article>
+    <article class="pj-mood-card"><a href="product.html?mood=outdoors" class="pj-mood-media"><img src="assets/nature.jpg" alt="Outdoors"></a><div class="pj-mood-meta"><div><h3>Outdoors</h3><p>Fresh air, long days, easy resets.</p></div><a href="product.html?mood=outdoors">SHOP →</a></div></article>
+  </div>
+</section>
+
+<section class="pj-journal">
+  <div class="pj-section-head"><div><span class="eyebrow">ZB / VISUAL JOURNAL</span><h2>Save the feeling.</h2></div><span class="pj-small-note">MOVE · RESET · REFRESH</span></div>
+  <div class="pj-masonry lifestyle-editorial">
+    <article class="pj-pin pj-pin-tall life-card"><div class="life-media media-slot" data-home-life-media="0"></div></article>
+    <article class="pj-pin life-card"><div class="life-media media-slot" data-home-life-media="1"></div></article>
+    <article class="pj-pin pj-quote life-card"><div class="life-card-copy"><h3>FOR THE IN-BETWEEN</h3><p>Between shower and everywhere else.</p></div></article>
+    <article class="pj-pin pj-pin-tall life-card"><div class="life-media media-slot" data-home-life-media="2"></div></article>
+    <article class="pj-pin life-card"><div class="life-media media-slot" data-home-life-media="3"></div></article>
+  </div>
+</section>
+
+<section class="pj-story" id="signature">
+  <div class="pj-story-copy"><span class="eyebrow" id="signatureEyebrow">OUR SIGNATURE</span><h2 id="signatureTitle">REFRESHING<br>BODY WIPES</h2><p id="signatureDescription"></p><a class="pj-dark-link" id="signatureButton" href="product.html">SHOP NOW →</a></div>
+  <div class="pj-signature-media media-slot signature-photo" id="homeSignatureMedia"></div>
+</section>
+
+<section class="scents pj-products"><div class="scents-copy"><span class="eyebrow">THE COLLECTION</span><h2>Find your<br>reset.</h2><p>The same ZB essential, interpreted for different moments and moods.</p><a href="product.html" class="pj-text-link">SHOP ALL →</a></div><div class="scent-grid" id="scentGrid"></div></section>
+
+<section class="commitment pj-commitment" id="about"><div class="commitment-media media-slot" id="homeCommitmentMedia"></div><div class="commitment-content"><span class="eyebrow">OUR COMMITMENT</span><h2>CLEANER BODIES.<br>BRIGHTER DAYS.</h2></div><p>High-performance, low-impact personal care for a cleaner, healthier and more active world.</p></section>
 </main>
 <footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script><script src="site-common.js"></script><script src="home.js"></script></body></html>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script><script src="site-common.js"></script><script src="home.js"></script>
+</body></html>
