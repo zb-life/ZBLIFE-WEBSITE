@@ -254,9 +254,9 @@
         journalQuoteText:lifestyle.journalQuoteText||'Between shower and everywhere else.',
         commitment:{
           visible:homeBlocks.find(b=>b.block_type==='commitment')?.visible!==false,
-          eyebrow:commitment.eyebrow||'OUR COMMITMENT',
-          title:commitment.title||'CLEANER BODIES.\nBRIGHTER DAYS.',
-          copy:commitment.copy||'High-performance, low-impact personal care for a cleaner, healthier and more active world.'
+          eyebrow:commitment.eyebrow??'OUR COMMITMENT',
+          title:commitment.title??'CLEANER BODIES.\nBRIGHTER DAYS.',
+          copy:commitment.copy??'High-performance, low-impact personal care for a cleaner, healthier and more active world.'
         },
         signature:{
           visible:featuredBlock?.visible!==false,
@@ -517,7 +517,7 @@
       ['hero',1,true,{eyebrow:site.homepage?.eyebrow||'',title:site.homepage?.title||'',subtitle:site.homepage?.subtitle||'',media:homeMedia.hero||{}}],
       ['featured_product',2,site.homepage?.signature?.visible!==false,{product_id:site.catalogProducts?.[0]?.id||null,media:homeMedia.signature||{},eyebrow:site.homepage?.signature?.eyebrow||'OUR SIGNATURE',title:site.homepage?.signature?.title||'REFRESHING\nBODY WIPES',description:site.homepage?.signature?.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',button_label:site.homepage?.signature?.buttonLabel||'SHOP NOW',button_link:site.homepage?.signature?.buttonLink||'product.html'}],
       ['lifestyle_grid',3,true,{items:homeMedia.lifestyle||[],moods:site.homepage?.moods||[],moodCta:site.homepage?.moodCta||{label:'FIND YOUR MOOD →',link:'product.html',visible:true},journal:site.homepage?.journal||[],journalEyebrow:site.homepage?.journalEyebrow||'ZB / VISUAL JOURNAL',journalTitle:site.homepage?.journalTitle||'Save the feeling.',journalQuoteTitle:site.homepage?.journalQuoteTitle||'FOR THE IN-BETWEEN',journalQuoteText:site.homepage?.journalQuoteText||'Between shower and everywhere else.'}],
-      ['commitment',4,site.homepage?.commitment?.visible!==false,{media:homeMedia.commitment||{},eyebrow:site.homepage?.commitment?.eyebrow||'OUR COMMITMENT',title:site.homepage?.commitment?.title||'CLEANER BODIES.\nBRIGHTER DAYS.',copy:site.homepage?.commitment?.copy||'High-performance, low-impact personal care for a cleaner, healthier and more active world.'}]
+      ['commitment',4,site.homepage?.commitment?.visible!==false,{media:homeMedia.commitment||{},eyebrow:site.homepage?.commitment?.eyebrow??'OUR COMMITMENT',title:site.homepage?.commitment?.title??'CLEANER BODIES.\nBRIGHTER DAYS.',copy:site.homepage?.commitment?.copy??'High-performance, low-impact personal care for a cleaner, healthier and more active world.'}]
     ];
     const {data:existingBlocks}=await sb.from('page_blocks').select('id,block_type').eq('page_id',homeId);
     for(const [type,position,visible,settings] of blockDefs){
