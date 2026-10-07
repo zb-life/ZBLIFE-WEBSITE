@@ -128,7 +128,7 @@
         subscriptionEligible:!!p.subscription_eligible,collectionIds:cpByProduct.get(p.id)||[],
         translations:translations.get(`product:${p.id}`)||{},
         variants:variants.filter(v=>v.product_id===p.id).sort((a,b)=>(a.position||0)-(b.position||0)).map(v=>({
-          id:v.id,name:v.title,state:v.state_label||'',editorialDescriptor:v.option_values?.EditorialDescriptor||'',price:major(v.price_minor),sku:v.sku||'',
+          id:v.id,name:v.title,state:v.state_label||'',editorialDescriptor:v.option_values?.EditorialDescriptor||'',hoverDescription:v.option_values?.HoverDescription||'',price:major(v.price_minor),sku:v.sku||'',
           color:v.color_hex||'#d8d8d8',image:v.option_values?.VariantImage||'',video:v.option_values?.VariantVideo||'',inventory:invMap.get(v.id)?.quantity_on_hand||0,
           active:v.active!==false,translations:translations.get(`variant:${v.id}`)||{}
         })),
@@ -387,7 +387,7 @@
       const variants=(p.variants||[]).map((v,i)=>({
         id:v.id,product_id:p.id,title:v.name||`Variant ${i+1}`,sku:v.sku||null,
         price_minor:minor(v.price),currency:'HKD',state_label:v.state||null,color_hex:v.color||null,
-        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||'',VariantImage:v.image||'',VariantVideo:v.video||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
+        option_values:{Scent:v.name||'',EditorialDescriptor:v.editorialDescriptor||'',HoverDescription:v.hoverDescription||'',VariantImage:v.image||'',VariantVideo:v.video||''},track_inventory:true,inventory_policy:'deny',requires_shipping:true,
         position:i+1,active:v.active!==false
       }));
       await upsert('product_variants',variants,'id');
