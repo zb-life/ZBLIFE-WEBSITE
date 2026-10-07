@@ -1283,3 +1283,66 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
   .shoppable-video-product{padding-top:10px}
   .shoppable-video-buy button{min-height:40px}
 }
+
+
+/* v16.7 — align mobile scent info cards cleanly */
+@media(max-width:600px){
+  .scent-card{
+    display:flex!important;
+    flex-direction:column;
+    min-width:0;
+  }
+  .scent-card-media{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:stretch;
+    overflow:visible!important;
+    background:transparent!important;
+  }
+  .scent-card-media>img{
+    width:100%!important;
+    height:auto!important;
+    aspect-ratio:1/1.08!important;
+    object-fit:contain!important;
+    object-position:center center!important;
+    border-radius:18px;
+    background:#fff;
+  }
+  .scent-hover-card{
+    position:relative!important;
+    inset:auto!important;
+    width:calc(100% - 12px)!important;
+    max-width:none!important;
+    margin:-10px auto 0!important;
+    box-sizing:border-box;
+    opacity:1!important;
+    transform:none!important;
+    align-self:center;
+    z-index:5;
+  }
+  .scent-card>strong,
+  .scent-card>small{
+    width:calc(100% - 4px);
+    margin-left:auto;
+    margin-right:auto;
+  }
+  .scent-card>strong{
+    margin-top:10px!important;
+  }
+  .scent-hover-top,
+  .scent-hover-cta{
+    width:100%;
+  }
+  .scent-hover-copy{
+    width:100%;
+    display:block;
+  }
+}
+
+@media(max-width:380px){
+  .scent-hover-card{
+    width:100%!important;
+    margin-top:8px!important;
+  }
+}
