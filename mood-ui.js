@@ -26,7 +26,7 @@
       const scent=(variant?.name||strong?.textContent||small?.textContent||'').trim();
       const meta=byScent[scent.toLowerCase()];
       const label=meta?.label||scent||'Your mood';
-      const imgSrc=meta?.img||variant?.image||'';
+      const imgSrc=variant?.moodCardImage||variant?.image||'';
       if(strong)strong.textContent=label;
       if(small)small.textContent=scent;
       let img=btn.querySelector('img.pj-mood-thumb');
