@@ -1,4 +1,5 @@
 const crypto=require('crypto');
+const nodemailer=require('nodemailer');
 const env=name=>String(process.env[name]||'').trim();
 const ok=()=>({statusCode:200,headers:{'content-type':'application/json'},body:'{"received":true}'});
 const fail=(status,msg)=>({statusCode:status,headers:{'content-type':'application/json'},body:JSON.stringify({error:msg})});
@@ -13,20 +14,39 @@ function verify(raw,header){
   const expected=crypto.createHmac('sha256',env('STRIPE_WEBHOOK_SECRET')).update(t+'.'+raw,'utf8').digest('hex');
   return sigs.some(s=>{try{return crypto.timingSafeEqual(Buffer.from(expected,'hex'),Buffer.from(s,'hex'))}catch{return false}});
 }
+let mailTransporter;
+function gmailTransport(){
+  if(mailTransporter)return mailTransporter;
+  const user=env('SMTP_USER'),pass=env('SMTP_PASS');
+  if(!user||!pass)throw new Error('Gmail SMTP is not configured');
+  mailTransporter=nodemailer.createTransport({
+    host:env('SMTP_HOST')||'smtp.gmail.com',
+    port:Number(env('SMTP_PORT')||465),
+    secure:Number(env('SMTP_PORT')||465)===465,
+    auth:{user,pass}
+  });
+  return mailTransporter;
+}
 async function sendEmail({to,subject,html,orderId,type}){
   const recipients=Array.isArray(to)?to:[to];
   const clean=recipients.map(x=>String(x||'').trim()).filter(Boolean);
   if(!clean.length)return;
   let status='failed',providerId=null,errorMessage='';
-  if(env('RESEND_API_KEY')){
-    try{
-      const res=await fetch('https://api.resend.com/emails',{method:'POST',headers:{authorization:'Bearer '+env('RESEND_API_KEY'),'content-type':'application/json'},body:JSON.stringify({from:env('ZB_EMAIL_FROM')||'ZIONBURG <orders@zb.life>',to:clean,subject,html})});
-      const data=await res.json().catch(()=>({}));
-      if(!res.ok)throw new Error(data?.message||'Email provider error');
-      status='sent';providerId=data.id||null;
-    }catch(err){errorMessage=err.message||String(err);}
-  }else errorMessage='RESEND_API_KEY is not configured';
-  await Promise.all(clean.map(recipient=>sb('email_log',{method:'POST',body:JSON.stringify({order_id:orderId||null,email_type:type,recipient,subject,status,provider_message_id:providerId,metadata:errorMessage?{error:errorMessage}:{}})}).catch(()=>null)));
+  try{
+    const info=await gmailTransport().sendMail({
+      from:env('ZB_EMAIL_FROM')||`ZIONBURG <${env('SMTP_USER')}>`,
+      to:clean.join(', '),
+      subject,
+      html,
+      replyTo:env('ZB_EMAIL_REPLY_TO')||env('SMTP_USER')
+    });
+    status='sent';
+    providerId=info.messageId||null;
+  }catch(err){
+    errorMessage=err.message||String(err);
+    console.error('[gmail-email]',errorMessage);
+  }
+  await Promise.all(clean.map(recipient=>sb('email_log',{method:'POST',body:JSON.stringify({order_id:orderId||null,email_type:type,recipient,subject,status,provider_message_id:providerId,metadata:errorMessage?{provider:'gmail_smtp',error:errorMessage}:{provider:'gmail_smtp'}})}).catch(()=>null)));
 }
 async function salesEmails(){
   if(env('ZB_SALES_EMAILS'))return env('ZB_SALES_EMAILS').split(/[;,\n]+/).map(x=>x.trim()).filter(Boolean);
