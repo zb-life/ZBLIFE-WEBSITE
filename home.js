@@ -4,18 +4,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   document.getElementById('heroEyebrow').textContent=ct.heroEyebrow||s.homepage.eyebrow;
   document.getElementById('heroTitle').innerHTML=(ct.heroTitle||s.homepage.title).replace(/\n/g,'<br>');
   document.getElementById('heroSubtitle').textContent=ct.heroSubtitle||s.homepage.subtitle;
-  const sig=s.homepage?.signature||defaults.homepage.signature;
-  const signatureSection=document.getElementById('signature');
-  if(signatureSection)signatureSection.hidden=sig.visible===false;
-  document.getElementById('signatureEyebrow').textContent=sig.eyebrow||defaults.homepage.signature.eyebrow;
-  document.getElementById('signatureTitle').innerHTML=String(sig.title||defaults.homepage.signature.title).replace(/\n/g,'<br>');
-  document.getElementById('signatureDescription').textContent=sig.description||defaults.homepage.signature.description;
-  const signatureButton=document.getElementById('signatureButton');signatureButton.textContent=`${sig.buttonLabel||'SHOP NOW'} →`;signatureButton.href=sig.buttonLink||'product.html';
-  const hm=s.homepageMedia||defaults.homepageMedia;
+  const hm={...defaults.homepageMedia,...(s.homepageMedia||{})};
   const heroHost=document.getElementById('homeHeroMedia');
-  if(heroHost)heroHost.dataset.heroLabel=String(hm.hero?.alt||'').trim();
-  renderMediaInto(heroHost,hm.hero);
-  renderMediaInto(document.getElementById('homeSignatureMedia'),hm.signature);
+  const heroMedia=hm.hero?.src?hm.hero:defaults.homepageMedia.hero;
+  if(heroHost)heroHost.dataset.heroLabel=String(heroMedia?.alt||'').trim();
+  renderMediaInto(heroHost,heroMedia);
   const lifeItems=hm.lifestyle||[];
   const lifeCards=[...document.querySelectorAll('.lifestyle-editorial .life-card')];
   document.querySelectorAll('[data-home-life-media]').forEach((el,i)=>{
@@ -26,7 +19,34 @@ document.addEventListener('DOMContentLoaded',()=>{
   const visibleLifeCount=lifeCards.filter((card,i)=>lifeItems[i]?.visible!==false).length;
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
-  renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
+  const commitment=s.homepage?.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES. BRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.',tabs:[]};
+  const commitmentSection=document.getElementById('about');
+  if(commitmentSection)commitmentSection.hidden=commitment.visible===false;
+  const ce=document.getElementById('commitmentEyebrow'),ct=document.getElementById('commitmentTitle'),cc=document.getElementById('commitmentCopy');
+  if(ce)ce.textContent=commitment.eyebrow||'OUR COMMITMENT';
+  if(ct)ct.innerHTML=String(commitment.title||'CLEANER BODIES. BRIGHTER DAYS.').replace(/\n/g,'<br>');
+  if(cc)cc.textContent=commitment.copy||'';
+  const commitmentMedia=hm.commitment?.src?hm.commitment:defaults.homepageMedia.commitment;
+  renderMediaInto(document.getElementById('homeCommitmentMedia'),commitmentMedia);
+  const visibleTabs=(commitment.tabs||[]).filter(t=>t?.visible!==false);
+  const tabsHost=document.getElementById('commitmentTabs'),tabCopy=document.getElementById('commitmentTabCopy');
+  if(tabsHost){
+    tabsHost.innerHTML=visibleTabs.map((t,i)=>`<button type="button" class="commitment-tab ${i===0?'active':''}" data-commitment-tab-index="${i}">${String(t.title||`Tab ${i+1}`)}</button>`).join('');
+    tabsHost.hidden=!visibleTabs.length;
+  }
+  if(tabCopy){tabCopy.textContent=visibleTabs[0]?.copy||'';tabCopy.hidden=!visibleTabs.length}
+  if(tabsHost&&visibleTabs.length)tabsHost.addEventListener('click',e=>{const b=e.target.closest('[data-commitment-tab-index]');if(!b)return;tabsHost.querySelectorAll('.commitment-tab').forEach(x=>x.classList.toggle('active',x===b));if(tabCopy)tabCopy.textContent=visibleTabs[+b.dataset.commitmentTabIndex]?.copy||''});
+
+  const extra=(s.homepage?.extraMedia||[]).filter(x=>x?.visible!==false&&x?.media?.src);
+  const extraSection=document.getElementById('homepageFlexibleMedia'),extraTabs=document.getElementById('homepageMediaTabs'),extraStage=document.getElementById('homepageMediaStage');
+  if(extraSection&&extraStage){
+    extraSection.hidden=!extra.length;
+    if(extra.length){
+      if(extraTabs){extraTabs.innerHTML=extra.map((x,i)=>`<button type="button" class="pj-flex-media-tab ${i===0?'active':''}" data-home-media-tab="${i}">${String(x.title||`Media ${i+1}`)}</button>`).join('');extraTabs.hidden=extra.length<2}
+      renderMediaInto(extraStage,extra[0].media);
+      extraTabs?.addEventListener('click',e=>{const b=e.target.closest('[data-home-media-tab]');if(!b)return;extraTabs.querySelectorAll('.pj-flex-media-tab').forEach(x=>x.classList.toggle('active',x===b));renderMediaInto(extraStage,extra[+b.dataset.homeMediaTab]?.media)});
+    }
+  }
 
   const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
   const videoVariants=variants.filter(v=>v.video);
