@@ -1888,3 +1888,6 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 .pinterest-pdp .pj-mood-options .scent-chip-copy strong{font-size:22px!important;line-height:1!important;letter-spacing:-.02em!important}
 .pinterest-pdp .pj-mood-options .scent-chip-copy small{font-family:"Manrope",Arial,sans-serif!important;font-size:9px!important;letter-spacing:.08em!important}
 .pinterest-pdp .pdp-lede,.pinterest-pdp .pdp-fact-grid p,.pinterest-pdp .accordion-body,.pinterest-pdp .pdp-mini-trust{font-family:"Manrope",Arial,sans-serif!important}
+
+/* v18.3 — reliable homepage feature visibility */
+.commitment[hidden]{display:none!important}

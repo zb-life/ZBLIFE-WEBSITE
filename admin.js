@@ -95,9 +95,9 @@ function commitmentConfig(){
 function renderCommitmentEditor(){
   const c=commitmentConfig(),m=(adminState.homepageMedia||defaults.homepageMedia).commitment||{};
   if($('commitmentVisible'))$('commitmentVisible').checked=c.visible!==false;
-  if($('commitmentEyebrow'))$('commitmentEyebrow').value=c.eyebrow||'';
-  if($('commitmentTitle'))$('commitmentTitle').value=c.title||'';
-  if($('commitmentCopy'))$('commitmentCopy').value=c.copy||'';
+  if($('commitmentEyebrow'))$('commitmentEyebrow').value=c.eyebrow??'';
+  if($('commitmentTitle'))$('commitmentTitle').value=c.title??'';
+  if($('commitmentCopy'))$('commitmentCopy').value=c.copy??'';
   if($('commitmentMediaEditor'))$('commitmentMediaEditor').innerHTML=mediaEditor(m,0,'commitment','Commitment media',false);
 }
 function captureCommitmentEditor(){
@@ -335,9 +335,9 @@ function renderSettings(){
   if($('journalQuoteTextInput'))$('journalQuoteTextInput').value=adminState.homepage?.journalQuoteText||'Between shower and everywhere else.';
   const commitment=commitmentConfig();
   if($('commitmentVisible'))$('commitmentVisible').checked=commitment.visible!==false;
-  if($('commitmentEyebrow'))$('commitmentEyebrow').value=commitment.eyebrow||'OUR COMMITMENT';
-  if($('commitmentTitle'))$('commitmentTitle').value=commitment.title||'CLEANER BODIES.\nBRIGHTER DAYS.';
-  if($('commitmentCopy'))$('commitmentCopy').value=commitment.copy||'High-performance, low-impact personal care for a cleaner, healthier and more active world.';
+  if($('commitmentEyebrow'))$('commitmentEyebrow').value=commitment.eyebrow??'OUR COMMITMENT';
+  if($('commitmentTitle'))$('commitmentTitle').value=commitment.title??'CLEANER BODIES.\nBRIGHTER DAYS.';
+  if($('commitmentCopy'))$('commitmentCopy').value=commitment.copy??'High-performance, low-impact personal care for a cleaner, healthier and more active world.';
   $('subscriptionStorefrontVisible').checked=adminState.subscriptions.storefrontVisible!==false;$('subscriptionLabel').value=adminState.subscriptions.label||'Subscribe & save';$('subscriptionDiscount').value=Number(adminState.subscriptions.discount||0);
   $('bundlesStorefrontVisible').checked=adminState.features?.bundlesStorefrontVisible===true;$('customerAccountsEnabled').checked=adminState.features?.customerAccounts!==false;$('announcementEnabled').checked=adminState.features?.announcementEnabled!==false;$('announcementText').value=adminState.features?.announcementText||'';renderAnnouncementCards();
   $('salesEmails').value=adminState.settings.salesEmails||adminState.settings.internalEmail||'';$('adminEmails').value=adminState.settings.adminEmails||'';$('sendSalesOrder').checked=adminState.settings.sendSalesOrder!==false;$('sendSalesReceipt').checked=adminState.settings.sendSalesReceipt!==false;$('receiptFromName').value=adminState.settings.receiptFromName||'ZB';$('receiptPrefix').value=adminState.settings.receiptPrefix||'ZB';const hkMarket=(adminState.markets?.items||[]).find(x=>x.id==='hk');$('shippingFee').value=hkMarket?.shippingFee??adminState.shipping.fee;$('freeShippingThreshold').value=hkMarket?.freeShippingThreshold??adminState.shipping.threshold;
@@ -347,7 +347,7 @@ function renderSettings(){
   renderGenericEditors();renderHomeMediaEditors();renderCommitmentEditor();renderHomepageMoodEditors();renderHomepageJournalEditors();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
 }
 function captureSettings(){
-  adminState.homepage={...(adminState.homepage||{}),eyebrow:$('editEyebrow').value,title:$('editTitle').value,subtitle:$('editSubtitle').value,journalEyebrow:$('journalEyebrowInput')?.value||'ZB / VISUAL JOURNAL',journalTitle:$('journalTitleInput')?.value||'Save the feeling.',journalQuoteTitle:$('journalQuoteTitleInput')?.value||'FOR THE IN-BETWEEN',journalQuoteText:$('journalQuoteTextInput')?.value||'Between shower and everywhere else.',commitment:{...(adminState.homepage?.commitment||{}),visible:$('commitmentVisible')?$('commitmentVisible').checked:true,eyebrow:$('commitmentEyebrow')?.value||'OUR COMMITMENT',title:$('commitmentTitle')?.value||'CLEANER BODIES.\nBRIGHTER DAYS.',copy:$('commitmentCopy')?.value||''}};adminState.subscriptions.enabled=true;adminState.subscriptions.storefrontVisible=$('subscriptionStorefrontVisible').checked;adminState.subscriptions.label=$('subscriptionLabel').value;adminState.subscriptions.discount=Number($('subscriptionDiscount').value||0);
+  adminState.homepage={...(adminState.homepage||{}),eyebrow:$('editEyebrow').value,title:$('editTitle').value,subtitle:$('editSubtitle').value,journalEyebrow:$('journalEyebrowInput')?.value||'ZB / VISUAL JOURNAL',journalTitle:$('journalTitleInput')?.value||'Save the feeling.',journalQuoteTitle:$('journalQuoteTitleInput')?.value||'FOR THE IN-BETWEEN',journalQuoteText:$('journalQuoteTextInput')?.value||'Between shower and everywhere else.',commitment:{...(adminState.homepage?.commitment||{}),visible:$('commitmentVisible')?$('commitmentVisible').checked:true,eyebrow:$('commitmentEyebrow')?.value??'',title:$('commitmentTitle')?.value??'',copy:$('commitmentCopy')?.value??''}};adminState.subscriptions.enabled=true;adminState.subscriptions.storefrontVisible=$('subscriptionStorefrontVisible').checked;adminState.subscriptions.label=$('subscriptionLabel').value;adminState.subscriptions.discount=Number($('subscriptionDiscount').value||0);
   captureAnnouncementCards();adminState.features={...(adminState.features||defaults.features),bundlesStorefrontVisible:$('bundlesStorefrontVisible').checked,customerAccounts:$('customerAccountsEnabled').checked,announcementEnabled:$('announcementEnabled').checked,announcementText:$('announcementText').value.trim(),announcementCards:announcementCards()};
   adminState.settings={...(adminState.settings||{}),internalEmail:$('salesEmails').value.split(/[;,\n]+/).map(x=>x.trim()).filter(Boolean)[0]||'',salesEmails:$('salesEmails').value,adminEmails:$('adminEmails').value,sendSalesOrder:$('sendSalesOrder').checked,sendSalesReceipt:$('sendSalesReceipt').checked,receiptFromName:$('receiptFromName').value,receiptPrefix:$('receiptPrefix').value};adminState.shipping={fee:Number($('shippingFee').value||0),threshold:Number($('freeShippingThreshold').value||0)};const hkMarket=(adminState.markets?.items||[]).find(x=>x.id==='hk');if(hkMarket){hkMarket.shippingFee=adminState.shipping.fee;hkMarket.freeShippingThreshold=adminState.shipping.threshold;}
   adminState.footer={...(adminState.footer||defaults.footer),tagline:$('footerTagline').value,socials:{instagram:$('socialInstagram').value.trim(),tiktok:$('socialTiktok').value.trim(),youtube:$('socialYoutube').value.trim(),facebook:$('socialFacebook').value.trim(),linkedin:$('socialLinkedin').value.trim()}};
