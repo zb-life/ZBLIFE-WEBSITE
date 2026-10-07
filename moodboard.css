@@ -1,0 +1,76 @@
+/* ZIONBURG moodboard / Pinterest-style homepage prototype */
+.moodboard-page{background:#f5f1ea}
+.moodboard-header{position:sticky;top:0}
+.moodboard-shell{max-width:1600px;margin:0 auto;padding:0 22px 80px}
+.moodboard-intro{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:40px;align-items:end;padding:62px 8px 42px;border-bottom:1px solid rgba(23,23,23,.12)}
+.moodboard-intro h1{font-size:clamp(64px,10vw,154px);line-height:.78;letter-spacing:-.065em;font-weight:400;margin:18px 0 0}
+.moodboard-intro-copy{justify-self:end;max-width:360px;padding-bottom:8px}
+.moodboard-intro-copy p{font-size:14px;line-height:1.55;color:#66615a;margin:0 0 22px}
+.moodboard-pill{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0 16px;border-radius:999px;border:1px solid rgba(23,23,23,.28);font-size:9px;letter-spacing:.12em}
+.moodboard-pill-dark{background:#171717;color:#fff;border-color:#171717}
+.moodboard-filter{display:flex;gap:8px;overflow-x:auto;padding:18px 4px 22px;scrollbar-width:none;position:sticky;top:72px;z-index:18;background:linear-gradient(#f5f1ea 76%,rgba(245,241,234,0))}
+.moodboard-filter::-webkit-scrollbar{display:none}
+.moodboard-filter button{flex:0 0 auto;border:1px solid rgba(23,23,23,.18);background:rgba(255,255,255,.62);min-height:34px;padding:0 14px;border-radius:999px;font-size:8px;letter-spacing:.12em}
+.moodboard-filter button.active{background:#171717;color:#fff;border-color:#171717}
+.moodboard-grid{column-count:4;column-gap:16px}
+.mood-pin{break-inside:avoid;margin:0 0 16px;display:block;position:relative;border-radius:22px;overflow:hidden;background:#fff;border:1px solid rgba(23,23,23,.07);box-shadow:0 2px 0 rgba(23,23,23,.02);transition:transform .25s ease,box-shadow .25s ease}
+.mood-pin:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(31,27,23,.10)}
+.mood-pin.is-hidden{display:none}
+.mood-pin-media{position:relative;overflow:hidden;background:#e7e2da}
+.mood-pin-media img,.mood-pin-media video{width:100%;height:100%;display:block;object-fit:cover;object-position:center;transition:transform .38s ease}
+.mood-pin:hover .mood-pin-media img,.mood-pin:hover .mood-pin-media video{transform:scale(1.02)}
+.mood-pin.tall .mood-pin-media{aspect-ratio:4/5.35}
+.mood-pin.portrait .mood-pin-media{aspect-ratio:9/13}
+.mood-pin.square .mood-pin-media{aspect-ratio:1/1}
+.mood-pin.landscape .mood-pin-media{aspect-ratio:4/3}
+.mood-pin.product .mood-pin-media img{object-fit:contain;background:#fff;padding:16px}
+.mood-pin-copy{padding:14px 14px 16px}
+.mood-pin-copy small{font-size:8px;letter-spacing:.13em;color:#8a857d;text-transform:uppercase}
+.mood-pin-copy h3{font-size:18px;line-height:1.05;font-weight:400;margin:7px 0 7px;letter-spacing:-.02em}
+.mood-pin-copy p{font-size:10px;line-height:1.5;color:#716d67;margin:0}
+.mood-pin-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(23,23,23,.08)}
+.mood-pin-meta span{font-size:9px;color:#6f6a64}
+.mood-pin-meta b{font-size:9px;font-weight:400}
+.mood-pin-action{position:absolute;right:10px;bottom:10px;z-index:4;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 7px 22px rgba(0,0,0,.11)}
+.mood-pin-label{position:absolute;top:10px;left:10px;z-index:4;display:inline-flex;align-items:center;min-height:28px;padding:0 10px;border-radius:999px;background:rgba(255,255,255,.86);backdrop-filter:blur(10px);font-size:8px;letter-spacing:.12em}
+.mood-pin.text-pin{padding:26px;min-height:240px;display:flex;flex-direction:column;justify-content:space-between;background:#dfe7d6}
+.mood-pin.text-pin.alt{background:#d8edf0}
+.mood-pin.text-pin.warm{background:#ead7c6}
+.mood-pin.text-pin h3{font-size:clamp(28px,3vw,48px);line-height:.94;font-weight:400;letter-spacing:-.04em;margin:0}
+.mood-pin.text-pin p{font-size:10px;line-height:1.5;max-width:230px;color:#615e58}
+.mood-pin.scent-pin{background:color-mix(in srgb,var(--pin-color,#ddd) 28%,#fff)}
+.mood-pin.scent-pin .mood-pin-media{background:transparent}
+.mood-pin.scent-pin .mood-pin-media img{object-fit:contain;background:transparent;padding:22px}
+.mood-pin-video-overlay{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.28)}
+.mood-pin-video-overlay small{font-size:8px;letter-spacing:.14em}
+.mood-pin-video-overlay strong{display:block;font-size:20px;font-weight:400;margin-top:3px}
+.mood-pin-video .mood-pin-media:after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.45),transparent 52%)}
+.moodboard-note{display:block;font-size:8px;letter-spacing:.1em;color:#8a857d;margin-top:10px}
+
+@media(max-width:1180px){
+  .moodboard-grid{column-count:3}
+  .moodboard-intro h1{font-size:clamp(62px,12vw,116px)}
+}
+@media(max-width:820px){
+  .moodboard-shell{padding-left:14px;padding-right:14px}
+  .moodboard-intro{grid-template-columns:1fr;gap:24px;padding-top:42px}
+  .moodboard-intro-copy{justify-self:start}
+  .moodboard-grid{column-count:2;column-gap:12px}
+  .mood-pin{margin-bottom:12px;border-radius:18px}
+  .moodboard-filter{top:70px}
+}
+@media(max-width:560px){
+  .moodboard-shell{padding-left:10px;padding-right:10px}
+  .moodboard-intro{padding:34px 4px 28px}
+  .moodboard-intro h1{font-size:clamp(56px,20vw,82px)}
+  .moodboard-grid{column-count:2;column-gap:8px}
+  .mood-pin{margin-bottom:8px;border-radius:15px}
+  .mood-pin-copy{padding:10px 10px 12px}
+  .mood-pin-copy h3{font-size:14px}
+  .mood-pin-copy p{font-size:9px}
+  .mood-pin-label{top:7px;left:7px;min-height:24px;padding:0 8px;font-size:7px}
+  .mood-pin-action{right:7px;bottom:7px;width:30px;height:30px;font-size:13px}
+  .mood-pin.text-pin{padding:16px;min-height:180px}
+  .mood-pin.text-pin h3{font-size:24px}
+  .mood-pin.scent-pin .mood-pin-media img{padding:12px}
+}
