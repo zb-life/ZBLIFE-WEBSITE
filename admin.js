@@ -89,60 +89,6 @@ function mediaEditor(m,i,scope,label,removable=false){m=m||{};return `<div class
 function renderHomeMediaEditors(){$('homepageMediaEditors').innerHTML=homeMediaFlat().map((m,i)=>mediaEditor(m,i,'home',HOME_MEDIA_LABELS[i],false)).join('')}
 function captureHomeMedia(){const items=homeMediaFlat();document.querySelectorAll('[data-media-scope="home"]').forEach(el=>{const i=+el.dataset.mediaIndex;if(!items[i])return;el.querySelectorAll('[data-media-k]').forEach(inp=>{let v=inp.value;if(['autoplay','loop','controls','visible'].includes(inp.dataset.mediaK))v=v==='true';items[i][inp.dataset.mediaK]=v})});setHomeMediaFlat(items)}
 
-function homepageExtraMedia(){
-  adminState.homepage=adminState.homepage||{};
-  if(!Array.isArray(adminState.homepage.extraMedia))adminState.homepage.extraMedia=[];
-  return adminState.homepage.extraMedia;
-}
-function renderHomepageExtraMediaEditors(){
-  const host=$('homepageExtraMediaEditors');if(!host)return;
-  const items=homepageExtraMedia();
-  host.innerHTML=items.map((x,i)=>`<div class="media-editor" data-home-extra-media="${i}">
-    <div class="media-editor-head"><strong>${esc(x.title||`Media tab ${i+1}`)}</strong><div class="media-order-actions"><button type="button" class="icon-square" data-extra-media-move="up" data-extra-media-index="${i}" ${i===0?'disabled':''}>↑</button><button type="button" class="icon-square" data-extra-media-move="down" data-extra-media-index="${i}" ${i===items.length-1?'disabled':''}>↓</button><button type="button" class="text-button danger-text" data-remove-extra-media="${i}">Remove</button></div></div>
-    <div class="asset-preview media-asset-preview">${mediaPreview(x.media||{})}</div>
-    <div class="two-col"><label>Tab title<input data-extra-k="title" value="${esc(x.title||'')}"></label><label>Visible<select data-extra-k="visible">${boolOptions(x.visible!==false)}</select></label></div>
-    <div class="two-col"><label>Media type<select data-extra-media-k="type"><option value="image" ${x.media?.type==='image'||!x.media?.type?'selected':''}>Image</option><option value="video" ${x.media?.type==='video'?'selected':''}>Video / MP4</option><option value="youtube" ${x.media?.type==='youtube'?'selected':''}>YouTube</option></select></label><label>Alt / label<input data-extra-media-k="alt" value="${esc(x.media?.alt||'')}"></label></div>
-    <label>Media URL<input data-extra-media-k="src" value="${esc(x.media?.src||'')}"></label>
-    <label>Upload image / small video<input type="file" accept="image/*,video/mp4,video/webm" data-extra-media-upload="${i}"></label>
-    <label>Video poster image URL<input data-extra-media-k="poster" value="${esc(x.media?.poster||'')}"></label>
-    <div class="three-col"><label>Autoplay<select data-extra-media-k="autoplay">${boolOptions(x.media?.autoplay!==false)}</select></label><label>Loop<select data-extra-media-k="loop">${boolOptions(x.media?.loop!==false)}</select></label><label>Controls<select data-extra-media-k="controls">${boolOptions(!!x.media?.controls)}</select></label></div>
-  </div>`).join('')||'<p class="empty-copy">No additional homepage media tabs yet.</p>';
-}
-function captureHomepageExtraMedia(){
-  const items=homepageExtraMedia();
-  document.querySelectorAll('[data-home-extra-media]').forEach(el=>{
-    const i=+el.dataset.homeExtraMedia,x=items[i];if(!x)return;x.media=x.media||{};
-    el.querySelectorAll('[data-extra-k]').forEach(inp=>{let v=inp.value;if(inp.dataset.extraK==='visible')v=v==='true';x[inp.dataset.extraK]=v});
-    el.querySelectorAll('[data-extra-media-k]').forEach(inp=>{let v=inp.value;if(['autoplay','loop','controls'].includes(inp.dataset.extraMediaK))v=v==='true';x.media[inp.dataset.extraMediaK]=v});
-  });
-}
-function commitmentConfig(){
-  adminState.homepage=adminState.homepage||{};
-  adminState.homepage.commitment=adminState.homepage.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES. BRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.',tabs:[]};
-  if(!Array.isArray(adminState.homepage.commitment.tabs))adminState.homepage.commitment.tabs=[];
-  return adminState.homepage.commitment;
-}
-function renderCommitmentEditor(){
-  const c=commitmentConfig();
-  if($('commitmentVisible'))$('commitmentVisible').checked=c.visible!==false;
-  if($('commitmentEyebrowInput'))$('commitmentEyebrowInput').value=c.eyebrow||'';
-  if($('commitmentTitleInput'))$('commitmentTitleInput').value=c.title||'';
-  if($('commitmentCopyInput'))$('commitmentCopyInput').value=c.copy||'';
-  const host=$('commitmentTabEditors');if(!host)return;
-  host.innerHTML=c.tabs.map((t,i)=>`<div class="stack-editor" data-commitment-tab="${i}">
-    <div class="stack-editor-main"><div class="two-col"><label>Tab title<input data-ct-k="title" value="${esc(t.title||'')}"></label><label>Visible<select data-ct-k="visible">${boolOptions(t.visible!==false)}</select></label></div><label>Copy<textarea data-ct-k="copy" rows="2">${esc(t.copy||'')}</textarea></label></div>
-    <div class="media-order-actions"><button type="button" class="icon-square" data-commitment-tab-move="up" data-commitment-tab-index="${i}" ${i===0?'disabled':''}>↑</button><button type="button" class="icon-square" data-commitment-tab-move="down" data-commitment-tab-index="${i}" ${i===c.tabs.length-1?'disabled':''}>↓</button><button type="button" class="text-button danger-text" data-remove-commitment-tab="${i}">Remove</button></div>
-  </div>`).join('')||'<p class="empty-copy">No commitment tabs. The section can display without tabs.</p>';
-}
-function captureCommitmentEditor(){
-  const c=commitmentConfig();
-  if($('commitmentVisible'))c.visible=$('commitmentVisible').checked;
-  if($('commitmentEyebrowInput'))c.eyebrow=$('commitmentEyebrowInput').value;
-  if($('commitmentTitleInput'))c.title=$('commitmentTitleInput').value;
-  if($('commitmentCopyInput'))c.copy=$('commitmentCopyInput').value;
-  document.querySelectorAll('[data-commitment-tab]').forEach(el=>{const i=+el.dataset.commitmentTab,t=c.tabs[i];if(!t)return;el.querySelectorAll('[data-ct-k]').forEach(inp=>{let v=inp.value;if(inp.dataset.ctK==='visible')v=v==='true';t[inp.dataset.ctK]=v})});
-}
-
 const DEFAULT_HOME_MOODS=[
   {key:'post',title:'Post-workout',subtitle:'Cool down. Clean up. Keep moving.',scent:'Mint',image:'assets/movement.jpg',visible:true},
   {key:'beach',title:'Beach',subtitle:'Salt, sun and somewhere to be next.',scent:'Cucumber',image:'assets/hero-editorial.jpg',visible:true},
@@ -367,7 +313,7 @@ function renderSettings(){
   const f=adminState.footer||defaults.footer;$('footerTagline').value=f.tagline||'';$('socialInstagram').value=f.socials?.instagram||'';$('socialTiktok').value=f.socials?.tiktok||'';$('socialYoutube').value=f.socials?.youtube||'';$('socialFacebook').value=f.socials?.facebook||'';$('socialLinkedin').value=f.socials?.linkedin||'';
   const t=adminState.theme||defaults.theme;$('editFont').value=t.font||'Instrument Sans';$('editBodySize').value=String(t.bodySize||defaults.theme.bodySize||18);$('editBg').value=t.bg||defaults.theme.bg;$('editText').value=t.text||defaults.theme.text;$('editSurface').value=t.surface||defaults.theme.surface;$('editSoftSurface').value=t.softSurface||defaults.theme.softSurface;$('editSelectedFill').value=t.selectedFill||defaults.theme.selectedFill;$('editAccent').value=t.accent||defaults.theme.accent;$('editButton').value=t.button||defaults.theme.button;$('editButtonText').value=t.buttonText||defaults.theme.buttonText;$('editLine').value=t.line||defaults.theme.line;
   const b=adminState.branding||defaults.branding;$('navLogoUrl').value=b.logo||'';$('faviconUrl').value=b.favicon||'assets/favicon.svg';$('navLogoText').value=b.logoText||'ZIONBURG';$('mobileLogoText').value=b.mobileLogoText||'ZB';$('navLogoWidth').value=b.logoWidth||132;$('mobileLogoWidth').value=b.mobileLogoWidth||44;
-  renderGenericEditors();renderHomeMediaEditors();renderHomepageExtraMediaEditors();renderHomepageMoodEditors();renderHomepageJournalEditors();renderCommitmentEditor();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
+  renderGenericEditors();renderHomeMediaEditors();renderHomepageMoodEditors();renderHomepageJournalEditors();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
 }
 function captureSettings(){
   adminState.homepage={...(adminState.homepage||{}),eyebrow:$('editEyebrow').value,title:$('editTitle').value,subtitle:$('editSubtitle').value,journalEyebrow:$('journalEyebrowInput')?.value||'ZB / VISUAL JOURNAL',journalTitle:$('journalTitleInput')?.value||'Save the feeling.',journalQuoteTitle:$('journalQuoteTitleInput')?.value||'FOR THE IN-BETWEEN',journalQuoteText:$('journalQuoteTextInput')?.value||'Between shower and everywhere else.'};adminState.subscriptions.enabled=true;adminState.subscriptions.storefrontVisible=$('subscriptionStorefrontVisible').checked;adminState.subscriptions.label=$('subscriptionLabel').value;adminState.subscriptions.discount=Number($('subscriptionDiscount').value||0);
@@ -377,7 +323,7 @@ function captureSettings(){
   adminState.theme={font:$('editFont').value,bodySize:Number($('editBodySize').value||18),bg:$('editBg').value,text:$('editText').value,surface:$('editSurface').value,softSurface:$('editSoftSurface').value,selectedFill:$('editSelectedFill').value,accent:$('editAccent').value,button:$('editButton').value,buttonText:$('editButtonText').value,line:$('editLine').value};
   adminState.branding={...adminState.branding,logo:$('navLogoUrl').value.trim(),favicon:$('faviconUrl').value.trim()||'assets/favicon.svg',logoText:$('navLogoText').value.trim()||'ZIONBURG',mobileLogoText:$('mobileLogoText').value.trim()||'ZB',logoAlt:$('navLogoText').value.trim()||'ZIONBURG',logoWidth:Number($('navLogoWidth').value||132),mobileLogoWidth:Number($('mobileLogoWidth').value||44)};
 }
-function captureAll(){try{captureProductEditor();captureCollectionEditor();captureBundles();captureGenericEditors();captureFooterLinks();captureHomeMedia();captureHomepageExtraMedia();captureHomepageMoods();captureHomepageJournal();captureCommitmentEditor();captureBenefits();captureLanguageSettings();captureMarketEditors();captureSettings()}catch(e){console.warn('Admin capture skipped:',e)}}
+function captureAll(){try{captureProductEditor();captureCollectionEditor();captureBundles();captureGenericEditors();captureFooterLinks();captureHomeMedia();captureHomepageMoods();captureHomepageJournal();captureBenefits();captureLanguageSettings();captureMarketEditors();captureSettings()}catch(e){console.warn('Admin capture skipped:',e)}}
 
 function addGeneric(type,obj){captureAll();const map={page:'pages',nav:'nav',stockist:'stockists',partner:'partners',friend:'friends',discount:'discounts'};if(type==='subplan')adminState.subscriptions.plans.push(obj);else adminState[map[type]].push(obj);renderGenericEditors()}
 function removeGeneric(type,i){captureAll();const map={page:'pages',nav:'nav',stockist:'stockists',partner:'partners',friend:'friends',discount:'discounts'};if(type==='subplan')adminState.subscriptions.plans.splice(i,1);else adminState[map[type]].splice(i,1);renderGenericEditors()}
@@ -412,12 +358,6 @@ function bindEvents(){
 
   document.addEventListener('click',e=>{
     const ep=e.target.closest('[data-edit-product]');if(ep){openProductEditor(ep.dataset.editProduct);return}const ec=e.target.closest('[data-edit-collection]');if(ec){openCollectionEditor(ec.dataset.editCollection);return}
-    const ahem=e.target.closest('#addHomepageMediaBlock');if(ahem){captureHomepageExtraMedia();homepageExtraMedia().push({id:uid('home-media'),title:`Media ${homepageExtraMedia().length+1}`,visible:true,media:{type:'image',src:'',alt:'',poster:'',autoplay:true,loop:true,controls:false}});renderHomepageExtraMediaEditors();return}
-    const rem=e.target.closest('[data-remove-extra-media]');if(rem){captureHomepageExtraMedia();homepageExtraMedia().splice(+rem.dataset.removeExtraMedia,1);renderHomepageExtraMediaEditors();return}
-    const emm=e.target.closest('[data-extra-media-move]');if(emm){captureHomepageExtraMedia();const arr=homepageExtraMedia(),i=+emm.dataset.extraMediaIndex,to=emm.dataset.extraMediaMove==='up'?i-1:i+1;if(to>=0&&to<arr.length){[arr[i],arr[to]]=[arr[to],arr[i]];renderHomepageExtraMediaEditors()}return}
-    const act=e.target.closest('#addCommitmentTab');if(act){captureCommitmentEditor();commitmentConfig().tabs.push({title:`Tab ${commitmentConfig().tabs.length+1}`,copy:'',visible:true});renderCommitmentEditor();return}
-    const rct=e.target.closest('[data-remove-commitment-tab]');if(rct){captureCommitmentEditor();commitmentConfig().tabs.splice(+rct.dataset.removeCommitmentTab,1);renderCommitmentEditor();return}
-    const mct=e.target.closest('[data-commitment-tab-move]');if(mct){captureCommitmentEditor();const arr=commitmentConfig().tabs,i=+mct.dataset.commitmentTabIndex,to=mct.dataset.commitmentTabMove==='up'?i-1:i+1;if(to>=0&&to<arr.length){[arr[i],arr[to]]=[arr[to],arr[i]];renderCommitmentEditor()}return}
     const rv=e.target.closest('[data-remove-variant]');if(rv){captureVariants();const p=currentProduct();p.variants.splice(+rv.dataset.removeVariant,1);renderVariantEditors();return}
     const rm=e.target.closest('[data-remove-product-media]');if(rm){captureProductMedia();const p=currentProduct();p.media.splice(+rm.dataset.removeProductMedia,1);renderProductMediaEditors();return}
     const mv=e.target.closest('[data-move-product-media]');if(mv){captureProductMedia();const p=currentProduct(),i=+mv.dataset.mediaOrderIndex,j=mv.dataset.moveProductMedia==='up'?i-1:i+1;if(j>=0&&j<p.media.length){[p.media[i],p.media[j]]=[p.media[j],p.media[i]];renderProductMediaEditors()}return}
@@ -434,9 +374,6 @@ function bindEvents(){
     if(e.target.matches('[data-language-index],#defaultLocale')){captureLanguageSettings();renderLanguageSettings();const p=currentProduct();if(p&&$('productTranslationEditors'))$('productTranslationEditors').innerHTML=translationFieldsHTML(p,'product');const c=currentCollection();if(c&&$('collectionTranslationEditors'))$('collectionTranslationEditors').innerHTML=translationFieldsHTML(c,'collection');return}
     const scope=e.target.closest('[data-bk="scopeType"]');if(scope){captureBundles();const b=scope.closest('[data-bundle]'),obj=adminState.bundles[+b.dataset.bundle];obj.scopeType=scope.value;obj.scopeId=scope.value==='product'?adminState.catalogProducts[0]?.id||'':scope.value==='collection'?adminState.collections[0]?.id||'':'';renderBundleEditors();return}
     const bu=e.target.closest('[data-benefit-upload]');if(bu){const i=+bu.dataset.benefitUpload;readAssetUpload(bu,data=>{captureBenefits();adminState.benefits[i].icon=data;renderBenefitEditors()});return}
-    const emu=e.target.closest('[data-extra-media-upload]');if(emu){const i=+emu.dataset.extraMediaUpload,file=emu.files?.[0],x=homepageExtraMedia()[i];if(!file||!x)return;captureHomepageExtraMedia();emu.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/extra-media/${x.id||i}`});x.media=x.media||{};x.media.src=url;x.media.type=file.type.startsWith('video/')?'video':'image';saveSite(adminState);renderHomepageExtraMediaEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload homepage media: '+err.message)}finally{emu.disabled=false}return}
-    if(e.target.closest('[data-extra-k],[data-extra-media-k]')){captureHomepageExtraMedia();return}
-    if(e.target.matches('#commitmentVisible,#commitmentEyebrowInput,#commitmentTitleInput,#commitmentCopyInput,[data-ct-k]')){captureCommitmentEditor();return}
     const hmu=e.target.closest('[data-mood-upload]');if(hmu){const i=+hmu.dataset.moodUpload,file=hmu.files?.[0];if(!file)return;hmu.disabled=true;try{captureHomepageMoods();const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/moods/${homepageMoods()[i]?.key||i}`});homepageMoods()[i].image=url;saveSite(adminState);renderHomepageMoodEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload mood image: '+err.message)}finally{hmu.disabled=false}return}
     if(e.target.closest('[data-mood-k]')){captureHomepageMoods();return}
     const ju=e.target.closest('[data-journal-upload]');if(ju){const i=+ju.dataset.journalUpload,file=ju.files?.[0];if(!file)return;ju.disabled=true;try{captureHomepageJournal();const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/journal/${i+1}`});homepageJournal()[i].image=url;saveSite(adminState);renderHomepageJournalEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload journal image: '+err.message)}finally{ju.disabled=false}return}
@@ -445,7 +382,7 @@ function bindEvents(){
     const vmu=e.target.closest('[data-variant-mood-url]');if(vmu){const p=currentProduct(),i=+vmu.dataset.variantMoodUrl;if(p?.variants?.[i]){p.variants[i].moodCardImage=vmu.value.trim();saveSite(adminState);renderVariantMoodPhotoEditors()}return}
     const vm=e.target.closest('[data-variant-mood-image-upload]');if(vm){const i=+vm.dataset.variantMoodImageUpload,file=vm.files?.[0],p=currentProduct();if(!file||!p?.variants?.[i])return;captureVariants();vm.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`variants/${p.id}/${p.variants[i].id}/mood-cards`});p.variants[i].moodCardImage=url;saveSite(adminState);renderVariantEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload product-page mood card photo: '+err.message)}finally{vm.disabled=false}return}
     const vv=e.target.closest('[data-variant-video-upload]');if(vv){const i=+vv.dataset.variantVideoUpload,file=vv.files?.[0],p=currentProduct();if(!file||!p?.variants?.[i])return;captureVariants();vv.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`variants/${p.id}/${p.variants[i].id}/videos`});p.variants[i].video=url;saveSite(adminState);renderVariantEditors();showSaveToast()}catch(err){console.error(err);alert('Could not upload variant video: '+err.message);vv.disabled=false}return}
-    const mu=e.target.closest('[data-media-upload-scope]');if(mu){const scopeName=mu.dataset.mediaUploadScope,i=+mu.dataset.mediaUploadIndex,file=mu.files?.[0];if(!file)return;mu.disabled=true;try{if(scopeName==='home'){captureHomeMedia();const arr=homeMediaFlat();const folder=i===0?'hero':'commitment';const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/${folder}`});arr[i]={...(arr[i]||{}),src:url,type:file.type.startsWith('video/')?'video':'image'};setHomeMediaFlat(arr);saveSite(adminState);const slot=i===0?'hero':'commitment';await ZBSupa.syncHomepageMedia(slot,arr[i],0);renderHomeMediaEditors();showSaveToast()}else{captureProductMedia();const p=currentProduct();if(!p?.media?.[i])return;const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`products/${p.id}/media`});p.media[i].src=url;p.media[i].type=file.type.startsWith('video/')?'video':'image';saveSite(adminState);renderProductMediaEditors();showSaveToast()}}catch(err){console.error(err);alert('Could not upload media: '+err.message)}finally{mu.disabled=false}return}
+    const mu=e.target.closest('[data-media-upload-scope]');if(mu){const scopeName=mu.dataset.mediaUploadScope,i=+mu.dataset.mediaUploadIndex,file=mu.files?.[0];if(!file)return;mu.disabled=true;try{if(scopeName==='home'){captureHomeMedia();const arr=homeMediaFlat();const folder=i===0?'hero':i===1?'signature':i===6?'commitment':`lifestyle-${i-1}`;const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`homepage/${folder}`});arr[i]={...(arr[i]||{}),src:url,type:file.type.startsWith('video/')?'video':'image'};setHomeMediaFlat(arr);saveSite(adminState);const slot=i===0?'hero':i===1?'signature':i===6?'commitment':'lifestyle';await ZBSupa.syncHomepageMedia(slot,arr[i],Math.max(0,i-2));renderHomeMediaEditors();showSaveToast()}else{captureProductMedia();const p=currentProduct();if(!p?.media?.[i])return;const url=await ZBSupa.uploadMedia(file,{bucket:'product-media',folder:`products/${p.id}/media`});p.media[i].src=url;p.media[i].type=file.type.startsWith('video/')?'video':'image';saveSite(adminState);renderProductMediaEditors();showSaveToast()}}catch(err){console.error(err);alert('Could not upload media: '+err.message)}finally{mu.disabled=false}return}
     if(e.target.closest('[data-media-k]')){if(e.target.closest('[data-media-scope="home"]')){captureHomeMedia();renderHomeMediaEditors()}else if(e.target.closest('[data-media-scope="product"]')){captureProductMedia();renderProductMediaEditors()}}
   });
   $('navLogoFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;e.target.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'brand-assets',folder:'logo'});adminState.branding.logo=url;$('navLogoUrl').value=url;saveSite(adminState);renderBrandingPreviews();showSaveToast()}catch(err){console.error(err);alert('Could not upload logo: '+err.message)}finally{e.target.disabled=false}});$('faviconFile').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;e.target.disabled=true;try{const url=await ZBSupa.uploadMedia(file,{bucket:'brand-assets',folder:'favicon'});adminState.branding.favicon=url;$('faviconUrl').value=url;saveSite(adminState);renderBrandingPreviews();showSaveToast()}catch(err){console.error(err);alert('Could not upload favicon: '+err.message)}finally{e.target.disabled=false}});$('navLogoUrl').addEventListener('input',()=>{adminState.branding.logo=$('navLogoUrl').value.trim();renderBrandingPreviews()});$('faviconUrl').addEventListener('input',()=>{adminState.branding.favicon=$('faviconUrl').value.trim()||'assets/favicon.svg';renderBrandingPreviews()});$('navLogoText').addEventListener('input',()=>{adminState.branding.logoText=$('navLogoText').value;renderBrandingPreviews()});
