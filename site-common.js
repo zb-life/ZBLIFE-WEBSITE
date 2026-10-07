@@ -254,13 +254,16 @@ function renderShipping(){
   document.querySelectorAll('[data-shipping-announcement]').forEach(el=>{
     if(!announcementEnabled){el.style.display='none';el.innerHTML='';return}
     el.style.display='';
-    if(customAnnouncement){el.textContent=customAnnouncement;return}
-    if(zh){
+    let message='';
+    if(customAnnouncement)message=customAnnouncement;
+    else if(zh){
       const marketName=m.name==='Hong Kong'?'香港':m.name;
-      el.innerHTML=threshold>0?`${marketName}訂單滿 ${money(threshold,m)} 免運費 <span>•</span> ${tail}`:`${marketName} ${tr('freeDelivery','FREE DELIVERY')} <span>•</span> ${tail}`;
+      message=threshold>0?`${marketName}訂單滿 ${money(threshold,m)} 免運費 • ${tail}`:`${marketName} ${tr('freeDelivery','FREE DELIVERY')} • ${tail}`;
     }else{
-      el.innerHTML=threshold>0?`FREE ${m.name.toUpperCase()} DELIVERY OVER ${money(threshold,m)} <span>•</span> ${tail}`:`${tr('freeDelivery','FREE DELIVERY').toUpperCase()} — ${m.name.toUpperCase()} <span>•</span> ${tail}`;
+      message=threshold>0?`FREE ${m.name.toUpperCase()} DELIVERY OVER ${money(threshold,m)} • ${tail}`:`${tr('freeDelivery','FREE DELIVERY').toUpperCase()} — ${m.name.toUpperCase()} • ${tail}`;
     }
+    const repeated=Array.from({length:6},()=>`<span class="announcement-item">${message}</span>`).join('');
+    el.innerHTML=`<div class="announcement-marquee"><div class="announcement-track">${repeated}</div></div>`;
   });
   document.querySelectorAll('[data-shipping-note]').forEach(el=>el.textContent=zh?(threshold>0?`訂單滿 ${money(threshold,m)} 免運費。`:'所有訂單免運費。'):(threshold>0?`Free delivery over ${money(threshold,m)}.`:'Free delivery on every order.'));
 }
