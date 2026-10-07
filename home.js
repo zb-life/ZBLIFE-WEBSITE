@@ -18,6 +18,15 @@ document.addEventListener('DOMContentLoaded',()=>{
   const visibleLifeCount=lifeCards.filter((card,i)=>lifeItems[i]?.visible!==false).length;
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
+  const commitment=s.homepage?.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
+  const commitmentSection=document.getElementById('about');
+  if(commitmentSection)commitmentSection.hidden=commitment.visible===false;
+  const commitmentEyebrow=commitmentSection?.querySelector('.commitment-content .eyebrow');
+  const commitmentTitle=commitmentSection?.querySelector('.commitment-content h2');
+  const commitmentCopy=commitmentSection?.querySelector(':scope > p');
+  if(commitmentEyebrow)commitmentEyebrow.textContent=commitment.eyebrow||'OUR COMMITMENT';
+  if(commitmentTitle)commitmentTitle.innerHTML=String(commitment.title||'CLEANER BODIES.\nBRIGHTER DAYS.').replace(/\n/g,'<br>');
+  if(commitmentCopy)commitmentCopy.textContent=commitment.copy||'';
   renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
 
   const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
