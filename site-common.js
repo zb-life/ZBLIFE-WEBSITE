@@ -10,12 +10,12 @@ const ZB_LOCALE='zb_locale_v15';
 const ZB_MARKET='zb_market_v15';
 
 const defaultVariants=[
-  {id:'var-mint',name:'Mint',state:'Energising',editorialDescriptor:'COOL + CRISP',price:88,sku:'ZB-RBW-MINT',color:'#a8cdb7',image:'assets/scent-mint.jpg',inventory:100,active:true},
-  {id:'var-cucumber',name:'Cucumber',state:'Crisp',editorialDescriptor:'FRESH + CLEAN',price:88,sku:'ZB-RBW-CUC',color:'#c3dbad',image:'assets/scent-cucumber.jpg',inventory:100,active:true},
-  {id:'var-lavender',name:'Lavender',state:'Calming',editorialDescriptor:'SOFT + CALM',price:88,sku:'ZB-RBW-LAV',color:'#cbb4d9',image:'assets/scent-lavender.jpg',inventory:100,active:true},
-  {id:'var-rose',name:'Rose',state:'Romantic',editorialDescriptor:'SOFT + FLORAL',price:88,sku:'ZB-RBW-ROSE',color:'#e0aeb7',image:'assets/scent-rose.jpg',inventory:100,active:true},
-  {id:'var-amber',name:'Amber',state:'Warm',editorialDescriptor:'WARM + GROUNDED',price:88,sku:'ZB-RBW-AMBER',color:'#c5966d',image:'assets/scent-amber.jpg',inventory:100,active:true},
-  {id:'var-orange',name:'Orange',state:'Uplifting',editorialDescriptor:'BRIGHT + ZESTY',price:88,sku:'ZB-RBW-ORG',color:'#e9a769',image:'assets/scent-orange.jpg',inventory:100,active:true}
+  {id:'var-mint',name:'Mint',state:'Energising',editorialDescriptor:'COOL + CRISP',hoverDescription:'A cool, clean reset with a crisp mint finish — ideal after training, commuting or hot days.',price:88,sku:'ZB-RBW-MINT',color:'#a8cdb7',image:'assets/scent-mint.jpg',inventory:100,active:true},
+  {id:'var-cucumber',name:'Cucumber',state:'Crisp',editorialDescriptor:'FRESH + CLEAN',hoverDescription:'Light, watery and clean with a fresh cucumber feel made for an easy everyday reset.',price:88,sku:'ZB-RBW-CUC',color:'#c3dbad',image:'assets/scent-cucumber.jpg',inventory:100,active:true},
+  {id:'var-lavender',name:'Lavender',state:'Calming',editorialDescriptor:'SOFT + CALM',hoverDescription:'A softer, calming scent profile for winding down, travel days and slower moments.',price:88,sku:'ZB-RBW-LAV',color:'#cbb4d9',image:'assets/scent-lavender.jpg',inventory:100,active:true},
+  {id:'var-rose',name:'Rose',state:'Romantic',editorialDescriptor:'SOFT + FLORAL',hoverDescription:'Soft floral freshness with a clean rose finish — elegant without feeling overly sweet.',price:88,sku:'ZB-RBW-ROSE',color:'#e0aeb7',image:'assets/scent-rose.jpg',inventory:100,active:true},
+  {id:'var-amber',name:'Amber',state:'Warm',editorialDescriptor:'WARM + GROUNDED',hoverDescription:'Warm, grounded and subtly rich — a deeper scent profile for an elevated everyday refresh.',price:88,sku:'ZB-RBW-AMBER',color:'#c5966d',image:'assets/scent-amber.jpg',inventory:100,active:true},
+  {id:'var-orange',name:'Orange',state:'Uplifting',editorialDescriptor:'BRIGHT + ZESTY',hoverDescription:'Bright citrus energy with a clean, zesty finish — made for a quick pick-me-up.',price:88,sku:'ZB-RBW-ORG',color:'#e9a769',image:'assets/scent-orange.jpg',inventory:100,active:true}
 ];
 const defaultProductMedia=[
   {type:'image',src:'assets/product-editorial.jpg',poster:'',alt:'Refreshing Body Wipes',autoplay:true,loop:true,controls:false},
