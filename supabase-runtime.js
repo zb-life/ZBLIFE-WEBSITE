@@ -587,6 +587,54 @@
     return data.publicUrl;
   }
 
+  async function loadOrdersForAdmin(){
+    const access=await requireRole(['admin','editor','sales','fulfilment']);
+    if(!access.ok) throw new Error('Please sign in with an authorised staff account.');
+    const sb=await client();
+    const {data:orders,error}=await sb.from('orders').select('*').order('created_at',{ascending:false});
+    if(error) throw new Error('orders: '+error.message);
+    const ids=(orders||[]).map(x=>x.id);
+    let items=[],payments=[],fulfilments=[];
+    if(ids.length){
+      const [ir,pr,fr]=await Promise.all([
+        sb.from('order_items').select('*').in('order_id',ids),
+        sb.from('payments').select('*').in('order_id',ids),
+        sb.from('fulfilments').select('*').in('order_id',ids).order('created_at',{ascending:false})
+      ]);
+      if(ir.error) throw new Error('order_items: '+ir.error.message);
+      if(pr.error) throw new Error('payments: '+pr.error.message);
+      if(fr.error) throw new Error('fulfilments: '+fr.error.message);
+      items=ir.data||[];payments=pr.data||[];fulfilments=fr.data||[];
+    }
+    return (orders||[]).map(o=>{
+      const f=fulfilments.find(x=>x.order_id===o.id);
+      const p=payments.find(x=>x.order_id===o.id);
+      const addr=o.shipping_address||{};
+      return {
+        _dbId:o.id,id:o.order_number||o.id,date:o.created_at,customer:o.metadata?.customer_name||[addr.first_name,addr.last_name].filter(Boolean).join(' ')||'Customer',
+        email:o.email,phone:o.phone,total:Number(o.grand_total_minor||0)/100,payment:o.payment_status==='paid'?'Paid':o.payment_status||'Unpaid',
+        fulfilment:o.fulfilment_status==='unfulfilled'?'Unfulfilled':o.fulfilment_status,discountCode:'',currency:o.currency||'HKD',
+        stripeCheckoutSessionId:o.stripe_checkout_session_id||'',stripePaymentIntentId:o.stripe_payment_intent_id||'',
+        trackingCarrier:f?.carrier||'',trackingNumber:f?.tracking_number||'',trackingUrl:f?.tracking_url||'',shippedAt:f?.shipped_at||null,
+        address:addr,items:items.filter(x=>x.order_id===o.id).map(x=>({
+          productId:x.product_id,variantId:x.variant_id,name:[x.product_title_snapshot,x.variant_title_snapshot].filter(Boolean).join(' — '),
+          detail:x.metadata?.bundle_name||'',qty:Number(x.quantity||1),bundleQty:Number(x.metadata?.bundle_qty||1),
+          price:Number(x.line_total_minor||0)/Math.max(1,Number(x.quantity||1))/100
+        })),
+        paymentReference:p?.provider_payment_id||o.stripe_payment_intent_id||''
+      };
+    });
+  }
+
+  async function loadEmailLogForAdmin(){
+    const access=await requireRole(['admin','editor','sales','fulfilment']);
+    if(!access.ok) throw new Error('Please sign in with an authorised staff account.');
+    const sb=await client();
+    const {data,error}=await sb.from('email_log').select('*').order('created_at',{ascending:false}).limit(500);
+    if(error) throw new Error('email_log: '+error.message);
+    return (data||[]).map(x=>({date:x.created_at,type:x.email_type,to:x.recipient,subject:x.subject||'',status:x.status,orderId:x.order_id||'',providerMessageId:x.provider_message_id||''}));
+  }
+
   async function syncHomepageMedia(slot,media,index=0){
     const access=await requireRole(['admin','editor']);
     if(!access.ok) throw new Error('Please sign in with an Admin or Editor account.');
@@ -615,5 +663,5 @@
     return true;
   }
 
-  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser,uploadMedia,syncHomepageMedia};
+  window.ZBSupa = {client,authInfo,requireRole,hydrateSiteCache,loadLegacySite,syncSite,loadOrdersForUser,loadOrdersForAdmin,loadEmailLogForAdmin,uploadMedia,syncHomepageMedia};
 })();
