@@ -182,7 +182,8 @@
     const home = pages.find(p=>p.handle==='home');
     const homeBlocks = blocks.filter(b=>b.page_id===home?.id).sort((a,b)=>(a.position||0)-(b.position||0));
     const hero = homeBlocks.find(b=>b.block_type==='hero')?.settings||{};
-    const featured = homeBlocks.find(b=>b.block_type==='featured_product')?.settings||{};
+    const featuredBlock = homeBlocks.find(b=>b.block_type==='featured_product');
+    const featured = featuredBlock?.settings||{};
     const lifestyle = homeBlocks.find(b=>b.block_type==='lifestyle_grid')?.settings||{};
     const commitment = homeBlocks.find(b=>b.block_type==='commitment')?.settings||{};
     const mediaObj = m => m ? {type:m.type||'image',src:String(m.src||'').replace(/^\//,''),poster:m.poster||'',alt:m.alt||'',autoplay:m.autoplay!==false,loop:m.loop!==false,controls:!!m.controls,visible:m.visible!==false} : null;
@@ -245,6 +246,7 @@
         title:hero.title||'',
         subtitle:hero.subtitle||'',
         signature:{
+          visible:featuredBlock?.visible!==false,
           eyebrow:featured.eyebrow||'OUR SIGNATURE',
           title:featured.title||'REFRESHING\nBODY WIPES',
           description:featured.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',
@@ -499,16 +501,16 @@
     }
     const homeMedia=site.homepageMedia||{};
     const blockDefs=[
-      ['hero',1,{eyebrow:site.homepage?.eyebrow||'',title:site.homepage?.title||'',subtitle:site.homepage?.subtitle||'',media:homeMedia.hero||{}}],
-      ['featured_product',2,{product_id:site.catalogProducts?.[0]?.id||null,media:homeMedia.signature||{},eyebrow:site.homepage?.signature?.eyebrow||'OUR SIGNATURE',title:site.homepage?.signature?.title||'REFRESHING\nBODY WIPES',description:site.homepage?.signature?.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',button_label:site.homepage?.signature?.buttonLabel||'SHOP NOW',button_link:site.homepage?.signature?.buttonLink||'product.html'}],
-      ['lifestyle_grid',3,{items:homeMedia.lifestyle||[]}],
-      ['commitment',4,{media:homeMedia.commitment||{}}]
+      ['hero',1,true,{eyebrow:site.homepage?.eyebrow||'',title:site.homepage?.title||'',subtitle:site.homepage?.subtitle||'',media:homeMedia.hero||{}}],
+      ['featured_product',2,site.homepage?.signature?.visible!==false,{product_id:site.catalogProducts?.[0]?.id||null,media:homeMedia.signature||{},eyebrow:site.homepage?.signature?.eyebrow||'OUR SIGNATURE',title:site.homepage?.signature?.title||'REFRESHING\nBODY WIPES',description:site.homepage?.signature?.description||'A premium, plant-based body wipe designed for modern lifestyles. Gentle, effective, and refreshing — anytime, anywhere.',button_label:site.homepage?.signature?.buttonLabel||'SHOP NOW',button_link:site.homepage?.signature?.buttonLink||'product.html'}],
+      ['lifestyle_grid',3,true,{items:homeMedia.lifestyle||[]}],
+      ['commitment',4,true,{media:homeMedia.commitment||{}}]
     ];
     const {data:existingBlocks}=await sb.from('page_blocks').select('id,block_type').eq('page_id',homeId);
-    for(const [type,position,settings] of blockDefs){
+    for(const [type,position,visible,settings] of blockDefs){
       const existing=existingBlocks?.find(x=>x.block_type===type);
       await upsert('page_blocks',{
-        id:existing?.id||uuid(),page_id:homeId,block_type:type,position,visible:true,settings
+        id:existing?.id||uuid(),page_id:homeId,block_type:type,position,visible,settings
       },'id');
     }
     for(let i=0;i<(site.pages||[]).length;i++){
