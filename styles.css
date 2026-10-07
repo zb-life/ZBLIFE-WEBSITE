@@ -1346,3 +1346,70 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
     margin-top:8px!important;
   }
 }
+
+
+/* v16.8 — larger Signature image + scrolling announcement ticker */
+.signature-photo{
+  min-height:470px!important;
+  background:#e9e5dd!important;
+}
+.signature-photo>img.managed-media{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center center!important;
+  transform:none!important;
+  padding:0!important;
+}
+@media(max-width:920px){
+  .signature-photo{
+    min-height:clamp(420px,92vw,680px)!important;
+    aspect-ratio:auto!important;
+  }
+}
+@media(max-width:600px){
+  .signature-photo{
+    min-height:118vw!important;
+  }
+}
+
+.announcement{
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  padding-left:0!important;
+  padding-right:0!important;
+}
+.announcement-marquee{
+  width:100%;
+  overflow:hidden;
+}
+.announcement-track{
+  display:flex;
+  width:max-content;
+  align-items:center;
+  animation:zb-announcement-scroll 24s linear infinite;
+  will-change:transform;
+}
+.announcement-item{
+  display:inline-block;
+  flex:0 0 auto;
+  padding:0 34px;
+  white-space:nowrap;
+}
+.announcement:hover .announcement-track{
+  animation-play-state:paused;
+}
+@keyframes zb-announcement-scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-50%)}
+}
+@media(max-width:600px){
+  .announcement-track{animation-duration:18s}
+  .announcement-item{padding:0 22px}
+}
+@media(prefers-reduced-motion:reduce){
+  .announcement{overflow-x:auto!important;-webkit-overflow-scrolling:touch}
+  .announcement-track{animation:none!important}
+}
