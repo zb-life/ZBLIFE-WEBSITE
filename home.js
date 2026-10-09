@@ -20,7 +20,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
   const commitment=s.homepage?.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
   const commitmentSection=document.getElementById('about');
-  if(commitmentSection)commitmentSection.hidden=commitment.visible===false;
+  if(commitmentSection){
+    const hideCommitment=commitment.visible===false;
+    commitmentSection.hidden=hideCommitment;
+    commitmentSection.classList.toggle('zb-force-hidden',hideCommitment);
+    if(hideCommitment)commitmentSection.style.setProperty('display','none','important');
+    else commitmentSection.style.removeProperty('display');
+  }
   const commitmentEyebrow=commitmentSection?.querySelector('.commitment-content .eyebrow');
   const commitmentTitle=commitmentSection?.querySelector('.commitment-content h2');
   const commitmentCopy=commitmentSection?.querySelector(':scope > p');
