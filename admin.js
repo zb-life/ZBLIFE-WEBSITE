@@ -344,6 +344,14 @@ function renderSettings(){
   const f=adminState.footer||defaults.footer;$('footerTagline').value=f.tagline||'';$('socialInstagram').value=f.socials?.instagram||'';$('socialTiktok').value=f.socials?.tiktok||'';$('socialYoutube').value=f.socials?.youtube||'';$('socialFacebook').value=f.socials?.facebook||'';$('socialLinkedin').value=f.socials?.linkedin||'';
   const t=adminState.theme||defaults.theme;$('editFont').value=t.font||'Instrument Sans';$('editBodySize').value=String(t.bodySize||defaults.theme.bodySize||18);$('editBg').value=t.bg||defaults.theme.bg;$('editText').value=t.text||defaults.theme.text;$('editSurface').value=t.surface||defaults.theme.surface;$('editSoftSurface').value=t.softSurface||defaults.theme.softSurface;$('editSelectedFill').value=t.selectedFill||defaults.theme.selectedFill;$('editAccent').value=t.accent||defaults.theme.accent;$('editButton').value=t.button||defaults.theme.button;$('editButtonText').value=t.buttonText||defaults.theme.buttonText;$('editLine').value=t.line||defaults.theme.line;
   const b=adminState.branding||defaults.branding;$('navLogoUrl').value=b.logo||'';$('faviconUrl').value=b.favicon||'assets/favicon.svg';$('navLogoText').value=b.logoText||'ZIONBURG';$('mobileLogoText').value=b.mobileLogoText||'ZB';$('navLogoWidth').value=b.logoWidth||132;$('mobileLogoWidth').value=b.mobileLogoWidth||44;
+  const seo=adminState.seo||defaults.seo;
+  if($('seoSiteName'))$('seoSiteName').value=seo.siteName||'';
+  if($('seoHomepageTitle'))$('seoHomepageTitle').value=seo.homepageTitle||'';
+  if($('seoHomepageDescription'))$('seoHomepageDescription').value=seo.homepageDescription||'';
+  if($('seoTitleSuffix'))$('seoTitleSuffix').value=seo.titleSuffix||'';
+  if($('seoSocialTitle'))$('seoSocialTitle').value=seo.socialTitle||'';
+  if($('seoSocialDescription'))$('seoSocialDescription').value=seo.socialDescription||'';
+  if($('seoSocialImage'))$('seoSocialImage').value=seo.socialImage||'';
   renderGenericEditors();renderHomeMediaEditors();renderCommitmentEditor();renderHomepageMoodEditors();renderHomepageJournalEditors();renderBenefitEditors();renderBrandingPreviews();renderProductList();renderCollectionList();renderBundleEditors();renderLanguageSettings();renderMarketEditors();previewShipping();
 }
 function captureSettings(){
@@ -353,6 +361,7 @@ function captureSettings(){
   adminState.footer={...(adminState.footer||defaults.footer),tagline:$('footerTagline').value,socials:{instagram:$('socialInstagram').value.trim(),tiktok:$('socialTiktok').value.trim(),youtube:$('socialYoutube').value.trim(),facebook:$('socialFacebook').value.trim(),linkedin:$('socialLinkedin').value.trim()}};
   adminState.theme={font:$('editFont').value,bodySize:Number($('editBodySize').value||18),bg:$('editBg').value,text:$('editText').value,surface:$('editSurface').value,softSurface:$('editSoftSurface').value,selectedFill:$('editSelectedFill').value,accent:$('editAccent').value,button:$('editButton').value,buttonText:$('editButtonText').value,line:$('editLine').value};
   adminState.branding={...adminState.branding,logo:$('navLogoUrl').value.trim(),favicon:$('faviconUrl').value.trim()||'assets/favicon.svg',logoText:$('navLogoText').value.trim()||'ZIONBURG',mobileLogoText:$('mobileLogoText').value.trim()||'ZB',logoAlt:$('navLogoText').value.trim()||'ZIONBURG',logoWidth:Number($('navLogoWidth').value||132),mobileLogoWidth:Number($('mobileLogoWidth').value||44)};
+  adminState.seo={...(adminState.seo||defaults.seo),siteName:$('seoSiteName')?.value.trim()||'',homepageTitle:$('seoHomepageTitle')?.value.trim()||'',homepageDescription:$('seoHomepageDescription')?.value.trim()||'',titleSuffix:$('seoTitleSuffix')?.value.trim()||'',socialTitle:$('seoSocialTitle')?.value.trim()||'',socialDescription:$('seoSocialDescription')?.value.trim()||'',socialImage:$('seoSocialImage')?.value.trim()||''};
 }
 function captureAll(){try{captureProductEditor();captureCollectionEditor();captureBundles();captureGenericEditors();captureFooterLinks();captureHomeMedia();captureCommitmentEditor();captureHomepageMoods();captureHomepageJournal();captureBenefits();captureLanguageSettings();captureMarketEditors();captureSettings()}catch(e){console.warn('Admin capture skipped:',e)}}
 

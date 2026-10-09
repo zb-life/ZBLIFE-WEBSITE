@@ -1900,3 +1900,40 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 .checkout-discount-message{min-height:18px;padding-top:7px;font-size:11px;color:#777}
 .checkout-discount-message.success{color:#306a46}
 .checkout-discount-message.error{color:#a22}
+
+/* v18.6 — clean scent info cards + no mock mood photography */
+.pj-mood-media{background:#e9e4dc}
+.pj-mood-media img[hidden]{display:none!important}
+.scent-hover-card{
+  left:12px!important;
+  right:12px!important;
+  bottom:12px!important;
+  padding:12px 13px!important;
+  border-radius:12px!important;
+  background:rgba(255,255,255,.94)!important;
+  box-shadow:0 10px 26px rgba(25,24,21,.12)!important;
+  backdrop-filter:blur(10px)!important;
+  -webkit-backdrop-filter:blur(10px)!important;
+}
+.scent-hover-top{margin-bottom:6px!important}
+.scent-hover-top b{font-size:9px!important;letter-spacing:.11em!important;font-weight:500!important}
+.scent-hover-copy{
+  font-size:11px!important;
+  line-height:1.4!important;
+  display:-webkit-box!important;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.scent-hover-cta{
+  margin-top:8px!important;
+  padding-top:8px!important;
+  font-size:9px!important;
+  letter-spacing:.08em!important;
+}
+.scent-hover-cta span{width:20px!important;height:20px!important;font-size:9px!important}
+@media(max-width:600px){
+  .scent-hover-card{display:none!important}
+  .scent-card-media{border-radius:12px!important}
+  .scent-card>strong{margin-top:8px!important}
+}

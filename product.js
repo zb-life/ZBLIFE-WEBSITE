@@ -88,7 +88,7 @@ function renderPDP(){
   if(!selectedBundleId||!bundles.some(b=>b.id===selectedBundleId))selectedBundleId=bundles[0].id;
   const bundle=selectedBundle(site,currentCatalogProduct);
 
-  document.title=`ZIONBURG — ${localize(currentCatalogProduct,'title')}`;
+  if(typeof applySeoMeta==='function')applySeoMeta({pageTitle:localize(currentCatalogProduct,'title'),description:localize(currentCatalogProduct,'description')||''});
   const countLabel=document.getElementById('variantCountLabel');if(countLabel)countLabel.textContent=currentLocale()==='zh-HK'?`${vs.length} 款選項`:`${vs.length} ${vs.length===1?'OPTION':'OPTIONS'}`;
   const scentTitle=document.querySelector('.pj-mood-selector .selector-title span:first-child');if(scentTitle)scentTitle.textContent=vs.length>1?tr('chooseScent','CHOOSE YOUR SCENT'):tr('chooseOption','CHOOSE YOUR OPTION');
   document.getElementById('scentOptions').innerHTML=vs.map(v=>`<button type="button" class="option scent-chip ${v.id===variant.id?'active':''}" data-variant="${v.id}" aria-pressed="${v.id===variant.id}"><span class="scent-chip-dot" style="background:${v.color||'#ddd'}"></span><span class="scent-chip-copy"><strong>${variantName(v)}</strong><small>${variantState(v)||tr('option','Option')}</small></span><span class="chip-check">✓</span></button>`).join('');

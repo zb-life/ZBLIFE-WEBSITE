@@ -27,6 +27,7 @@ const defaults={
     font:'Instrument Sans',bodySize:18,bg:'#f8f5ef',text:'#171717',surface:'#ffffff',softSurface:'#f0e7db',selectedFill:'#f6e3df',accent:'#d6a39a',button:'#1c1d1b',buttonText:'#ffffff',line:'#ded7ce'
   },
   branding:{logo:'',logoText:'ZIONBURG',mobileLogoText:'ZB',logoAlt:'ZIONBURG',logoWidth:132,mobileLogoWidth:44,favicon:'assets/favicon.svg'},
+  seo:{siteName:'ZB by Zionburg',homepageTitle:'ZB by Zionburg | Refreshing Body Wipes',homepageDescription:'Refreshing body wipes made for movement, travel and everyday resets. Discover plant-based, XL body wipes from ZB by Zionburg.',titleSuffix:'| ZB by Zionburg',socialTitle:'ZB by Zionburg',socialDescription:'Move. Reset. Refresh. Body wipes designed for active, everyday life.',socialImage:''},
   shipping:{fee:30,threshold:300},
   nav:[
     {label:'Products',type:'products',visible:true},
@@ -174,6 +175,28 @@ function migrateRaw(raw){raw=raw&&typeof raw==='object'?raw:{};
   return raw
 }
 function getSite(){try{const raw=migrateRaw(JSON.parse(localStorage.getItem(ZB_KEY)||'{}'));const out=deepMerge(defaults,raw);const primary=getPrimaryCatalogProduct(out);out.products=primary?primary.variants:clone(defaultVariants);out.productMedia=primary?primary.media:clone(defaultProductMedia);return out}catch{return clone(defaults)}}
+function ensureMeta(name,attr='name'){let el=document.head.querySelector(`meta[${attr}="${name}"]`);if(!el){el=document.createElement('meta');el.setAttribute(attr,name);document.head.appendChild(el)}return el}
+function applySeoMeta({home=false,pageTitle='',description='',image=''}={}){
+  const site=getSite(),seo=site.seo||defaults.seo,siteName=seo.siteName||site.branding?.logoText||'ZIONBURG';
+  const suffix=seo.titleSuffix||(`| ${siteName}`);
+  const title=home?(seo.homepageTitle||siteName):(pageTitle?(`${pageTitle} ${suffix}`).trim():siteName);
+  const desc=description||(home?seo.homepageDescription:'')||seo.homepageDescription||'';
+  const socialTitle=(home?seo.socialTitle:'')||title;
+  const socialDescription=(home?seo.socialDescription:'')||desc;
+  const socialImage=image||seo.socialImage||'';
+  document.title=title;
+  ensureMeta('description').setAttribute('content',desc);
+  ensureMeta('og:title','property').setAttribute('content',socialTitle);
+  ensureMeta('og:description','property').setAttribute('content',socialDescription);
+  ensureMeta('og:type','property').setAttribute('content',home?'website':'article');
+  ensureMeta('og:site_name','property').setAttribute('content',siteName);
+  ensureMeta('twitter:card').setAttribute('content',socialImage?'summary_large_image':'summary');
+  ensureMeta('twitter:title').setAttribute('content',socialTitle);
+  ensureMeta('twitter:description').setAttribute('content',socialDescription);
+  if(socialImage){ensureMeta('og:image','property').setAttribute('content',socialImage);ensureMeta('twitter:image').setAttribute('content',socialImage)}
+  ensureMeta('application-name').setAttribute('content',siteName);
+}
+
 function saveSite(v){localStorage.setItem(ZB_KEY,JSON.stringify(v));window.dispatchEvent(new Event('zb:site-updated'));if(window.ZBSupa&&storefrontTranslationEditActive?.()){ZBSupa.syncSite(v).catch(e=>console.warn('Supabase publish skipped:',e.message))}}
 function currentLocale(){const site=getSite(),enabled=(site.localization?.languages||[]).filter(x=>x.enabled!==false);const saved=localStorage.getItem(ZB_LOCALE);return enabled.some(x=>x.code===saved)?saved:(site.localization?.defaultLocale||enabled[0]?.code||'en')}
 function setLocale(code){localStorage.setItem(ZB_LOCALE,code)}
