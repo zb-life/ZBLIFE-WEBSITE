@@ -32,7 +32,6 @@ async function createStripeSession(params){
   append(body,'payment_intent_data[receipt_email]',params.email);
   append(body,'phone_number_collection[enabled]','true');
   append(body,'billing_address_collection','auto');
-  append(body,'allow_promotion_codes','true');
   params.lines.forEach((line,i)=>{
     append(body,`line_items[${i}][quantity]`,line.quantity);
     append(body,`line_items[${i}][price_data][currency]`,params.currency.toLowerCase());
@@ -113,16 +112,34 @@ exports.handler=async(event)=>{
       });
     }
 
+    const discountCode=String(input.discountCode||'').trim().toUpperCase();
+    let discount=0,discountLabel='';
+    if(discountCode){
+      const discountRows=await sb('discounts?select=id,code,discount_type,value,enabled&enabled=eq.true');
+      const d=(discountRows||[]).find(x=>String(x.code||'').trim().toUpperCase()===discountCode);
+      if(!d)return json(400,{error:'This discount code is not valid.'});
+      if(d.discount_type==='percent'){
+        discount=Math.min(subtotal,Math.max(0,Math.round(subtotal*Number(d.value||0)/100)));
+      }else if(d.discount_type==='flat'){
+        if(String(market.currency||'HKD').toUpperCase()!=='HKD')return json(400,{error:'This discount code is only available for HKD checkout.'});
+        discount=Math.min(subtotal,Math.max(0,Math.round(Number(d.value||0)*100)));
+      }else{
+        return json(400,{error:'This discount code is not valid.'});
+      }
+      discountLabel=discountCode;
+    }
+    const discountedSubtotal=Math.max(0,subtotal-discount);
+
     const zones=await sb('shipping_zones?select=id&market_id='+eq(market.id)+'&active=eq.true&order=position.asc&limit=1');
     let shipping=0;
     if(zones?.[0]){
       const rates=await sb('shipping_rates?select=price_minor,free_over_minor,min_order_minor,max_order_minor,active&shipping_zone_id='+eq(zones[0].id)+'&active=eq.true&order=position.asc');
-      const rate=(rates||[]).find(r=>(r.min_order_minor==null||subtotal>=Number(r.min_order_minor))&&(r.max_order_minor==null||subtotal<=Number(r.max_order_minor)))||rates?.[0];
-      if(rate)shipping=(rate.free_over_minor!=null&&subtotal>=Number(rate.free_over_minor))?0:Number(rate.price_minor||0);
+      const rate=(rates||[]).find(r=>(r.min_order_minor==null||discountedSubtotal>=Number(r.min_order_minor))&&(r.max_order_minor==null||discountedSubtotal<=Number(r.max_order_minor)))||rates?.[0];
+      if(rate)shipping=(rate.free_over_minor!=null&&discountedSubtotal>=Number(rate.free_over_minor))?0:Number(rate.price_minor||0);
     }
-    const taxable=subtotal+(market.tax_shipping?shipping:0);
+    const taxable=discountedSubtotal+(market.tax_shipping?shipping:0);
     const tax=market.tax_mode==='manual'?Math.max(0,Math.round(taxable*Number(market.manual_tax_rate||0)/100)):0;
-    const total=subtotal+shipping+tax;
+    const total=discountedSubtotal+shipping+tax;
     const postal=String(customer.postal||'').trim()||'N/A';
     const customerSnapshot={
       email,first_name:String(customer.firstName||'').trim(),last_name:String(customer.lastName||'').trim(),phone,
@@ -132,12 +149,20 @@ exports.handler=async(event)=>{
 
     const intents=await sb('checkout_intents',{
       method:'POST',
-      body:JSON.stringify({market_id:market.id,email,customer:customerSnapshot,items,currency:market.currency,subtotal_minor:subtotal,shipping_minor:shipping,tax_minor:tax,total_minor:total,status:'pending'})
+      body:JSON.stringify({market_id:market.id,email,customer:{...customerSnapshot,discount_code:discountLabel},items,currency:market.currency,subtotal_minor:subtotal,shipping_minor:shipping,tax_minor:tax,total_minor:total,status:'pending'})
     });
     const intent=intents?.[0];
     if(!intent?.id)throw new Error('Could not create checkout record.');
 
-    const lines=items.map(x=>({quantity:x.qty,unitAmount:x.checkoutUnitMinor,name:`${x.productTitle} — ${x.variantTitle}`,description:x.bundleQty>1?`${x.bundleName||x.bundleQty+' pack'}`:''}));
+    let allocatedDiscount=0;
+    const lines=items.map((x,i)=>{
+      const lineBase=Number(x.lineTotalMinor||0);
+      const share=i===items.length-1?Math.max(0,discount-allocatedDiscount):Math.min(lineBase,Math.max(0,Math.round(discount*(lineBase/Math.max(1,subtotal)))));
+      allocatedDiscount+=share;
+      const discountedLine=Math.max(0,lineBase-share);
+      const description=[x.bundleQty>1?(x.bundleName||x.bundleQty+' pack'):'',x.qty>1?('Qty '+x.qty):'',discountLabel?('Discount '+discountLabel):''].filter(Boolean).join(' · ');
+      return {quantity:1,unitAmount:discountedLine,name:`${x.productTitle} — ${x.variantTitle}`,description};
+    });
     if(shipping>0)lines.push({quantity:1,unitAmount:shipping,name:'Shipping'});
     if(tax>0)lines.push({quantity:1,unitAmount:tax,name:'Tax'});
     const base=env('URL')||env('DEPLOY_PRIME_URL')||'https://zb.life';

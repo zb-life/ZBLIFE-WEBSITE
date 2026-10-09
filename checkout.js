@@ -1,3 +1,4 @@
+let appliedDiscountCode='';
 function checkoutCountry(){return document.getElementById('country')?.value||''}
 function checkoutMarket(){
   const country=checkoutCountry();
@@ -5,9 +6,16 @@ function checkoutMarket(){
   const site=getSite(),enabled=(site.markets?.items||[]).filter(m=>m.enabled!==false);
   return enabled.find(m=>(m.countries||[]).includes(country))||enabled.find(m=>(m.countries||[]).includes('Other'))||null;
 }
+function discountPreview(sub,market){
+  const code=String(appliedDiscountCode||'').trim().toUpperCase();if(!code)return 0;
+  const d=(getSite().discounts||[]).find(x=>x.enabled!==false&&String(x.code||'').trim().toUpperCase()===code);if(!d)return 0;
+  if(d.type==='percent')return Math.min(sub,Math.max(0,sub*Number(d.value||0)/100));
+  if(d.type==='flat'){if(market&&String(market.currency||'HKD').toUpperCase()!=='HKD')return 0;return Math.min(sub,Math.max(0,Number(d.value||0)))}
+  return 0;
+}
 function calc(){
-  const c=getCart(),sub=cartSubtotal(),disc=0;
-  const after=sub,country=checkoutCountry(),market=checkoutMarket(),ship=market?shippingFor(after,country):0,tax=market?taxFor(after,ship,country):0,total=after+ship+tax;
+  const c=getCart(),sub=cartSubtotal(),country=checkoutCountry(),market=checkoutMarket(),disc=discountPreview(sub,market);
+  const after=Math.max(0,sub-disc),ship=market?shippingFor(after,country):0,tax=market?taxFor(after,ship,country):0,total=after+ship+tax;
   document.getElementById('checkoutItems').innerHTML=c.length?c.map(i=>`<div class="order-item"><span>${i.name}<br><small>${i.detail||''}</small></span><b>${money(i.price*i.qty,market||currentMarket())}</b></div>`).join(''):`<p>${tr('bagEmpty','Your bag is empty.')}</p>`;
   document.getElementById('coSubtotal').textContent=money(sub,market||currentMarket());document.getElementById('discountRow').style.display=disc?'flex':'none';document.getElementById('coDiscount').textContent='−'+money(disc,market||currentMarket());document.getElementById('coShipping').textContent=market?(ship?money(ship,market):tr('freeDelivery','FREE')):'—';document.getElementById('shipPrice').textContent=market?(ship?money(ship,market):tr('freeDelivery','FREE')):'—';document.getElementById('coTax').textContent=market?(tax?money(tax,market):money(0,market)):'—';document.getElementById('taxRow').style.display=getSite().markets?.taxEngine==='none'?'none':'flex';document.getElementById('coTotal').textContent=market?money(total,market):money(after,currentMarket());
   const estimate=document.getElementById('shipEstimate');if(estimate)estimate.textContent=market?.deliveryEstimate||tr('deliveryTiming','Delivery timing shown at checkout');
@@ -35,6 +43,15 @@ function clearCheckoutError(){const el=document.getElementById('checkoutError');
 document.addEventListener('DOMContentLoaded',()=>{
   renderCheckoutCountries();renderCheckoutAccount();calc();
   document.getElementById('country')?.addEventListener('change',()=>{updatePostalRequirement();const m=checkoutMarket();if(m)setMarket(m.id);calc()});
+  document.getElementById('applyDiscount')?.addEventListener('click',()=>{
+    const input=document.getElementById('discountCode'),message=document.getElementById('discountMessage'),code=String(input?.value||'').trim().toUpperCase();
+    if(!code){appliedDiscountCode='';if(message){message.textContent='';message.className='checkout-discount-message'}calc();return}
+    const d=(getSite().discounts||[]).find(x=>x.enabled!==false&&String(x.code||'').trim().toUpperCase()===code),market=checkoutMarket();
+    if(!d){appliedDiscountCode='';if(message){message.textContent='This discount code is not valid.';message.className='checkout-discount-message error'}calc();return}
+    if(d.type==='flat'&&market&&String(market.currency||'HKD').toUpperCase()!=='HKD'){appliedDiscountCode='';if(message){message.textContent='This discount code is only available for HKD checkout.';message.className='checkout-discount-message error'}calc();return}
+    appliedDiscountCode=code;if(input)input.value=code;if(message){message.textContent=code+' applied';message.className='checkout-discount-message success'}calc();
+  });
+  document.getElementById('discountCode')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('applyDiscount')?.click()}});
   document.getElementById('checkoutForm').addEventListener('submit',async e=>{
     e.preventDefault();clearCheckoutError();
     const form=e.currentTarget;if(!form.checkValidity()){form.reportValidity();return}
@@ -42,6 +59,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     const t=calc();if(!t.market){showCheckoutError('Shipping is not currently available for the selected country.');return}
     const submit=document.getElementById('checkoutSubmit'),old=submit.textContent;submit.disabled=true;submit.textContent='OPENING SECURE PAYMENT…';
     const payload={
+      discountCode:appliedDiscountCode||'',
       items:c.map(i=>({productId:i.productId,variantId:i.variantId,qty:Number(i.qty||1),bundleQty:Number(i.bundleQty||1),subscription:!!i.subscription,cadence:i.cadence||null})),
       customer:{
         email:document.getElementById('email').value.trim().toLowerCase(),

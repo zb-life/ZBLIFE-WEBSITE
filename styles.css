@@ -1891,3 +1891,12 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 
 /* v18.3 — reliable homepage feature visibility */
 .commitment[hidden]{display:none!important}
+
+/* v18.4 — checkout discount code */
+.checkout-discount-box{padding:18px 0;border-bottom:1px solid var(--line)}
+.checkout-discount-row{display:grid;grid-template-columns:1fr auto;gap:8px}
+.checkout-discount-row input{min-width:0;height:46px;border:1px solid var(--line);background:#fff;padding:0 13px;font:inherit}
+.checkout-discount-row button{height:46px;border:1px solid #171717;background:#171717;color:#fff;padding:0 18px;font-size:10px;letter-spacing:.12em;cursor:pointer}
+.checkout-discount-message{min-height:18px;padding-top:7px;font-size:11px;color:#777}
+.checkout-discount-message.success{color:#306a46}
+.checkout-discount-message.error{color:#a22}
