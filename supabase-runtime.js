@@ -313,14 +313,17 @@
     try{
       const site = await loadLegacySite();
       if(!site) return false;
-      localStorage.setItem(cacheKey, JSON.stringify(site));
+      const next=JSON.stringify(site);
+      const previous=localStorage.getItem(cacheKey)||'';
+      const changed=previous!==next;
+      localStorage.setItem(cacheKey,next);
       sessionStorage.setItem(HYDRATED_KEY,'1');
-      window.dispatchEvent(new CustomEvent('zb:supabase-ready',{detail:{site}}));
-      if(reload){
+      window.dispatchEvent(new CustomEvent('zb:supabase-ready',{detail:{site,changed}}));
+      if(reload&&changed){
         sessionStorage.setItem('zb_supabase_reloaded','1');
         location.reload();
       }
-      return true;
+      return changed;
     }catch(err){
       console.warn('[ZB Supabase] Hydration failed:',err);
       return false;
