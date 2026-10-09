@@ -84,12 +84,12 @@ document.addEventListener('DOMContentLoaded',()=>{
 document.addEventListener('DOMContentLoaded',()=>{
   const site=getSite();
   const defaultsMood=[
-    {key:'post',title:'Post-workout',subtitle:'Cool down. Clean up. Keep moving.',scent:'Mint',image:'assets/movement.jpg',visible:true},
-    {key:'beach',title:'Beach',subtitle:'Salt, sun and somewhere to be next.',scent:'Cucumber',image:'assets/hero-editorial.jpg',visible:true},
-    {key:'travel',title:'Travel',subtitle:'A carry-on reset between places.',scent:'Amber',image:'assets/travel.jpg',visible:true},
-    {key:'slow',title:'Slow morning',subtitle:'Soft routines and nowhere to rush.',scent:'Lavender',image:'assets/everyday.jpg',visible:true},
-    {key:'night',title:'Night out',subtitle:'Refresh before the next plan.',scent:'Rose',image:'assets/product-editorial.jpg',visible:true},
-    {key:'outdoors',title:'Outdoors',subtitle:'Fresh air, long days, easy resets.',scent:'Orange',image:'assets/nature.jpg',visible:true}
+    {key:'post',title:'Post-workout',subtitle:'Cool down. Clean up. Keep moving.',scent:'Mint',image:'',visible:true},
+    {key:'beach',title:'Beach',subtitle:'Salt, sun and somewhere to be next.',scent:'Cucumber',image:'',visible:true},
+    {key:'travel',title:'Travel',subtitle:'A carry-on reset between places.',scent:'Amber',image:'',visible:true},
+    {key:'slow',title:'Slow morning',subtitle:'Soft routines and nowhere to rush.',scent:'Lavender',image:'',visible:true},
+    {key:'night',title:'Night out',subtitle:'Refresh before the next plan.',scent:'Rose',image:'',visible:true},
+    {key:'outdoors',title:'Outdoors',subtitle:'Fresh air, long days, easy resets.',scent:'Orange',image:'',visible:true}
   ];
   const source=Array.isArray(site.homepage?.moods)?site.homepage.moods:[];
   const moods=defaultsMood.map((d,i)=>({...d,...(source.find(x=>x.key===d.key)||source[i]||{})}));
@@ -98,7 +98,12 @@ document.addEventListener('DOMContentLoaded',()=>{
     card.style.display=m.visible===false?'none':'';
     const a=card.querySelector('.pj-mood-media'),img=a?.querySelector('img'),title=card.querySelector('h3'),sub=card.querySelector('p');
     const href=`product.html?mood=${encodeURIComponent(m.key)}&scent=${encodeURIComponent(m.scent||'')}`;
-    if(a)a.href=href;if(img&&m.image){img.src=m.image;img.alt=m.title||''}if(title)title.textContent=m.title||'';if(sub)sub.textContent=m.subtitle||'';
+    if(a)a.href=href;
+    if(img){
+      if(m.image){img.src=m.image;img.alt=m.title||'';img.hidden=false}
+      else{img.removeAttribute('src');img.alt='';img.hidden=true}
+    }
+    if(title)title.textContent=m.title||'';if(sub)sub.textContent=m.subtitle||'';
   });
   const cta=site.homepage?.moodCta||{label:'FIND YOUR MOOD →',link:'product.html',visible:true};
   const ctaEl=document.getElementById('moodGridCta');
@@ -138,4 +143,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   reveal();
   window.addEventListener('zb:supabase-ready',reveal,{once:true});
   setTimeout(()=>{if(document.documentElement.dataset.zbHydrationFallback==='1')reveal()},2500);
+});
+
+
+document.addEventListener('DOMContentLoaded',()=>{
+  if(typeof applySeoMeta==='function')applySeoMeta({home:true});
 });
