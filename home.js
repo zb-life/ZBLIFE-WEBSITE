@@ -174,13 +174,14 @@ document.addEventListener('DOMContentLoaded',()=>{
 /* v18.5 — reveal homepage only after CMS-backed render completes */
 document.addEventListener('DOMContentLoaded',()=>{
   const reveal=()=>{
-    if(sessionStorage.getItem('zb_supabase_hydrated_v1')==='1'||document.documentElement.dataset.zbHydrationFallback==='1'){
+    if(!window.zbHomeRefreshPending&&(sessionStorage.getItem('zb_supabase_hydrated_v1')==='1'||document.documentElement.dataset.zbHydrationFallback==='1')){
       requestAnimationFrame(()=>document.body.classList.remove('zb-home-loading'));
     }
   };
   reveal();
   window.addEventListener('zb:supabase-ready',reveal,{once:true});
-  setTimeout(()=>{if(document.documentElement.dataset.zbHydrationFallback==='1')reveal()},2500);
+  window.addEventListener('zb:home-refresh-complete',reveal,{once:true});
+  setTimeout(()=>{if(!window.zbHomeRefreshPending&&document.documentElement.dataset.zbHydrationFallback==='1')reveal()},2500);
 });
 
 
