@@ -2003,3 +2003,99 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
 @media(max-width:600px){
   .pj-products .scent-hover-card{display:none!important}
 }
+
+/* v18.8 — mobile commitment visibility + scent info sheet */
+@media(max-width:600px){
+  .pinterest-home .commitment[hidden],
+  .pinterest-home .pj-commitment[hidden]{
+    display:none!important;
+  }
+  .pj-products .scent-hover-card{display:none!important}
+}
+.zb-scent-sheet-scrim{
+  position:fixed;
+  inset:0;
+  background:rgba(17,17,17,.32);
+  z-index:240;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .2s ease,visibility .2s ease;
+}
+.zb-scent-sheet-scrim.open{opacity:1;visibility:visible}
+.zb-scent-sheet{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  z-index:250;
+  background:#fff;
+  border-radius:22px 22px 0 0;
+  padding:20px 20px max(22px,env(safe-area-inset-bottom));
+  transform:translateY(105%);
+  transition:transform .26s cubic-bezier(.2,.8,.2,1);
+  box-shadow:0 -18px 50px rgba(0,0,0,.14);
+}
+.zb-scent-sheet.open{transform:none}
+.zb-scent-sheet-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:18px;
+  margin-bottom:18px;
+}
+.zb-scent-sheet-kicker{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+.zb-scent-sheet-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--scent-color,#ddd);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--scent-color,#ddd) 18%,transparent);
+}
+.zb-scent-sheet-close{
+  border:0;
+  background:none;
+  font-size:24px;
+  line-height:1;
+  padding:0 0 8px 12px;
+  cursor:pointer;
+}
+.zb-scent-sheet-copy{
+  font-size:16px;
+  line-height:1.55;
+  color:#514e48;
+  margin:0 0 22px;
+}
+.zb-scent-sheet-cta{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  min-height:54px;
+  padding:0 16px;
+  background:#171717;
+  color:#fff;
+  border-radius:999px;
+  font-size:12px;
+  letter-spacing:.09em;
+  text-decoration:none;
+}
+.zb-scent-sheet-cta span:last-child{
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff;
+  color:#171717;
+}
+@media(min-width:601px){
+  .zb-scent-sheet,.zb-scent-sheet-scrim{display:none!important}
+}
