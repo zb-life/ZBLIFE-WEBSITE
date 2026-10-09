@@ -32,6 +32,7 @@ async function createStripeSession(params){
   append(body,'payment_intent_data[receipt_email]',params.email);
   append(body,'phone_number_collection[enabled]','true');
   append(body,'billing_address_collection','auto');
+  append(body,'allow_promotion_codes','true');
   params.lines.forEach((line,i)=>{
     append(body,`line_items[${i}][quantity]`,line.quantity);
     append(body,`line_items[${i}][price_data][currency]`,params.currency.toLowerCase());
