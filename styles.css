@@ -1937,3 +1937,69 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
   .scent-card-media{border-radius:12px!important}
   .scent-card>strong{margin-top:8px!important}
 }
+
+/* v18.7 — floating scent information panel */
+@media(min-width:601px){
+  .pj-products .scent-grid{overflow:visible!important}
+  .pj-products .scent-card{z-index:1}
+  .pj-products .scent-card:hover,
+  .pj-products .scent-card:focus-visible{z-index:20}
+  .pj-products .scent-card-media{
+    overflow:visible!important;
+    border-radius:0!important;
+  }
+  .pj-products .scent-card-media>img{
+    border-radius:18px;
+    overflow:hidden;
+  }
+  .pj-products .scent-hover-card{
+    width:min(300px,26vw)!important;
+    min-width:250px!important;
+    max-width:300px!important;
+    left:calc(100% + 14px)!important;
+    right:auto!important;
+    top:50%!important;
+    bottom:auto!important;
+    padding:20px 20px 18px!important;
+    border-radius:18px!important;
+    opacity:0;
+    transform:translateY(-50%) translateX(-8px) scale(.98)!important;
+    transition:opacity .2s ease,transform .24s cubic-bezier(.2,.8,.2,1)!important;
+    pointer-events:none;
+  }
+  .pj-products .scent-card:nth-child(n+4) .scent-hover-card{
+    left:auto!important;
+    right:calc(100% + 14px)!important;
+    transform:translateY(-50%) translateX(8px) scale(.98)!important;
+  }
+  .pj-products .scent-card:hover .scent-hover-card,
+  .pj-products .scent-card:focus-visible .scent-hover-card{
+    opacity:1!important;
+    transform:translateY(-50%) translateX(0) scale(1)!important;
+  }
+  .pj-products .scent-hover-top{margin-bottom:12px!important}
+  .pj-products .scent-hover-top b{
+    font-size:10px!important;
+    line-height:1.35!important;
+  }
+  .pj-products .scent-hover-copy{
+    display:block!important;
+    overflow:visible!important;
+    -webkit-line-clamp:unset!important;
+    font-size:14px!important;
+    line-height:1.55!important;
+  }
+  .pj-products .scent-hover-cta{
+    margin-top:16px!important;
+    padding-top:14px!important;
+    font-size:10px!important;
+  }
+  .pj-products .scent-hover-cta span{
+    width:30px!important;
+    height:30px!important;
+    font-size:11px!important;
+  }
+}
+@media(max-width:600px){
+  .pj-products .scent-hover-card{display:none!important}
+}
