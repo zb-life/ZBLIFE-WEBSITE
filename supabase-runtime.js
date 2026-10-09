@@ -315,7 +315,17 @@
       if(!site) return false;
       const next=JSON.stringify(site);
       const previous=localStorage.getItem(cacheKey)||'';
-      const changed=previous!==next;
+      let previousComparable=previous;
+      let nextComparable=next;
+      try{
+        const prevObj=previous?JSON.parse(previous):null;
+        const nextObj=JSON.parse(next);
+        if(prevObj)delete prevObj._supabaseLoadedAt;
+        delete nextObj._supabaseLoadedAt;
+        previousComparable=prevObj?JSON.stringify(prevObj):'';
+        nextComparable=JSON.stringify(nextObj);
+      }catch{}
+      const changed=previousComparable!==nextComparable;
       localStorage.setItem(cacheKey,next);
       sessionStorage.setItem(HYDRATED_KEY,'1');
       window.dispatchEvent(new CustomEvent('zb:supabase-ready',{detail:{site,changed}}));
