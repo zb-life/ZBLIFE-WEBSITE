@@ -70,7 +70,7 @@ async function fulfill(session){
     return null;
   }
   const stripeGrandTotal=Number.isFinite(Number(session.amount_total))?Number(session.amount_total):Number(intent.total_minor||0);
-  const stripeDiscount=Math.max(0,Number(session.total_details?.amount_discount||0),Number(intent.total_minor||0)-stripeGrandTotal);
+  const stripeDiscount=Math.max(0,Number(session.total_details?.amount_discount||0),Number(intent.subtotal_minor||0)+Number(intent.shipping_minor||0)+Number(intent.tax_minor||0)-stripeGrandTotal);
   const c=intent.customer||{};
   const name=[c.first_name,c.last_name].filter(Boolean).join(' ').trim()||'Customer';
   const ship={first_name:c.first_name||'',last_name:c.last_name||'',phone:c.phone||'',address_line_1:c.address_line_1||'',address_line_2:c.address_line_2||'',city:c.city||c.country||'',region:c.region||'',postal_code:c.postal_code||'N/A',country:c.country||'',country_code:c.country_code||''};
