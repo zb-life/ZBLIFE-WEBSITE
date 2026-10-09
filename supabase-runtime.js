@@ -234,6 +234,7 @@
     return {
       theme:publicSettings.theme||undefined,
       branding:publicSettings.branding||undefined,
+      seo:publicSettings.seo||undefined,
       footer:{...(publicSettings.footer||{}),socials:socialMap,links:publicSettings.footer?.links||[]},
       features:publicSettings.features||undefined,
       settings:publicSettings.commerce_private||undefined,
@@ -442,6 +443,7 @@
     await upsert('site_settings',[
       {setting_key:'theme',value:site.theme||{},is_public:true,updated_by:access.user.id},
       {setting_key:'branding',value:site.branding||{},is_public:true,updated_by:access.user.id},
+      {setting_key:'seo',value:site.seo||{},is_public:true,updated_by:access.user.id},
       {setting_key:'footer',value:{...(site.footer||{}),socials:undefined},is_public:true,updated_by:access.user.id},
       {setting_key:'features',value:site.features||{},is_public:true,updated_by:access.user.id},
       {setting_key:'commerce_private',value:site.settings||{},is_public:false,updated_by:access.user.id}
