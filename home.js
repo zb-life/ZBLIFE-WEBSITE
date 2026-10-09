@@ -18,10 +18,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   const visibleLifeCount=lifeCards.filter((card,i)=>lifeItems[i]?.visible!==false).length;
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
-  const commitment=s.homepage?.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
+  const commitment=s.homepage?.commitment||{visible:false,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
   const commitmentSection=document.getElementById('about');
   if(commitmentSection){
-    const hideCommitment=commitment.visible===false;
+    const hideCommitment=commitment.visible!==true;
     commitmentSection.hidden=hideCommitment;
     commitmentSection.classList.toggle('zb-force-hidden',hideCommitment);
     if(hideCommitment)commitmentSection.style.setProperty('display','none','important');
