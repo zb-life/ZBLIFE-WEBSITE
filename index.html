@@ -5,9 +5,9 @@
 <title>ZIONBURG — Move. Reset. Refresh.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css"><style>body.zb-home-loading .announcement,body.zb-home-loading .site-header,body.zb-home-loading main,body.zb-home-loading footer{visibility:hidden!important}body.zb-home-loading{background:#fbfaf7}</style>
 </head>
-<body class="pinterest-home">
+<body class="pinterest-home zb-home-loading">
 <div class="announcement" data-shipping-announcement></div>
 <header class="site-header"><a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a><nav data-site-nav></nav><div class="header-actions"><button class="icon-btn" id="cartBtn">BAG <span id="cartCount">0</span></button></div></header>
 <main>
@@ -41,5 +41,5 @@
 <section class="commitment pj-commitment" id="about"><div class="commitment-media media-slot" id="homeCommitmentMedia"></div><div class="commitment-content"><span class="eyebrow">OUR COMMITMENT</span><h2>CLEANER BODIES.<br>BRIGHTER DAYS.</h2></div><p>High-performance, low-impact personal care for a cleaner, healthier and more active world.</p></section>
 </main>
 <footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}}}catch(e){console.warn("Supabase preload:",e)}})();</script><script src="site-common.js"></script><script src="home.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{try{if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){const changed=await ZBSupa.hydrateSiteCache();if(changed){location.reload();return}document.documentElement.dataset.zbHydrationFallback="1"}}catch(e){console.warn("Supabase preload:",e);document.documentElement.dataset.zbHydrationFallback="1"}})();</script><script src="site-common.js"></script><script src="home.js"></script>
 </body></html>
