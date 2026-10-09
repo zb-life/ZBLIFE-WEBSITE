@@ -58,6 +58,38 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   document.getElementById('scentGrid').innerHTML=variants.map(v=>{const vn=localize(v,'name')||v.name,vs=localize(v,'state')||v.state||'',descriptor=v.editorialDescriptor||'',hover=v.hoverDescription||`${descriptor ? descriptor+'. ' : ''}${vs ? 'A '+vs.toLowerCase()+' scent for an easy everyday reset.' : 'A refreshing scent for your everyday reset.'}`;return `<a class="scent-card" href="product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}" style="--scent-color:${v.color||'#ddd'}"><span class="scent-card-media"><img src="${v.image||''}" alt="${vn}"><span class="scent-hover-card"><span class="scent-hover-top"><i class="scent-hover-dot"></i><b>${descriptor||vs||'YOUR RESET'}</b></span><span class="scent-hover-copy">${hover}</span><span class="scent-hover-cta">MEET ${vn.toUpperCase()} <span>↗</span></span></span></span><strong>${vn.toUpperCase()}</strong><small>${vs}</small></a>`}).join('');
 
+  const ensureScentSheet=()=>{
+    let scrim=document.getElementById('zbScentSheetScrim'),sheet=document.getElementById('zbScentSheet');
+    if(!scrim){
+      scrim=document.createElement('div');scrim.id='zbScentSheetScrim';scrim.className='zb-scent-sheet-scrim';document.body.appendChild(scrim);
+    }
+    if(!sheet){
+      sheet=document.createElement('aside');sheet.id='zbScentSheet';sheet.className='zb-scent-sheet';sheet.setAttribute('role','dialog');sheet.setAttribute('aria-modal','true');
+      sheet.innerHTML='<div class="zb-scent-sheet-head"><div class="zb-scent-sheet-kicker"><i class="zb-scent-sheet-dot"></i><b data-scent-sheet-kicker></b></div><button class="zb-scent-sheet-close" type="button" aria-label="Close">×</button></div><p class="zb-scent-sheet-copy" data-scent-sheet-copy></p><a class="zb-scent-sheet-cta" data-scent-sheet-link href="#"><span data-scent-sheet-cta></span><span>↗</span></a>';
+      document.body.appendChild(sheet);
+    }
+    return {scrim,sheet};
+  };
+  const closeScentSheet=()=>{const x=document.getElementById('zbScentSheet'),s=document.getElementById('zbScentSheetScrim');x?.classList.remove('open');s?.classList.remove('open');document.body.style.overflow=''};
+  document.addEventListener('click',e=>{
+    if(window.matchMedia('(min-width:601px)').matches)return;
+    const card=e.target.closest('.pj-products .scent-card');
+    if(card&&!e.target.closest('.zb-scent-sheet')){
+      e.preventDefault();
+      const variant=variants.find(v=>card.href.includes('scent='+encodeURIComponent(v.name)))||variants.find(v=>card.querySelector('strong')?.textContent===String(localize(v,'name')||v.name).toUpperCase());
+      if(!variant)return;
+      const vn=localize(variant,'name')||variant.name,vs=localize(variant,'state')||variant.state||'',descriptor=variant.editorialDescriptor||'',hover=variant.hoverDescription||`${descriptor ? descriptor+'. ' : ''}${vs ? 'A '+vs.toLowerCase()+' scent for an easy everyday reset.' : 'A refreshing scent for your everyday reset.'}`;
+      const {scrim,sheet}=ensureScentSheet();
+      sheet.style.setProperty('--scent-color',variant.color||'#ddd');
+      sheet.querySelector('[data-scent-sheet-kicker]').textContent=descriptor||vs||'YOUR RESET';
+      sheet.querySelector('[data-scent-sheet-copy]').textContent=hover;
+      const link=sheet.querySelector('[data-scent-sheet-link]');link.href=card.href;sheet.querySelector('[data-scent-sheet-cta]').textContent='MEET '+vn.toUpperCase();
+      scrim.classList.add('open');sheet.classList.add('open');document.body.style.overflow='hidden';
+      return;
+    }
+    if(e.target.closest('.zb-scent-sheet-close')||e.target.id==='zbScentSheetScrim')closeScentSheet();
+  });
+
   document.addEventListener('click',e=>{
     const btn=e.target.closest('[data-shoppable-add]');
     if(!btn)return;
