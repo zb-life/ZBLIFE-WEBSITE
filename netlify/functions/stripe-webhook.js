@@ -69,12 +69,14 @@ async function fulfill(session){
     await sb('checkout_intents?id='+eq(intent.id),{method:'PATCH',body:JSON.stringify({status:'pending',updated_at:new Date().toISOString()})});
     return null;
   }
+  const stripeGrandTotal=Number.isFinite(Number(session.amount_total))?Number(session.amount_total):Number(intent.total_minor||0);
+  const stripeDiscount=Math.max(0,Number(session.total_details?.amount_discount||0),Number(intent.total_minor||0)-stripeGrandTotal);
   const c=intent.customer||{};
   const name=[c.first_name,c.last_name].filter(Boolean).join(' ').trim()||'Customer';
   const ship={first_name:c.first_name||'',last_name:c.last_name||'',phone:c.phone||'',address_line_1:c.address_line_1||'',address_line_2:c.address_line_2||'',city:c.city||c.country||'',region:c.region||'',postal_code:c.postal_code||'N/A',country:c.country||'',country_code:c.country_code||''};
   const orders=await sb('orders',{method:'POST',body:JSON.stringify({
     market_id:intent.market_id||null,email:intent.email,phone:c.phone||'N/A',currency:intent.currency,
-    subtotal_minor:intent.subtotal_minor,discount_total_minor:0,shipping_total_minor:intent.shipping_minor,tax_total_minor:intent.tax_minor,grand_total_minor:intent.total_minor,
+    subtotal_minor:intent.subtotal_minor,discount_total_minor:stripeDiscount,shipping_total_minor:intent.shipping_minor,tax_total_minor:intent.tax_minor,grand_total_minor:stripeGrandTotal,
     order_status:'open',payment_status:'paid',fulfilment_status:'unfulfilled',shipping_address:ship,billing_address:null,
     stripe_checkout_session_id:sessionId,stripe_payment_intent_id:session.payment_intent||null,paid_at:new Date().toISOString(),
     metadata:{customer_name:name,checkout_intent_id:intent.id}
@@ -86,16 +88,16 @@ async function fulfill(session){
     return {order_id:order.id,product_id:x.productId||null,variant_id:x.variantId||null,product_title_snapshot:x.productTitle||'Product',variant_title_snapshot:x.variantTitle||null,sku_snapshot:x.sku||null,quantity:qty,unit_price_minor:base,discount_minor:Math.max(0,gross-line),line_total_minor:line,metadata:{bundle_qty:x.bundleQty||1,bundle_name:x.bundleName||''}};
   });
   if(items.length)await sb('order_items',{method:'POST',body:JSON.stringify(items)});
-  await sb('payments',{method:'POST',body:JSON.stringify({order_id:order.id,provider:'stripe',provider_payment_id:session.payment_intent||sessionId,amount_minor:intent.total_minor,currency:intent.currency,status:'succeeded',payment_method_type:null,processed_at:new Date().toISOString(),raw_reference:{checkout_session_id:sessionId}})});
+  await sb('payments',{method:'POST',body:JSON.stringify({order_id:order.id,provider:'stripe',provider_payment_id:session.payment_intent||sessionId,amount_minor:stripeGrandTotal,currency:intent.currency,status:'succeeded',payment_method_type:null,processed_at:new Date().toISOString(),raw_reference:{checkout_session_id:sessionId}})});
   for(const x of intent.items||[]){
     const rows=await sb('inventory?select=id,quantity_on_hand&variant_id='+eq(x.variantId)+'&limit=1');
     if(rows?.[0])await sb('inventory?id='+eq(rows[0].id),{method:'PATCH',body:JSON.stringify({quantity_on_hand:Math.max(0,Number(rows[0].quantity_on_hand||0)-Number(x.totalQty||x.qty||1)),updated_at:new Date().toISOString()})});
   }
   await sb('checkout_intents?id='+eq(intent.id),{method:'PATCH',body:JSON.stringify({status:'paid',updated_at:new Date().toISOString()})});
   const itemHtml=(intent.items||[]).map(x=>`<tr><td style="padding:8px 0">${x.productTitle} — ${x.variantTitle}${x.bundleQty>1?' ('+x.bundleQty+' pack)':''}</td><td style="padding:8px 0;text-align:right">× ${x.qty}</td><td style="padding:8px 0;text-align:right">${money(x.lineTotalMinor,intent.currency)}</td></tr>`).join('');
-  const baseHtml=`<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#171717"><h1 style="font-weight:400;letter-spacing:.08em">ZIONBURG</h1><p>Order <strong>${order.order_number}</strong></p><table style="width:100%;border-collapse:collapse">${itemHtml}</table><hr style="border:0;border-top:1px solid #ddd"><p style="text-align:right"><strong>Total ${money(intent.total_minor,intent.currency)}</strong></p><p>Deliver to:<br>${name}<br>${ship.address_line_1}<br>${[ship.city,ship.region,ship.postal_code].filter(Boolean).join(', ')}<br>${ship.country}</p></div>`;
+  const baseHtml=`<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#171717"><h1 style="font-weight:400;letter-spacing:.08em">ZIONBURG</h1><p>Order <strong>${order.order_number}</strong></p><table style="width:100%;border-collapse:collapse">${itemHtml}</table><hr style="border:0;border-top:1px solid #ddd"><p style="text-align:right">${stripeDiscount?`Discount −${money(stripeDiscount,intent.currency)}<br>`:'' }<strong>Total ${money(stripeGrandTotal,intent.currency)}</strong></p><p>Deliver to:<br>${name}<br>${ship.address_line_1}<br>${[ship.city,ship.region,ship.postal_code].filter(Boolean).join(', ')}<br>${ship.country}</p></div>`;
   const sales=await salesEmails();
-  if(sales.length)await sendEmail({to:sales,subject:`New ZIONBURG order ${order.order_number} — ${money(intent.total_minor,intent.currency)}`,html:baseHtml,orderId:order.id,type:'sales_order_notification'});
+  if(sales.length)await sendEmail({to:sales,subject:`New ZIONBURG order ${order.order_number} — ${money(stripeGrandTotal,intent.currency)}`,html:baseHtml,orderId:order.id,type:'sales_order_notification'});
   await sendEmail({to:intent.email,subject:`Your ZIONBURG order ${order.order_number}`,html:`<div style="font-family:Arial,sans-serif;max-width:640px;margin:auto;color:#171717"><h1 style="font-weight:400;letter-spacing:.08em">ZIONBURG</h1><h2 style="font-weight:400">ORDER CONFIRMED</h2><p>Thank you, ${name}. We’ve received your order and will let you know when it’s on the way.</p>${baseHtml}</div>`,orderId:order.id,type:'customer_order_confirmation'});
   return order;
 }
