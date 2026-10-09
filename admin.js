@@ -89,7 +89,7 @@ function mediaEditor(m,i,scope,label,removable=false){m=m||{};return `<div class
 function renderHomeMediaEditors(){$('homepageMediaEditors').innerHTML=homeMediaFlat().map((m,i)=>mediaEditor(m,i,'home',HOME_MEDIA_LABELS[i],false)).join('')}
 function commitmentConfig(){
   adminState.homepage=adminState.homepage||{};
-  adminState.homepage.commitment=adminState.homepage.commitment||{visible:true,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
+  adminState.homepage.commitment=adminState.homepage.commitment||{visible:false,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
   return adminState.homepage.commitment;
 }
 function renderCommitmentEditor(){
