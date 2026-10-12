@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbHomeRefreshPromise){try{await window.zbHomeRefreshPromise}catch(e){console.warn('Homepage refresh:',e)}}
   const s=getSite(),product=getPrimaryCatalogProduct(s),variants=getProductVariants(product);
   const locale=currentLocale(),ct=s.localization?.contentTranslations?.[locale]||{};
   document.getElementById('heroEyebrow').textContent=ct.heroEyebrow||s.homepage.eyebrow;
@@ -19,21 +20,30 @@ document.addEventListener('DOMContentLoaded',()=>{
   const lifeGrid=document.querySelector('.lifestyle-editorial');
   if(lifeGrid)lifeGrid.style.setProperty('--life-columns',String(Math.max(1,visibleLifeCount)));
   const commitment=s.homepage?.commitment||{visible:false,eyebrow:'OUR COMMITMENT',title:'CLEANER BODIES.\nBRIGHTER DAYS.',copy:'High-performance, low-impact personal care for a cleaner, healthier and more active world.'};
-  const commitmentSection=document.getElementById('about');
-  if(commitmentSection){
-    const hideCommitment=commitment.visible!==true;
-    commitmentSection.hidden=hideCommitment;
-    commitmentSection.classList.toggle('zb-force-hidden',hideCommitment);
-    if(hideCommitment)commitmentSection.style.setProperty('display','none','important');
-    else commitmentSection.style.removeProperty('display');
+  const commitmentMount=document.getElementById('homeCommitmentMount');
+  if(commitmentMount){
+    commitmentMount.replaceChildren();
+    if(commitment.visible===true){
+      const commitmentSection=document.createElement('section');
+      commitmentSection.className='commitment pj-commitment';
+      commitmentSection.id='about';
+      commitmentSection.innerHTML='<div class="commitment-media media-slot" id="homeCommitmentMedia"></div><div class="commitment-content"><span class="eyebrow"></span><h2></h2></div><p></p>';
+      const commitmentEyebrow=commitmentSection.querySelector('.commitment-content .eyebrow');
+      const commitmentTitle=commitmentSection.querySelector('.commitment-content h2');
+      const commitmentCopy=commitmentSection.querySelector(':scope > p');
+      const eyebrowText=commitment.eyebrow??'OUR COMMITMENT';
+      commitmentEyebrow.textContent=eyebrowText;
+      commitmentEyebrow.hidden=eyebrowText==='';
+      const titleText=String(commitment.title??'CLEANER BODIES.\nBRIGHTER DAYS.');
+      commitmentTitle.hidden=titleText==='';
+      titleText.split('\n').forEach((line,i)=>{if(i)commitmentTitle.appendChild(document.createElement('br'));commitmentTitle.appendChild(document.createTextNode(line))});
+      const copyText=commitment.copy??'';
+      commitmentCopy.textContent=copyText;
+      commitmentCopy.hidden=copyText==='';
+      commitmentMount.appendChild(commitmentSection);
+      renderMediaInto(commitmentSection.querySelector('#homeCommitmentMedia'),hm.commitment);
+    }
   }
-  const commitmentEyebrow=commitmentSection?.querySelector('.commitment-content .eyebrow');
-  const commitmentTitle=commitmentSection?.querySelector('.commitment-content h2');
-  const commitmentCopy=commitmentSection?.querySelector(':scope > p');
-  if(commitmentEyebrow){commitmentEyebrow.textContent=commitment.eyebrow??'OUR COMMITMENT';commitmentEyebrow.hidden=(commitment.eyebrow??'')==='';}
-  if(commitmentTitle){commitmentTitle.innerHTML=String(commitment.title??'CLEANER BODIES.\nBRIGHTER DAYS.').replace(/\n/g,'<br>');commitmentTitle.hidden=(commitment.title??'')==='';}
-  if(commitmentCopy){commitmentCopy.textContent=commitment.copy??'';commitmentCopy.hidden=(commitment.copy??'')==='';}
-  renderMediaInto(document.getElementById('homeCommitmentMedia'),hm.commitment);
 
   const videoSection=document.getElementById('shopVideos'),videoTrack=document.getElementById('shoppableVideoTrack');
   const videoVariants=variants.filter(v=>v.video);
