@@ -2130,3 +2130,8 @@ main,.pdp-shell,.page-shell,.checkout-shell,.admin-main{min-width:0}
     display:none!important;
   }
 }
+
+/* Friends of ZB: display the complete uploaded photo without cropping. */
+#friendGrid .community-card-media{aspect-ratio:auto;overflow:visible}
+#friendGrid .community-card-media img,
+#friendGrid .community-card-media.contain img{width:100%;height:auto;object-fit:contain;padding:0;display:block;background:transparent}
