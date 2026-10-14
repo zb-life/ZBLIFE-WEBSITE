@@ -410,7 +410,30 @@ function bindEvents(){
   });
   document.addEventListener('change',async e=>{
     if(e.target.id==='interfaceTranslationLocale'){captureInterfaceTranslations(selectedInterfaceLocale);selectedInterfaceLocale=e.target.value;renderInterfaceTranslationEditor();return}
-    const cu=e.target.closest('[data-community-upload]');if(cu){const type=cu.dataset.communityUpload,i=+cu.dataset.communityIndex;readAssetUpload(cu,data=>{captureGenericEditors();const key=type==='partner'?'partners':'friends';if(adminState[key]?.[i])adminState[key][i].image=data;renderGenericEditors()});return}
+    const cu=e.target.closest('[data-community-upload]');if(cu){
+      const type=cu.dataset.communityUpload,i=Number(cu.dataset.communityIndex),file=cu.files?.[0];
+      if(!file||!['partner','friend'].includes(type))return;
+      // Capture every open editor before rerendering; never infer identity from another list.
+      captureGenericEditors();
+      const key=type==='partner'?'partners':'friends',record=adminState[key]?.[i];
+      if(!record)return;
+      cu.disabled=true;
+      try{
+        const url=await ZBSupa.uploadMedia(file,{bucket:'page-media',folder:`community/${type}s`});
+        // The record may have been removed while the file uploaded.
+        if(!adminState[key]?.includes(record))throw new Error('This community entry changed during upload. Please try again.');
+        record.image=url;
+        saveSite(adminState);
+        renderGenericEditors();
+        // Publish the new image URL to Supabase so the public page also updates.
+        await ZBSupa.syncSite(adminState);
+        showSaveToast();
+      }catch(err){
+        console.error('Community image upload failed:',err);
+        alert('Could not update the community image: '+err.message);
+      }finally{cu.disabled=false}
+      return
+    }
     if(e.target.matches('[data-language-index],#defaultLocale')){captureLanguageSettings();renderLanguageSettings();const p=currentProduct();if(p&&$('productTranslationEditors'))$('productTranslationEditors').innerHTML=translationFieldsHTML(p,'product');const c=currentCollection();if(c&&$('collectionTranslationEditors'))$('collectionTranslationEditors').innerHTML=translationFieldsHTML(c,'collection');return}
     const scope=e.target.closest('[data-bk="scopeType"]');if(scope){captureBundles();const b=scope.closest('[data-bundle]'),obj=adminState.bundles[+b.dataset.bundle];obj.scopeType=scope.value;obj.scopeId=scope.value==='product'?adminState.catalogProducts[0]?.id||'':scope.value==='collection'?adminState.collections[0]?.id||'':'';renderBundleEditors();return}
     const bu=e.target.closest('[data-benefit-upload]');if(bu){const i=+bu.dataset.benefitUpload;readAssetUpload(bu,data=>{captureBenefits();adminState.benefits[i].icon=data;renderBenefitEditors()});return}
