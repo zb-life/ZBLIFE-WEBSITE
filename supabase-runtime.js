@@ -506,6 +506,19 @@
       });
     }
     await upsert('stockists',stockPayload,'id');
+    // Upsert alone leaves removed stockists in the database, so they reappear
+    // on the public page after the next Supabase hydration.
+    // Delete only records that are no longer in the editor's published list.
+    const {data:existingStockists,error:stockistReadError}=await sb.from('stockists').select('id');
+    if(stockistReadError) throw new Error('Could not verify stockists before deleting: '+stockistReadError.message);
+    const keptStockistIds=new Set(stockPayload.map(s=>s.id));
+    const removedStockistIds=(existingStockists||[]).map(s=>s.id).filter(id=>!keptStockistIds.has(id));
+    for(let i=0;i<removedStockistIds.length;i+=100){
+      const ids=removedStockistIds.slice(i,i+100);
+      const {data:deleted,error:stockistDeleteError}=await sb.from('stockists').delete().in('id',ids).select('id');
+      if(stockistDeleteError) throw new Error('Could not delete removed stockists: '+stockistDeleteError.message);
+      if((deleted||[]).length!==ids.length) throw new Error('Some removed stockists could not be deleted. Check Supabase permissions.');
+    }
 
     // Community
     const communityPayload=[];
