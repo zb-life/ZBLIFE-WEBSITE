@@ -434,3 +434,44 @@ body:not(.admin-page) .purchase-options .purchase-chip.active{
   box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 -2px 0 rgba(0,0,0,.25) inset,0 3px 0 #1b1411,0 8px 14px rgba(59,47,42,.22)!important;
 }
 body:not(.admin-page) .pack-chip.active small,body:not(.admin-page) .purchase-chip.active small{color:#fff!important}
+
+/* =====================================================================
+   PRODUCT PAGE round 4: centred photo, flat buttons, full-bleed variant photos
+   ===================================================================== */
+/* main photo centred in its frame */
+body:not(.admin-page) .pdp-gallery-stage{display:flex!important;align-items:center;justify-content:center}
+body:not(.admin-page) .pdp-gallery-stage .managed-media,
+body:not(.admin-page) .pdp-gallery-stage img,
+body:not(.admin-page) .pdp-gallery-stage video{
+  position:static!important;margin:auto!important;
+  width:100%!important;height:100%!important;max-width:100%;max-height:100%;
+  object-fit:contain!important;object-position:center center!important;
+}
+
+/* flat buttons: no shadows, no 3D edge */
+body:not(.admin-page) .pdp-buy.cute-primary,
+body:not(.admin-page) .pdp-buy.cute-primary:hover,
+body:not(.admin-page) .pdp-buy.cute-primary:active,
+body:not(.admin-page) .pack-chip,
+body:not(.admin-page) .pack-chip:hover,
+body:not(.admin-page) .pack-chip.active,
+body:not(.admin-page) .purchase-options .purchase-chip,
+body:not(.admin-page) .purchase-options .purchase-chip:hover,
+body:not(.admin-page) .purchase-options .purchase-chip.active{
+  box-shadow:none!important;transform:none!important;filter:none!important;
+}
+body:not(.admin-page) .pdp-buy.cute-primary{background:var(--button)!important;color:var(--button-text)!important;border:1px solid var(--button)!important}
+body:not(.admin-page) .pack-chip,
+body:not(.admin-page) .purchase-options .purchase-chip{background:var(--surface)!important;border:1px solid var(--line-solid)!important}
+body:not(.admin-page) .pack-chip.active,
+body:not(.admin-page) .purchase-options .purchase-chip.active{background:var(--button)!important;color:var(--button-text)!important;border-color:var(--button)!important}
+body:not(.admin-page) .pack-chip.active small,body:not(.admin-page) .purchase-chip.active small{color:var(--button-text)!important}
+
+/* variant tiles: the photo fills the whole tile at its own proportions (no cream, no crop) */
+body:not(.admin-page) .pj-mood-options{align-items:start}
+body:not(.admin-page) .pj-mood-options .scent-chip{aspect-ratio:auto!important;min-height:0!important;background:transparent!important;display:block}
+body:not(.admin-page) .pj-mood-options .scent-chip img.pj-mood-thumb{
+  position:relative!important;inset:auto!important;display:block;
+  width:100%!important;height:auto!important;padding:0!important;
+  object-fit:cover!important;
+}
