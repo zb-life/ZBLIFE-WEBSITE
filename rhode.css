@@ -384,3 +384,53 @@ body:not(.admin-page) .purchase-chip.active small,
 body:not(.admin-page) .pack-chip.active small{color:var(--button-text)!important;opacity:.82}
 body:not(.admin-page) .pack-chip small{white-space:nowrap}
 @media(max-width:700px){body:not(.admin-page) .bundle-options .pack-chip small{display:none}}
+
+/* =====================================================================
+   PRODUCT PAGE round 3
+   ===================================================================== */
+/* info panel + photo stage take a soft tint of the selected variant's colour */
+body:not(.admin-page) .pdp-top-v2{--variant-color:transparent}
+body:not(.admin-page) .pdp-info-v2.pj-pdp-info{
+  background:color-mix(in srgb,var(--variant-color) 22%,var(--paper))!important;
+  border-left:0;
+  transition:background .35s;
+}
+body:not(.admin-page) .pdp-gallery-stage,
+body:not(.admin-page) .product-gallery-main{
+  background:color-mix(in srgb,var(--variant-color) 30%,var(--soft-surface))!important;
+  background-image:none!important;
+}
+body:not(.admin-page) .pdp-top-v2 .pdp-kicker-row .eyebrow{color:color-mix(in srgb,var(--variant-color) 55%,var(--ink))}
+
+/* variant photos: show the whole picture */
+body:not(.admin-page) .pj-mood-options .scent-chip{min-height:0!important;aspect-ratio:4/5;background:color-mix(in srgb,var(--variant-color,#ecdccf) 0%,#ecdccf)!important}
+body:not(.admin-page) .pj-mood-options .scent-chip img.pj-mood-thumb{object-fit:contain!important;object-position:center 40%!important;padding:8px 8px 44px;box-sizing:border-box;background:transparent}
+body:not(.admin-page) .pj-mood-options .scent-chip:after{inset:auto 0 0 0!important;height:56px!important;background:linear-gradient(0deg,rgba(59,47,42,.55),transparent)!important}
+
+/* trust line: readable */
+body:not(.admin-page) .pdp-mini-trust{gap:10px 22px!important;justify-content:flex-start!important;padding:18px 0 6px!important}
+body:not(.admin-page) .pdp-mini-trust span{font-size:14.5px!important;color:var(--ink)!important;letter-spacing:.01em;font-weight:500}
+body:not(.admin-page) .pdp-mini-trust span:before{color:var(--ink)!important;margin-right:7px}
+
+/* depth: fixed dark tones so it shows with ANY saved theme */
+body:not(.admin-page) .pdp-buy.cute-primary{
+  background:linear-gradient(180deg,#6b5a51 0%,#3b2f2a 55%,#2a201c 100%)!important;
+  color:#fff!important;
+  border:1px solid #241b17!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -3px 0 rgba(0,0,0,.28) inset,0 4px 0 #1b1411,0 16px 26px rgba(59,47,42,.35)!important;
+}
+body:not(.admin-page) .pdp-buy.cute-primary:hover{transform:translateY(-2px)!important;box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 -3px 0 rgba(0,0,0,.28) inset,0 6px 0 #1b1411,0 22px 32px rgba(59,47,42,.38)!important}
+body:not(.admin-page) .pdp-buy.cute-primary:active{transform:translateY(4px)!important;box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 0 0 #1b1411,0 4px 8px rgba(59,47,42,.3)!important}
+body:not(.admin-page) .pack-chip,
+body:not(.admin-page) .purchase-options .purchase-chip{
+  background:#fffaf5!important;
+  border:1px solid #d9c8bb!important;
+  box-shadow:0 1px 0 #fff inset,0 3px 0 #d9c8bb,0 8px 14px rgba(59,47,42,.10)!important;
+}
+body:not(.admin-page) .pack-chip.active,
+body:not(.admin-page) .purchase-options .purchase-chip.active{
+  background:linear-gradient(180deg,#6b5a51 0%,#3b2f2a 60%,#2a201c 100%)!important;
+  color:#fff!important;border-color:#241b17!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.22) inset,0 -2px 0 rgba(0,0,0,.25) inset,0 3px 0 #1b1411,0 8px 14px rgba(59,47,42,.22)!important;
+}
+body:not(.admin-page) .pack-chip.active small,body:not(.admin-page) .purchase-chip.active small{color:#fff!important}
