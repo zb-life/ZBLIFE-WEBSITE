@@ -24,7 +24,7 @@ const defaultProductMedia=[
 ];
 const defaults={
   theme:{
-    font:'Instrument Sans',bodySize:18,bg:'#f8f5ef',text:'#171717',surface:'#ffffff',softSurface:'#f0e7db',selectedFill:'#f6e3df',accent:'#d6a39a',button:'#1c1d1b',buttonText:'#ffffff',line:'#ded7ce'
+    font:'Hanken Grotesk',bodySize:18,bg:'#f6f0e9',text:'#3b2f2a',surface:'#fbf6f0',softSurface:'#ecdccf',selectedFill:'#e3cdbd',accent:'#dbe7dc',button:'#3b2f2a',buttonText:'#f6f0e9',line:'#d9c8bb'
   },
   branding:{logo:'',logoText:'ZIONBURG',mobileLogoText:'ZB',logoAlt:'ZIONBURG',logoWidth:132,mobileLogoWidth:44,favicon:'assets/favicon.svg'},
   seo:{siteName:'ZB by Zionburg',homepageTitle:'ZB by Zionburg | Refreshing Body Wipes',homepageDescription:'Refreshing body wipes made for movement, travel and everyday resets. Discover plant-based, XL body wipes from ZB by Zionburg.',titleSuffix:'| ZB by Zionburg',socialTitle:'ZB by Zionburg',socialDescription:'Move. Reset. Refresh. Body wipes designed for active, everyday life.',socialImage:''},

@@ -69,6 +69,9 @@ function renderEditorial(variant,product){
   const moodName=document.getElementById('meetName'),headline=document.getElementById('meetHeadline');
   const moodEyebrow=moodName?.closest('.eyebrow');
   if(editorial)editorial.style.backgroundColor=accent;
+  const vc=/^#[0-9a-f]{3,8}$/i.test(String(variant?.color||''))?variant.color:'';
+  const pdpRoot=document.querySelector('.pdp-top-v2')||document.body;
+  if(vc)pdpRoot.style.setProperty('--variant-color',vc);else pdpRoot.style.removeProperty('--variant-color');
   if(moodEyebrow)moodEyebrow.style.color='';
   if(headline)headline.style.color='';
 }
