@@ -1,0 +1,225 @@
+/* ZB storefront — soft, warm, Rhode-inspired skin.
+   Loaded AFTER styles.css on storefront pages. Visual only.
+   Colours read the same CSS variables the Admin > Theme panel sets, so those controls still work. */
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap");
+
+:root{
+  --zb-cocoa:#3b2f2a;
+  --zb-cream:#f6f0e9;
+  --zb-blush:#ecdccf;
+  --zb-sand:#e3cdbd;
+  --zb-sage:#dbe7dc;
+  --zb-lilac:#e9dfe2;
+  --zb-butter:#efe3cf;
+  --zb-radius-xl:36px;
+  --zb-radius-lg:28px;
+  --zb-radius-md:20px;
+}
+
+body:not(.admin-page){
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+body:not(.admin-page) h1,
+body:not(.admin-page) h2,
+body:not(.admin-page) h3{font-weight:400;letter-spacing:-.04em;text-transform:lowercase}
+body:not(.admin-page) a:focus-visible,
+body:not(.admin-page) button:focus-visible,
+body:not(.admin-page) input:focus-visible,
+body:not(.admin-page) select:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* ---------- announcement bar ---------- */
+body:not(.admin-page) .announcement{letter-spacing:.04em;text-transform:lowercase;font-size:12.5px}
+
+/* ---------- header ---------- */
+body:not(.admin-page) .site-header{
+  background:color-mix(in srgb,var(--paper) 92%,transparent);
+  border-bottom:0;
+}
+body:not(.admin-page) .brand{
+  letter-spacing:-.05em;font-weight:600;font-size:28px;text-transform:lowercase;
+}
+body:not(.admin-page) .desktop-nav,
+body:not(.admin-page) .desktop-nav>a,
+body:not(.admin-page) .nav-dropdown>button,
+body:not(.admin-page) .dropdown-menu a,
+body:not(.admin-page) .icon-btn,
+body:not(.admin-page) .menu-toggle{
+  text-transform:lowercase;letter-spacing:0;font-size:14.5px;font-weight:400;
+}
+body:not(.admin-page) .dropdown-menu{
+  border-radius:var(--zb-radius-md);border:1px solid var(--line-solid);
+  background:var(--surface);box-shadow:0 20px 50px rgba(59,47,42,.12);
+}
+
+/* ---------- buttons ---------- */
+body:not(.admin-page) .btn,
+body:not(.admin-page) button.btn,
+body:not(.admin-page) a.btn{
+  border-radius:999px;
+  min-height:52px;
+  padding-inline:32px;
+  text-transform:lowercase;
+  letter-spacing:.01em;
+  font-size:14.5px;
+  font-weight:500;
+  box-shadow:none;
+}
+body:not(.admin-page) .btn:not(.light):not(.secondary){background:var(--button);color:var(--button-text);border-color:var(--button)}
+body:not(.admin-page) .pj-text-link{
+  display:inline-block;
+  border:1px solid var(--ink);
+  border-radius:999px;
+  padding:14px 28px;
+  text-decoration:none;
+  text-transform:lowercase;
+  letter-spacing:.01em;
+  font-size:14.5px;font-weight:500;
+  transition:background .18s,color .18s;
+}
+body:not(.admin-page) .pj-text-link:hover{background:var(--ink);color:var(--paper)}
+body:not(.admin-page) .eyebrow{letter-spacing:.06em;text-transform:lowercase;font-size:13px;color:var(--muted)}
+
+/* ---------- hero ---------- */
+body:not(.admin-page) .pj-hero{
+  margin:12px 4.4vw 0;
+  border-radius:var(--zb-radius-xl);
+  overflow:hidden;
+  background:var(--soft-surface);
+}
+body:not(.admin-page) .pj-hero-copy h1{
+  text-transform:lowercase;font-weight:400;letter-spacing:-.055em;line-height:.9;
+}
+body:not(.admin-page) .pj-hero-copy{background:transparent!important}
+body:not(.admin-page) .pj-hero-copy p{color:var(--muted)}
+body:not(.admin-page) .pj-hero-media{background:var(--sand,#e3cdbd)}
+body:not(.admin-page) .pj-hero-media img,
+body:not(.admin-page) .pj-hero-media video{object-fit:cover}
+
+/* ---------- mood tiles ---------- */
+body:not(.admin-page) .pj-mood-grid{gap:24px 20px}
+body:not(.admin-page) .pj-mood-media{
+  border-radius:var(--zb-radius-lg);
+  aspect-ratio:4/5;
+  background:var(--zb-blush);
+  transition:transform .25s;
+}
+body:not(.admin-page) .pj-mood-card:nth-child(6n+2) .pj-mood-media{background:var(--zb-sage)}
+body:not(.admin-page) .pj-mood-card:nth-child(6n+3) .pj-mood-media{background:var(--zb-lilac)}
+body:not(.admin-page) .pj-mood-card:nth-child(6n+4) .pj-mood-media{background:var(--zb-butter)}
+body:not(.admin-page) .pj-mood-card:nth-child(6n+5) .pj-mood-media{background:var(--zb-sand)}
+body:not(.admin-page) .pj-mood-card:nth-child(6n+6) .pj-mood-media{background:#dbe0d3}
+body:not(.admin-page) .pj-mood-card:hover .pj-mood-media{transform:translateY(-4px)}
+body:not(.admin-page) .pj-mood-meta h3{font-size:28px;letter-spacing:-.035em;text-transform:lowercase}
+body:not(.admin-page) .pj-mood-meta p{color:var(--muted);font-size:15px}
+body:not(.admin-page) .pj-section-head h2{font-size:clamp(36px,5vw,56px);letter-spacing:-.045em}
+
+/* ---------- visual journal: real grid, no orphan gaps ---------- */
+body:not(.admin-page) .pj-masonry{
+  display:grid!important;
+  columns:auto!important;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-auto-rows:260px;
+  grid-auto-flow:dense;
+  gap:20px;
+}
+body:not(.admin-page) .pj-masonry .pj-pin{
+  aspect-ratio:auto!important;
+  width:100%;
+  justify-self:stretch;
+  margin:0;
+  min-height:0;
+  height:100%;
+  border-radius:var(--zb-radius-lg);
+  background:var(--zb-blush);
+}
+body:not(.admin-page) .pj-masonry .pj-pin-tall{grid-row:span 2}
+body:not(.admin-page) .pj-masonry .pj-pin .life-media,
+body:not(.admin-page) .pj-masonry .pj-pin-tall .life-media{min-height:0;height:100%}
+body:not(.admin-page) .pj-masonry .pj-pin img,
+body:not(.admin-page) .pj-masonry .pj-pin video{width:100%;height:100%;object-fit:cover}
+body:not(.admin-page) .pj-masonry>.pj-pin:last-child:nth-child(4n+1){grid-column:span 2}
+body:not(.admin-page) .pj-quote{background:var(--surface)!important;min-height:0}
+body:not(.admin-page) .pj-quote .life-card-copy h3,
+body:not(.admin-page) .pj-quote h3{text-transform:lowercase;font-size:clamp(26px,2.6vw,36px);line-height:1.05}
+
+/* ---------- collection ---------- */
+body:not(.admin-page) .scents,
+body:not(.admin-page) .pj-products{background:var(--paper)!important}
+body:not(.admin-page) .pj-products .scents-copy h2{
+  font-family:inherit;text-transform:lowercase;font-weight:400;letter-spacing:-.05em;
+}
+body:not(.admin-page) .scent-card{
+  border-radius:var(--zb-radius-md);
+  overflow:visible;
+}
+body:not(.admin-page) .scent-card img,
+body:not(.admin-page) .scent-card-media{border-radius:var(--zb-radius-md)}
+body:not(.admin-page) .scent-card strong,
+body:not(.admin-page) .scent-card small{text-transform:lowercase;letter-spacing:0}
+
+/* ---------- commitment band ---------- */
+body:not(.admin-page) .commitment,
+body:not(.admin-page) .pj-commitment{border-radius:var(--zb-radius-xl);overflow:hidden}
+
+/* ---------- product page ---------- */
+body:not(.admin-page) .product-gallery-main{border-radius:var(--zb-radius-xl);overflow:hidden;background:var(--soft-surface)}
+body:not(.admin-page) .product-gallery-thumbs button,
+body:not(.admin-page) .product-gallery-thumbs img{border-radius:var(--zb-radius-md)}
+body:not(.admin-page) .pj-pdp-info h1{
+  text-transform:lowercase;font-weight:400;letter-spacing:-.05em!important;
+}
+body:not(.admin-page) .pj-mood-options .scent-chip{border-radius:var(--zb-radius-lg)!important}
+body:not(.admin-page) .scent-chip,
+body:not(.admin-page) .pack-chip,
+body:not(.admin-page) .purchase-chip,
+body:not(.admin-page) .option{
+  border-radius:999px!important;
+  text-transform:lowercase;
+  letter-spacing:0;
+}
+body:not(.admin-page) .soft-accordions summary,
+body:not(.admin-page) .selector-title,
+body:not(.admin-page) .pdp-selector-head{text-transform:lowercase;letter-spacing:.01em;font-size:14.5px}
+body:not(.admin-page) .soft-accordions details{border-color:var(--line-solid)}
+
+/* ---------- labels that other rules force to uppercase ---------- */
+body:not(.admin-page) #heroEyebrow,
+body:not(.admin-page) .pj-hero-copy .eyebrow,
+body:not(.admin-page) .pdp-state-line span,
+body:not(.admin-page) .scent-hover-top b,
+body:not(.admin-page) .pdp-fact-grid span,
+body:not(.admin-page) .pdp-selector-head span,
+body:not(.admin-page) .floating-pill,
+body:not(.admin-page) .pdp-buy,
+body:not(.admin-page) .pdp-buy span,
+body:not(.admin-page) .selector-title span,
+body:not(.admin-page) .footer-nav a,
+body:not(.admin-page) footer strong{text-transform:lowercase!important;letter-spacing:.02em}
+
+/* ---------- forms (account, checkout) ---------- */
+body:not(.admin-page) input:not([type="checkbox"]):not([type="radio"]),
+body:not(.admin-page) select,
+body:not(.admin-page) textarea{border-radius:16px}
+
+/* ---------- footer ---------- */
+body:not(.admin-page) footer{
+  background:var(--paper);
+  border-top:1px solid var(--line-solid);
+  text-transform:lowercase;
+  letter-spacing:0;
+  font-size:14px;
+}
+body:not(.admin-page) footer .brand{letter-spacing:-.05em;font-size:36px}
+
+/* ---------- small screens ---------- */
+@media(max-width:900px){
+  body:not(.admin-page) .pj-hero{margin:8px 12px 0;border-radius:28px}
+  body:not(.admin-page) .pj-masonry{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:200px;gap:12px}
+  body:not(.admin-page) .pj-masonry>.pj-pin:last-child:nth-child(4n+1){grid-column:auto}
+  body:not(.admin-page) .pj-masonry>.pj-pin:last-child:nth-child(2n+1){grid-column:span 2}
+}
+@media(prefers-reduced-motion:reduce){
+  body:not(.admin-page) *{transition:none!important}
+}
