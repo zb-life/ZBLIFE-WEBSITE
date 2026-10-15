@@ -223,3 +223,164 @@ body:not(.admin-page) footer .brand{letter-spacing:-.05em;font-size:36px}
 @media(prefers-reduced-motion:reduce){
   body:not(.admin-page) *{transition:none!important}
 }
+
+/* =====================================================================
+   PRODUCT PAGE refinements
+   ===================================================================== */
+
+/* ---- scent / state line under the product name: readable size ---- */
+body:not(.admin-page) .pdp-state-line{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 14px}
+body:not(.admin-page) .pdp-state-line span{
+  font-size:16px!important;
+  line-height:1.3;
+  letter-spacing:.02em!important;
+  font-weight:500;
+  color:var(--ink);
+}
+body:not(.admin-page) .pdp-state-line .dot-sep{opacity:.4}
+body:not(.admin-page) .pdp-kicker-row .eyebrow{font-size:14px;color:var(--muted)}
+
+/* ---- gallery: show whole photos, never crop ---- */
+body:not(.admin-page) .pdp-gallery-stage,
+body:not(.admin-page) .product-gallery-main{
+  height:auto;
+  min-height:0;
+  aspect-ratio:4/5;
+  max-height:calc(100vh - 150px);
+  background:var(--soft-surface);
+  border-radius:var(--zb-radius-xl);
+}
+body:not(.admin-page) .pdp-gallery-stage .managed-media,
+body:not(.admin-page) .product-gallery-main .managed-media,
+body:not(.admin-page) .pdp-gallery-stage img,
+body:not(.admin-page) .pdp-gallery-stage video{
+  width:100%;height:100%;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+body:not(.admin-page) .pdp-gallery-stage .managed-media,
+body:not(.admin-page) .pdp-gallery-stage img,
+body:not(.admin-page) .pdp-gallery-stage video{background:transparent!important}
+body:not(.admin-page) .product-gallery-thumbs .managed-media,
+body:not(.admin-page) .product-gallery-thumbs img,
+body:not(.admin-page) .product-gallery-thumbs video{object-fit:contain!important;background:var(--soft-surface)}
+
+/* ---- one consistent control size: pack, purchase option and Add to bag ---- */
+body:not(.admin-page){--pdp-control-h:60px;--pdp-control-r:999px}
+
+body:not(.admin-page) .pdp-info-v2 .selector{margin-top:22px}
+body:not(.admin-page) .selector-title{margin-bottom:12px}
+
+/* pack options: equal columns across the full width */
+body:not(.admin-page) .bundle-options{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+}
+body:not(.admin-page) .bundle-options .pack-chip{
+  min-height:var(--pdp-control-h);
+  height:var(--pdp-control-h);
+  border-radius:var(--pdp-control-r)!important;
+  padding:0 22px!important;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-size:15px;
+  text-align:left;
+}
+body:not(.admin-page) .bundle-options .pack-chip>span:first-child{flex:1;min-width:0;text-align:left}
+body:not(.admin-page) .bundle-options .pack-chip small{display:inline;margin-left:6px}
+body:not(.admin-page) .bundle-options .pack-chip strong{display:inline}
+body:not(.admin-page) .bundle-options .pack-chip em{position:static;margin:0;flex:0 0 auto;white-space:nowrap}
+body:not(.admin-page) .bundle-options .pack-chip .pack-price{flex:0 0 auto;white-space:nowrap}
+body:not(.admin-page) .pack-chip strong{font-size:15px;font-weight:500;display:block;line-height:1.15}
+body:not(.admin-page) .pack-chip small{font-size:12.5px;display:block;opacity:.7;line-height:1.15}
+body:not(.admin-page) .pack-chip .pack-price{font-size:15px;font-weight:500}
+body:not(.admin-page) .pack-chip em{font-style:normal;font-size:11px;padding:3px 9px;border-radius:999px;background:var(--selected-fill)}
+
+/* purchase options (one-time / subscribe): same height and shape */
+body:not(.admin-page) .segmented-soft{padding:6px;border-radius:calc(var(--pdp-control-r)/1);gap:6px!important}
+body:not(.admin-page) .purchase-options .purchase-chip{
+  min-height:calc(var(--pdp-control-h) - 12px);
+  border-radius:var(--pdp-control-r)!important;
+  padding:0 20px!important;
+  font-size:15px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  text-align:left;
+}
+body:not(.admin-page) .purchase-chip>span:nth-of-type(2){flex:1;min-width:0;text-align:left}
+body:not(.admin-page) .purchase-chip strong{display:inline;font-weight:500}
+body:not(.admin-page) .purchase-chip small{display:block;font-size:12.5px;opacity:.7}
+
+/* depth on the option chips: soft raised, pressed when selected */
+body:not(.admin-page) .pack-chip,
+body:not(.admin-page) .purchase-chip{
+  background:var(--surface);
+  border:1px solid var(--line-solid);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 6px rgba(59,47,42,.07);
+  transition:transform .15s,box-shadow .15s,background .15s;
+}
+body:not(.admin-page) .pack-chip:hover,
+body:not(.admin-page) .purchase-chip:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 8px 16px rgba(59,47,42,.12)}
+body:not(.admin-page) .pack-chip.active,
+body:not(.admin-page) .purchase-chip.active{
+  box-shadow:0 2px 5px rgba(0,0,0,.22) inset,0 1px 0 rgba(255,255,255,.2);
+  transform:none;
+}
+
+/* ---- Add to bag: same size as the options, with real depth ---- */
+body:not(.admin-page) .pdp-buy.cute-primary{
+  width:100%;
+  min-height:var(--pdp-control-h);
+  height:var(--pdp-control-h);
+  border-radius:var(--pdp-control-r);
+  padding:0 12px 0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  font-size:15px;font-weight:500;letter-spacing:.02em;text-transform:lowercase;
+  border:1px solid color-mix(in srgb,var(--button) 80%,black);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--button) 84%,white) 0%,var(--button) 55%,color-mix(in srgb,var(--button) 88%,black) 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.28) inset,
+    0 -3px 0 rgba(0,0,0,.22) inset,
+    0 3px 0 color-mix(in srgb,var(--button) 70%,black),
+    0 14px 24px rgba(59,47,42,.30);
+  transform:translateY(0);
+  transition:transform .15s,box-shadow .15s,filter .15s;
+}
+body:not(.admin-page) .pdp-buy.cute-primary span{font-size:15px;font-weight:500;letter-spacing:.02em;text-transform:lowercase}
+body:not(.admin-page) .pdp-buy.cute-primary b{
+  font-size:15px;font-weight:500;padding:11px 18px;border-radius:999px;
+  background:rgba(255,255,255,.16);box-shadow:0 1px 0 rgba(255,255,255,.18) inset;
+}
+body:not(.admin-page) .pdp-buy.cute-primary:hover{
+  transform:translateY(-2px);filter:brightness(1.06);
+  box-shadow:0 1px 0 rgba(255,255,255,.3) inset,0 -3px 0 rgba(0,0,0,.22) inset,0 5px 0 color-mix(in srgb,var(--button) 70%,black),0 20px 30px rgba(59,47,42,.34);
+}
+body:not(.admin-page) .pdp-buy.cute-primary:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 rgba(255,255,255,.2) inset,0 -2px 0 rgba(0,0,0,.2) inset,0 0 0 color-mix(in srgb,var(--button) 70%,black),0 5px 10px rgba(59,47,42,.25);
+}
+@media(prefers-reduced-motion:reduce){body:not(.admin-page) .pdp-buy.cute-primary,body:not(.admin-page) .pack-chip,body:not(.admin-page) .purchase-chip{transition:none;transform:none!important}}
+@media(max-width:700px){
+  body:not(.admin-page){--pdp-control-h:56px}
+  body:not(.admin-page) .pdp-gallery-stage,body:not(.admin-page) .product-gallery-main{max-height:none;border-radius:0}
+}
+
+/* ---- purchase options: same height / width as the pack options ---- */
+body:not(.admin-page) .segmented-soft{background:transparent!important;padding:0!important;border-radius:0!important;gap:10px!important}
+body:not(.admin-page) .purchase-options .purchase-chip{
+  min-height:var(--pdp-control-h);height:var(--pdp-control-h);
+  padding:0 22px!important;
+  background:var(--surface)!important;
+}
+body:not(.admin-page) .purchase-options .purchase-chip.active{
+  background:var(--button)!important;color:var(--button-text)!important;border-color:var(--button)!important;
+}
+body:not(.admin-page) .purchase-chip b{font-size:15px;font-weight:500;flex:0 0 auto}
+body:not(.admin-page) .purchase-chip strong{font-size:15px}
+body:not(.admin-page) .purchase-chip .fake-radio{flex:0 0 auto}
+body:not(.admin-page) .purchase-chip.active .fake-radio{border-color:var(--button-text)}
+body:not(.admin-page) .purchase-chip.active .fake-radio:after{background:var(--button-text)}
+body:not(.admin-page) .purchase-chip.active small{opacity:.75}
+body:not(.admin-page) .purchase-chip.active small,
+body:not(.admin-page) .pack-chip.active small{color:var(--button-text)!important;opacity:.82}
+body:not(.admin-page) .pack-chip small{white-space:nowrap}
+@media(max-width:700px){body:not(.admin-page) .bundle-options .pack-chip small{display:none}}
