@@ -557,7 +557,7 @@
     for(let i=0;i<(site.pages||[]).length;i++){
       const p=site.pages[i]; if(!isUuid(p._dbId)) p._dbId=uuid();
       await upsert('pages',{
-        id:p._dbId,title:p.title,handle:p.slug||`page-${i+1}`,status:p.status||'published',
+        id:p._dbId,title:p.title,handle:(p.slug=String(p.slug||p.title||'').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||`page-${i+1}`),status:p.status||'published',
         template:'default',published_at:(p.status||'published')==='published'?new Date().toISOString():null,updated_by:access.user.id
       },'id');
       const {data:eb}=await sb.from('page_blocks').select('id').eq('page_id',p._dbId).eq('block_type','editorial_text').limit(1);
