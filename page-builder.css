@@ -1,0 +1,207 @@
+/* ZB page sections + click-to-edit editor.
+   Uses the same colour tokens as rhode.css / Admin > Theme. */
+
+/* ---------- sections (visitors) ---------- */
+.zbs-page{padding:8px 0 72px}
+.zbs{padding:36px 4.4vw;position:relative}
+.zbs-inner{max-width:1180px;margin:0 auto}
+.zbs-narrow{max-width:760px}
+.zbs-align-center{text-align:center}
+.zbs-align-center .zbs-narrow{margin-inline:auto}
+.zbs-heading{font-size:clamp(28px,3.6vw,42px);line-height:1.05;letter-spacing:-.04em;font-weight:400;text-transform:lowercase;margin:0 0 18px}
+.zbs-rich{font-size:17px;line-height:1.75;color:var(--ink)}
+.zbs-rich p{margin:0 0 1em}
+.zbs-rich p:last-child{margin-bottom:0}
+.zbs-rich h2,.zbs-rich h3,.zbs-rich h4{font-weight:400;letter-spacing:-.03em;text-transform:lowercase;margin:1.4em 0 .5em;line-height:1.15}
+.zbs-rich h3{font-size:24px}
+.zbs-rich h4{font-size:19px}
+.zbs-rich ul,.zbs-rich ol{padding-left:1.3em;margin:0 0 1em}
+.zbs-rich li{margin:.25em 0}
+.zbs-rich a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.zbs-rich blockquote{margin:1em 0;padding-left:18px;border-left:2px solid var(--line-solid,#ddd);color:var(--muted)}
+
+/* soft background bands */
+.zbs[class*="zbs-bg-"]{margin:12px 4.4vw;border-radius:var(--zb-radius-xl,36px);padding:56px 5vw}
+.zbs-bg-blush{background:var(--zb-blush,#ecdccf)}
+.zbs-bg-sage{background:var(--zb-sage,#dbe7dc)}
+.zbs-bg-cream{background:var(--zb-butter,#efe3cf)}
+.zbs-bg-lilac{background:var(--zb-lilac,#e9dfe2)}
+
+/* images */
+.zbs-img{border-radius:var(--zb-radius-lg,28px);overflow:hidden;background:var(--zb-blush,#ecdccf)}
+.zbs-img img{display:block;width:100%;height:100%;object-fit:cover}
+.zbs-img-wide{aspect-ratio:16/9}
+.zbs-w-full{padding-inline:0}
+.zbs-w-full .zbs-inner{max-width:none}
+.zbs-w-full .zbs-img{border-radius:0}
+.zbs-w-full .zbs-caption{padding-inline:4.4vw}
+.zbs-image figure{margin:0 auto}
+.zbs-caption{margin-top:12px;font-size:14px;color:var(--muted);text-align:center}
+
+/* image + text */
+.zbs-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,72px);align-items:center}
+.zbs-side-right .zbs-img-split{order:2}
+.zbs-img-split{aspect-ratio:4/5}
+.zbs-copy .zbs-btn{margin-top:24px}
+
+/* banner */
+.zbs-banner{padding-top:12px}
+.zbs-banner .zbs-inner{max-width:none}
+.zbs-banner-box{position:relative;border-radius:var(--zb-radius-xl,36px);overflow:hidden;background:var(--zb-blush,#ecdccf);display:flex;align-items:flex-end;min-height:min(78vh,720px);padding:clamp(28px,5vw,64px)}
+.zbs-h-short .zbs-banner-box{min-height:min(48vh,440px)}
+.zbs-banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.zbs-banner.has-img .zbs-banner-box::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.32))}
+.zbs-banner.has-img.zbs-tone-light .zbs-banner-box::after{background:linear-gradient(180deg,rgba(255,255,255,0) 40%,rgba(246,240,233,.55))}
+.zbs-banner-copy{position:relative;z-index:1;max-width:720px}
+.zbs-banner-heading{font-size:clamp(44px,7vw,96px);line-height:.92;letter-spacing:-.055em;font-weight:400;text-transform:lowercase;margin:10px 0 14px}
+.zbs-banner-sub{font-size:18px;margin:0 0 24px;max-width:520px}
+.zbs-banner.has-img.zbs-tone-dark .zbs-banner-copy{color:#fff}
+.zbs-banner.has-img.zbs-tone-dark .zbs-eyebrow{color:rgba(255,255,255,.85)}
+.zbs-banner.has-img.zbs-tone-dark .btn{background:#fff!important;color:var(--zb-cocoa,#3b2f2a)!important;border-color:#fff!important}
+
+/* gallery */
+.zbs-grid{display:grid;gap:16px}
+.zbs-cols-2{grid-template-columns:repeat(2,1fr)}
+.zbs-cols-3{grid-template-columns:repeat(3,1fr)}
+.zbs-cols-4{grid-template-columns:repeat(4,1fr)}
+.zbs-tile{position:relative}
+.zbs-img-tile{aspect-ratio:4/5}
+.zbs-grid .zbs-tile:nth-child(5n+2) .zbs-img{background:var(--zb-sage,#dbe7dc)}
+.zbs-grid .zbs-tile:nth-child(5n+3) .zbs-img{background:var(--zb-lilac,#e9dfe2)}
+.zbs-grid .zbs-tile:nth-child(5n+4) .zbs-img{background:var(--zb-butter,#efe3cf)}
+
+/* faq */
+.zbs-faq-list{border-top:1px solid var(--line-solid,#e3d8cf)}
+.zbs-faq-item{border-bottom:1px solid var(--line-solid,#e3d8cf)}
+.zbs-faq-q{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;font-size:19px;letter-spacing:-.02em;text-transform:lowercase}
+.zbs-faq-q::-webkit-details-marker{display:none}
+.zbs-faq-icon{flex:none;width:28px;height:28px;border-radius:999px;border:1px solid var(--ink);position:relative}
+.zbs-faq-icon::before,.zbs-faq-icon::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:1px;background:var(--ink);transform:translate(-50%,-50%)}
+.zbs-faq-icon::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .2s}
+details[open] .zbs-faq-icon::after{transform:translate(-50%,-50%) rotate(0)}
+.zbs-faq-a{padding:0 44px 22px 0;color:var(--muted)}
+
+/* buttons */
+.zbs-button{padding-block:20px}
+
+@media (max-width:760px){
+  .zbs{padding:26px 20px}
+  .zbs[class*="zbs-bg-"]{margin:8px 12px;padding:36px 22px;border-radius:var(--zb-radius-lg,28px)}
+  .zbs-split{grid-template-columns:1fr}
+  .zbs-side-right .zbs-img-split{order:0}
+  .zbs-cols-3,.zbs-cols-4{grid-template-columns:repeat(2,1fr)}
+  .zbs-grid{gap:10px}
+  .zbs-banner{padding:8px 12px}
+  .zbs-banner-box{min-height:68vh;border-radius:var(--zb-radius-lg,28px);padding:26px}
+  .zbs-h-short .zbs-banner-box{min-height:42vh}
+  .zbs-rich{font-size:16px}
+  .zbs-faq-q{font-size:17px}
+}
+
+/* ---------- editor ---------- */
+body.zbe-on{padding-top:64px}
+body.zbe-on .announcement{display:none}
+.zbe-bar{position:fixed;top:0;left:0;right:0;z-index:9000;height:64px;display:flex;align-items:center;gap:10px;padding:0 16px;background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;font:14px/1.2 "Hanken Grotesk",system-ui,sans-serif}
+.zbe-bar *{box-sizing:border-box}
+.zbe-title{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.zbe-title small{display:block;opacity:.65;font-weight:400;font-size:12px;margin-top:2px}
+.zbe-pill,.zbe-bar select{appearance:none;border:1px solid rgba(246,240,233,.35);background:transparent;color:inherit;border-radius:999px;height:38px;padding:0 16px;font:inherit;cursor:pointer;white-space:nowrap}
+.zbe-pill:hover{background:rgba(246,240,233,.1)}
+.zbe-pill.primary{background:#f6f0e9;color:var(--zb-cocoa,#3b2f2a);border-color:#f6f0e9;font-weight:600}
+.zbe-pill.primary:disabled{opacity:.55;cursor:default}
+.zbe-status{display:inline-flex;align-items:center;gap:8px}
+.zbe-dot{width:8px;height:8px;border-radius:50%;background:#e8b04b}
+.zbe-status.live .zbe-dot{background:#8fd19e}
+.zbe-dirty{font-size:12px;opacity:.75;white-space:nowrap}
+@media (max-width:760px){
+  .zbe-bar{gap:6px;padding:0 10px}
+  .zbe-pill,.zbe-bar select{padding:0 11px;height:36px;font-size:13px}
+  .zbe-hide-sm{display:none!important}
+}
+
+/* editable canvas */
+.zbe-on [data-section]{outline:1px dashed transparent;outline-offset:-1px;transition:outline-color .15s}
+.zbe-on [data-section]:hover{outline-color:rgba(59,47,42,.28)}
+.zbe-on [data-section].zbe-sel{outline:2px solid var(--zb-cocoa,#3b2f2a)}
+.zbe-on [contenteditable]{outline:none;border-radius:6px;cursor:text;min-width:2ch}
+.zbe-on [contenteditable]:hover{box-shadow:0 0 0 1px rgba(59,47,42,.18)}
+.zbe-on [contenteditable]:focus{box-shadow:0 0 0 2px rgba(59,47,42,.45);background:color-mix(in srgb,var(--paper,#fff) 70%,transparent)}
+.zbe-on .zbs-empty::before{content:attr(data-placeholder);color:var(--muted,#9b8b80);opacity:.7;pointer-events:none}
+.zbe-on .zbs-banner.has-img.zbs-tone-dark .zbs-empty::before{color:rgba(255,255,255,.75)}
+.zbe-on [data-img]{cursor:pointer}
+.zbe-on .zbs-img[data-img]{position:relative}
+.zbe-format[hidden]{display:none!important}
+.zbe-on .zbs-img[data-img]:not(.zbs-img-empty):hover::after{content:"change photo";position:absolute;inset:auto 12px 12px auto;background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;border-radius:999px;padding:8px 14px;font-size:13px}
+.zbs-img-empty{display:flex;align-items:center;justify-content:center;min-height:180px;border:1.5px dashed rgba(59,47,42,.3);background:color-mix(in srgb,var(--zb-blush,#ecdccf) 55%,transparent)!important;color:var(--zb-cocoa,#3b2f2a);font-size:15px}
+.zbs-img.zbe-uploading{opacity:.55;pointer-events:none}
+.zbs-img.zbe-uploading::before{content:"uploading…";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;color:var(--zb-cocoa,#3b2f2a);font-weight:600}
+.zbs-banner-photo{position:absolute;top:16px;left:16px;z-index:3;border:0;border-radius:999px;background:rgba(59,47,42,.85);color:#f6f0e9;padding:10px 16px;font:500 13px "Hanken Grotesk",sans-serif;cursor:pointer}
+.zbs-btn-empty{opacity:.6;border-style:dashed!important}
+.zbs-mini-x{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;border:0;background:rgba(59,47,42,.85);color:#f6f0e9;font-size:17px;line-height:1;cursor:pointer;z-index:3}
+.zbs-faq-q-row{position:relative;display:flex;align-items:center;gap:10px}
+.zbs-faq-q-row .zbs-faq-q{flex:1;cursor:text}
+.zbs-faq-q-row .zbs-mini-x{position:static;flex:none}
+.zbs-faq-edit .zbs-faq-a{padding-bottom:18px}
+.zbs-add-item{border:1.5px dashed rgba(59,47,42,.3);background:transparent;border-radius:var(--zb-radius-lg,28px);color:var(--zb-cocoa,#3b2f2a);font:500 14px "Hanken Grotesk",sans-serif;cursor:pointer;min-height:120px}
+.zbs-add-line{min-height:52px;width:100%;margin-top:14px;border-radius:999px}
+
+/* per-section toolbar */
+.zbe-tools{position:absolute;top:10px;right:10px;z-index:50;display:none;align-items:center;gap:4px;padding:4px;border-radius:999px;background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;font:13px "Hanken Grotesk",sans-serif;box-shadow:0 8px 24px rgba(59,47,42,.22)}
+[data-section].zbe-sel>.zbe-tools,[data-section]:hover>.zbe-tools{display:flex}
+.zbe-tools span{padding:0 10px 0 12px;opacity:.75;text-transform:lowercase}
+.zbe-tools button{border:0;background:transparent;color:inherit;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:15px;line-height:1}
+.zbe-tools button:hover{background:rgba(246,240,233,.15)}
+.zbe-tools button:disabled{opacity:.3;cursor:default}
+
+/* add-section rail */
+.zbe-add{display:flex;justify-content:center;position:relative;height:0;z-index:40}
+.zbe-add button{transform:translateY(-50%);border:1px solid var(--zb-cocoa,#3b2f2a);background:var(--paper,#fff);color:var(--zb-cocoa,#3b2f2a);border-radius:999px;height:34px;padding:0 16px;font:500 13px "Hanken Grotesk",sans-serif;cursor:pointer;opacity:0;transition:opacity .15s}
+.zbe-on .zbs-page:hover .zbe-add button,.zbe-add button:focus,.zbe-add.zbe-last button{opacity:1}
+.zbe-add.zbe-last{height:auto;padding:28px 0}
+.zbe-add.zbe-last button{transform:none;height:46px;padding:0 26px}
+@media (hover:none){.zbe-add button{opacity:1}}
+
+/* popovers, drawers, modals */
+.zbe-pop{position:absolute;z-index:9500;width:min(320px,calc(100vw - 24px));background:#fffaf5;color:var(--zb-cocoa,#3b2f2a);border:1px solid #e3d8cf;border-radius:20px;box-shadow:0 20px 50px rgba(59,47,42,.18);padding:16px;font:14px/1.4 "Hanken Grotesk",sans-serif}
+.zbe-pop h4,.zbe-drawer h3,.zbe-modal h3{margin:0 0 12px;font-weight:500;text-transform:lowercase;letter-spacing:-.01em}
+.zbe-field{display:grid;gap:6px;margin:0 0 12px;font-size:13px}
+.zbe-field>span{opacity:.75}
+.zbe-field input,.zbe-field textarea,.zbe-field select{font:inherit;font-size:14px;color:inherit;background:#fff;border:1px solid #e3d8cf;border-radius:12px;padding:10px 12px;width:100%;box-sizing:border-box}
+.zbe-field textarea{min-height:84px;resize:vertical}
+.zbe-seg{display:flex;flex-wrap:wrap;gap:6px}
+.zbe-seg button{border:1px solid #e3d8cf;background:#fff;color:inherit;border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer}
+.zbe-seg button.on{background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;border-color:var(--zb-cocoa,#3b2f2a)}
+.zbe-swatch{width:30px;height:30px;padding:0!important;border-radius:50%!important}
+.zbe-row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.zbe-btn{border:1px solid var(--zb-cocoa,#3b2f2a);background:transparent;color:var(--zb-cocoa,#3b2f2a);border-radius:999px;padding:10px 18px;font:500 14px "Hanken Grotesk",sans-serif;cursor:pointer}
+.zbe-btn.primary{background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9}
+.zbe-btn.danger{border-color:#b4533c;color:#b4533c}
+.zbe-toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid #efe5dc;cursor:pointer}
+.zbe-toggle input{width:44px;height:26px;appearance:none;background:#e3d8cf;border-radius:999px;position:relative;cursor:pointer;flex:none;margin:0;transition:background .15s}
+.zbe-toggle input::after{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .15s}
+.zbe-toggle input:checked{background:var(--zb-cocoa,#3b2f2a)}
+.zbe-toggle input:checked::after{left:21px}
+.zbe-toggle small{display:block;opacity:.65;margin-top:2px}
+.zbe-link{display:flex;gap:6px;align-items:center;font-size:13px;background:#f6f0e9;border-radius:12px;padding:8px 10px;word-break:break-all}
+.zbe-link button{flex:none}
+
+.zbe-scrim{position:fixed;inset:0;z-index:9400;background:rgba(59,47,42,.28)}
+.zbe-drawer{position:fixed;top:0;right:0;bottom:0;z-index:9600;width:min(400px,100vw);background:#fffaf5;color:var(--zb-cocoa,#3b2f2a);padding:22px;overflow:auto;font:14px/1.4 "Hanken Grotesk",sans-serif;box-shadow:-20px 0 50px rgba(59,47,42,.15)}
+.zbe-modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:9600;width:min(760px,calc(100vw - 24px));max-height:calc(100vh - 40px);overflow:auto;background:#fffaf5;color:var(--zb-cocoa,#3b2f2a);border-radius:28px;padding:26px;font:14px/1.4 "Hanken Grotesk",sans-serif;box-shadow:0 30px 80px rgba(59,47,42,.25)}
+.zbe-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:6px 0 16px}
+.zbe-card{text-align:left;border:1px solid #e3d8cf;background:#fff;border-radius:18px;padding:14px;font:inherit;color:inherit;cursor:pointer;display:grid;gap:4px}
+.zbe-card:hover,.zbe-card.on{border-color:var(--zb-cocoa,#3b2f2a)}
+.zbe-card.on{box-shadow:inset 0 0 0 1px var(--zb-cocoa,#3b2f2a)}
+.zbe-card strong{font-weight:500;text-transform:lowercase;font-size:15px}
+.zbe-card small{opacity:.65}
+.zbe-card i{display:block;height:54px;border-radius:10px;background:var(--zb-blush,#ecdccf);margin-bottom:6px;font-style:normal}
+
+.zbe-format{position:absolute;z-index:9500;display:flex;gap:2px;padding:4px;border-radius:999px;background:var(--zb-cocoa,#3b2f2a);box-shadow:0 8px 24px rgba(59,47,42,.25)}
+.zbe-format button{border:0;background:transparent;color:#f6f0e9;min-width:32px;height:32px;border-radius:999px;cursor:pointer;font:600 13px "Hanken Grotesk",sans-serif;padding:0 8px}
+.zbe-format button:hover{background:rgba(246,240,233,.15)}
+
+.zbe-toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:9800;background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;border-radius:999px;padding:12px 20px;font:500 14px "Hanken Grotesk",sans-serif;box-shadow:0 12px 30px rgba(59,47,42,.25);max-width:calc(100vw - 32px);text-align:center}
+.zbe-toast.err{background:#9d3f2b}
+
+.zbe-edit-pill{position:fixed;right:18px;bottom:18px;z-index:8000;border:0;border-radius:999px;background:var(--zb-cocoa,#3b2f2a);color:#f6f0e9;padding:14px 22px;font:500 14px "Hanken Grotesk",sans-serif;cursor:pointer;box-shadow:0 12px 30px rgba(59,47,42,.25)}
+.zbe-draft-flag{display:inline-block;margin-left:10px;vertical-align:middle;font-size:12px;letter-spacing:.04em;padding:4px 10px;border-radius:999px;background:#efe3cf;color:var(--zb-cocoa,#3b2f2a)}

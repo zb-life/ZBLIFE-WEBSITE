@@ -220,7 +220,7 @@ function translateExactUiText(value){
   return lead+translated+trail;
 }
 function translateStaticElement(el){
-  if(!el||el.nodeType!==1||document.body?.classList.contains('admin-page')||['SCRIPT','STYLE','NOSCRIPT'].includes(el.tagName))return;
+  if(!el||el.nodeType!==1||document.body?.classList.contains('admin-page')||['SCRIPT','STYLE','NOSCRIPT'].includes(el.tagName)||el.closest?.('[data-zb-sections],[data-zb-editor-ui]'))return;
   ['placeholder','aria-label','title'].forEach(attr=>{if(el.hasAttribute?.(attr)){const v=el.getAttribute(attr),n=translateExactUiText(v);if(n!==v)el.setAttribute(attr,n)}});
   [...(el.childNodes||[])].forEach(n=>{if(n.nodeType===3){const v=n.nodeValue,nv=translateExactUiText(v);if(nv!==v)n.nodeValue=nv}else if(n.nodeType===1)translateStaticElement(n)});
 }
