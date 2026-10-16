@@ -49,8 +49,30 @@
     return clientPromise;
   }
 
+  // Storefront pages read public catalogue data without the signed-in session.
+  // A stuck login refresh (common with several admin tabs open) would otherwise
+  // make every storefront request wait, leaving pages white or showing fallback photos.
+  let publicClientPromise = null;
+  async function publicClient(){
+    if(publicClientPromise) return publicClientPromise;
+    publicClientPromise = (async()=>{
+      if(!window.supabase?.createClient) throw new Error('Supabase JS library did not load.');
+      const cfg=await loadSupabaseConfig();
+      return window.supabase.createClient(cfg.supabaseUrl,cfg.supabasePublishableKey,{
+        auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false,storageKey:'zb-public-reader'}
+      });
+    })().catch(err=>{ publicClientPromise=null; throw err; });
+    return publicClientPromise;
+  }
+  function needsSignedInReads(){
+    const body=document.body;
+    if(body?.classList.contains('admin-page')) return true;
+    if(/(^|\/)admin\.html$/.test(location.pathname)) return true;
+    return !!new URLSearchParams(location.search).get('edit');
+  }
+
   async function rows(table, select='*', configure){
-    const sb = await client();
+    const sb = needsSignedInReads() ? await client() : await publicClient();
     let q = sb.from(table).select(select);
     if(configure) q = configure(q);
     const {data,error} = await q;
