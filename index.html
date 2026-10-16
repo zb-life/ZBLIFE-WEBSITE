@@ -41,5 +41,5 @@
 <div id="homeCommitmentMount"></div>
 </main>
 <footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>window.zbHomeRefreshPending=true;window.zbHomeRefreshPromise=(async()=>{try{await ZBSupa.hydrateSiteCache({force:true})}catch(e){console.warn("Supabase preload:",e)}finally{window.zbHomeRefreshPending=false;document.documentElement.dataset.zbHydrationFallback="1";window.dispatchEvent(new Event("zb:home-refresh-complete"))}})();</script><script src="site-common.js"></script><script src="home.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>window.zbHomeRefreshPending=true;window.zbHomeRefreshPromise=(async()=>{try{await Promise.race([ZBSupa.hydrateSiteCache({force:true}),new Promise(r=>setTimeout(r,6000))])}catch(e){console.warn("Supabase preload:",e)}finally{window.zbHomeRefreshPending=false;document.documentElement.dataset.zbHydrationFallback="1";window.dispatchEvent(new Event("zb:home-refresh-complete"))}})();</script><script src="site-common.js"></script><script src="home.js"></script>
 </body></html>
