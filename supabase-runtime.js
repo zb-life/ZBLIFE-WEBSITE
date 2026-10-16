@@ -190,7 +190,10 @@
 
     const legacyPages = pages.filter(p=>p.handle!=='home').map(p=>{
       const b=blocks.find(x=>x.page_id===p.id && x.block_type==='editorial_text');
-      return {_dbId:p.id,title:p.title,slug:p.handle,body:b?.settings?.body||'',status:p.status};
+      const sections=blocks.filter(x=>x.page_id===p.id && x.block_type==='section' && x.visible!==false)
+        .sort((a,b)=>(a.position||0)-(b.position||0)).map(x=>({...(x.settings||{}),_id:x.id}));
+      return {_dbId:p.id,title:p.title,slug:p.handle,body:b?.settings?.body||'',status:p.status,
+        template:p.template||'default',seoDescription:p.seo_description||'',sections};
     });
 
     const benefitList = benefits.sort((a,b)=>(a.position||0)-(b.position||0)).map(b=>({
@@ -557,8 +560,8 @@
     for(let i=0;i<(site.pages||[]).length;i++){
       const p=site.pages[i]; if(!isUuid(p._dbId)) p._dbId=uuid();
       await upsert('pages',{
-        id:p._dbId,title:p.title,handle:p.slug||`page-${i+1}`,status:p.status||'published',
-        template:'default',published_at:(p.status||'published')==='published'?new Date().toISOString():null,updated_by:access.user.id
+        id:p._dbId,title:p.title,handle:(p.slug=String(p.slug||p.title||'').toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')||`page-${i+1}`),status:p.status||'published',
+        template:p.template||'default',published_at:(p.status||'published')==='published'?new Date().toISOString():null,updated_by:access.user.id
       },'id');
       const {data:eb}=await sb.from('page_blocks').select('id').eq('page_id',p._dbId).eq('block_type','editorial_text').limit(1);
       await upsert('page_blocks',{id:eb?.[0]?.id||uuid(),page_id:p._dbId,block_type:'editorial_text',position:1,visible:true,settings:{body:p.body||''}},'id');
