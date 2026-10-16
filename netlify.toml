@@ -2,3 +2,9 @@
   command = "node netlify/generate-supabase-config.mjs"
   publish = "."
   functions = "netlify/functions"
+
+# Google Merchant Center product feed
+[[redirects]]
+  from = "/google-feed.xml"
+  to = "/.netlify/functions/google-merchant-feed"
+  status = 200
