@@ -82,6 +82,26 @@ function renderRelated(product){
 }
 function renderRitual(product){const host=document.getElementById('ritualMedia');if(host){const items=getProductMedia(product);renderMediaInto(host,items[2]||items[0])}}
 
+// Google product data (JSON-LD). Google Merchant Center compares this with the
+// product feed at /google-feed.xml, so it always uses the base HKD price and the
+// same ids (SKU, or variant id when there is no SKU) as the feed.
+function renderProductStructuredData(product,variant,variants){
+  try{
+    const abs=s=>{s=String(s||'').trim();if(!s)return'';if(/^https?:\/\//i.test(s))return s;return new URL(s.replace(/^\.?\//,''),'https://zb.life/').href};
+    const plain=s=>String(s||'').replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim();
+    const linkFor=v=>`https://zb.life/product.html?product=${encodeURIComponent(product.handle)}&scent=${encodeURIComponent(v.name)}`;
+    const productImages=getProductMedia(product).filter(m=>m.type!=='video'&&m.type!=='youtube').map(m=>abs(m.src));
+    const offer=v=>({'@type':'Offer',url:linkFor(v),priceCurrency:'HKD',price:Number(v.price||0).toFixed(2),availability:'https://schema.org/InStock',itemCondition:'https://schema.org/NewCondition'});
+    const item=v=>({'@type':'Product',name:variants.length>1?`${product.title} – ${v.name}`:product.title,sku:v.sku||v.id,image:[...new Set([abs(v.image),...productImages].filter(Boolean))],description:plain(product.description)||product.title,brand:{'@type':'Brand',name:product.vendor||'ZIONBURG'},offers:offer(v)});
+    const data=variants.length>1
+      ?{'@context':'https://schema.org','@type':'ProductGroup',name:product.title,productGroupID:product.id,description:plain(product.description)||product.title,brand:{'@type':'Brand',name:product.vendor||'ZIONBURG'},url:linkFor(variant),hasVariant:variants.map(item)}
+      :{'@context':'https://schema.org',...item(variant)};
+    let el=document.getElementById('zbProductJsonLd');
+    if(!el){el=document.createElement('script');el.type='application/ld+json';el.id='zbProductJsonLd';document.head.appendChild(el)}
+    el.textContent=JSON.stringify(data);
+  }catch(e){console.warn('Product structured data skipped:',e.message)}
+}
+
 function renderPDP(){
   const site=getSite();currentCatalogProduct=getCatalogProduct(site);if(!currentCatalogProduct)return;
   const vs=variantsFor(currentCatalogProduct);
@@ -92,6 +112,7 @@ function renderPDP(){
   const bundle=selectedBundle(site,currentCatalogProduct);
 
   if(typeof applySeoMeta==='function')applySeoMeta({pageTitle:localize(currentCatalogProduct,'title'),description:localize(currentCatalogProduct,'description')||''});
+  renderProductStructuredData(currentCatalogProduct,variant,vs);
   const countLabel=document.getElementById('variantCountLabel');if(countLabel)countLabel.textContent=currentLocale()==='zh-HK'?`${vs.length} 款選項`:`${vs.length} ${vs.length===1?'OPTION':'OPTIONS'}`;
   const scentTitle=document.querySelector('.pj-mood-selector .selector-title span:first-child');if(scentTitle)scentTitle.textContent=vs.length>1?tr('chooseScent','CHOOSE YOUR SCENT'):tr('chooseOption','CHOOSE YOUR OPTION');
   document.getElementById('scentOptions').innerHTML=vs.map(v=>`<button type="button" class="option scent-chip ${v.id===variant.id?'active':''}" data-variant="${v.id}" aria-pressed="${v.id===variant.id}"><span class="scent-chip-dot" style="background:${v.color||'#ddd'}"></span><span class="scent-chip-copy"><strong>${variantName(v)}</strong><small>${variantState(v)||tr('option','Option')}</small></span><span class="chip-check">✓</span></button>`).join('');
