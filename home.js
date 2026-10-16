@@ -192,6 +192,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   window.addEventListener('zb:supabase-ready',reveal,{once:true});
   window.addEventListener('zb:home-refresh-complete',reveal,{once:true});
   setTimeout(()=>{if(!window.zbHomeRefreshPending&&document.documentElement.dataset.zbHydrationFallback==='1')reveal()},2500);
+  // Safety net: never leave the homepage hidden, even if loading store data stalls.
+  setTimeout(()=>document.body.classList.remove('zb-home-loading'),7000);
 });
 
 
