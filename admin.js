@@ -1,3 +1,13 @@
+// What was ordered: one line per product with scent, pack size and quantity.
+function orderItemsCell(o){
+  const items=Array.isArray(o.items)?o.items:[];
+  if(!items.length)return '<span class="order-sub">No item details</span>';
+  return `<ul class="order-items">${items.map(it=>{
+    const pack=Number(it.bundleQty||1)>1?` <span class="order-pack">${Number(it.bundleQty)}-pack</span>`:'';
+    const detail=it.detail&&!/pack/i.test(it.detail)?` <span class="order-pack">${esc(it.detail)}</span>`:'';
+    return `<li><span class="order-qty">${Number(it.qty||1)} ×</span> ${esc(it.name||'Product')}${pack}${detail}</li>`;
+  }).join('')}</ul>`;
+}
 let adminState=getSite();
 let selectedProductId=null,selectedCollectionId=null,selectedInterfaceLocale=null;
 const $=id=>document.getElementById(id);
@@ -25,9 +35,9 @@ function paidOrders(){return orders().filter(o=>!String(o.payment||'').toLowerCa
 function renderSales(){
   const os=paidOrders(),rev=os.reduce((sum,o)=>sum+Number(o.total||0),0);
   $('kpiRevenue').textContent=money(rev);$('kpiOrders').textContent=os.length;$('kpiAov').textContent=money(os.length?rev/os.length:0);$('kpiCustomers').textContent=new Set(os.map(o=>String(o.email||'').toLowerCase()).filter(Boolean)).size;
-  const row=o=>`<tr><td><strong>${esc(o.id)}</strong></td><td>${new Date(o.date).toLocaleDateString()}</td><td>${esc(o.customer)}</td><td>${esc(o.email)}</td><td>${money(o.total)}</td><td><span class="status-pill success">${esc(o.payment)}</span></td><td>${esc(o.fulfilment)}</td></tr>`;
+  const row=o=>`<tr><td><strong>${esc(o.id)}</strong></td><td>${new Date(o.date).toLocaleDateString()}</td><td>${esc(o.customer)}</td><td>${orderItemsCell(o)}</td><td>${money(o.total)}</td><td><span class="status-pill success">${esc(o.payment)}</span></td><td>${esc(o.fulfilment)}</td></tr>`;
   $('recentOrders').innerHTML=os.slice(0,6).map(row).join('')||'<tr><td colspan="7" class="empty-cell">No orders yet.</td></tr>';
-  $('ordersTable').innerHTML=orders().map((o,i)=>{const shipped=String(o.fulfilment||'').toLowerCase()==='shipped';const tracking=o.trackingNumber?`<div class="tracking-cell"><strong>${esc(o.trackingCarrier||'Carrier')}</strong><small>${esc(o.trackingNumber)}</small>${o.trackingUrl?`<a class="tracking-link" href="${esc(o.trackingUrl)}" target="_blank" rel="noopener">Track ↗</a>`:''}</div>`:'—';return `<tr><td><strong>${esc(o.id)}</strong></td><td>${new Date(o.date).toLocaleDateString()}</td><td>${esc(o.customer)}</td><td>${esc(o.email)}</td><td>${esc(o.discountCode||'—')}</td><td>${money(o.total)}</td><td>${esc(o.payment)}</td><td><span class="status-pill ${shipped?'shipped':''}">${esc(o.fulfilment||'Unfulfilled')}</span></td><td>${tracking}</td><td><button class="admin-secondary compact" data-ship-order="${i}">${shipped?'Edit shipment':'Ship order'}</button></td></tr>`}).join('')||'<tr><td colspan="10" class="empty-cell">No orders yet.</td></tr>';
+  $('ordersTable').innerHTML=orders().map((o,i)=>{const shipped=String(o.fulfilment||'').toLowerCase()==='shipped';const tracking=o.trackingNumber?`<div class="tracking-cell"><strong>${esc(o.trackingCarrier||'Carrier')}</strong><small>${esc(o.trackingNumber)}</small>${o.trackingUrl?`<a class="tracking-link" href="${esc(o.trackingUrl)}" target="_blank" rel="noopener">Track ↗</a>`:''}</div>`:'—';return `<tr><td><strong>${esc(o.id)}</strong></td><td>${new Date(o.date).toLocaleDateString()}</td><td>${esc(o.customer)}<small class="order-sub">${esc(o.email||'')}</small></td><td>${orderItemsCell(o)}</td><td>${esc(o.discountCode||'—')}</td><td>${money(o.total)}</td><td>${esc(o.payment)}</td><td><span class="status-pill ${shipped?'shipped':''}">${esc(o.fulfilment||'Unfulfilled')}</span></td><td>${tracking}</td><td><button class="admin-secondary compact" data-ship-order="${i}">${shipped?'Edit shipment':'Ship order'}</button></td></tr>`}).join('')||'<tr><td colspan="10" class="empty-cell">No orders yet.</td></tr>';
   const map={};os.forEach(o=>{if(!o.email)return;const key=String(o.email).toLowerCase();if(!map[key])map[key]={name:o.customer,email:o.email,orders:0,total:0,registered:false};map[key].orders++;map[key].total+=Number(o.total||0)});getCustomers().forEach(c=>{const key=String(c.email||'').toLowerCase();if(!key)return;if(!map[key])map[key]={name:c.name,email:c.email,orders:0,total:0,registered:true};map[key].registered=true;map[key].name=map[key].name||c.name});
   $('customerList').innerHTML=Object.values(map).map(c=>`<div class="customer-row"><div class="customer-avatar">${esc((c.name||c.email||'?').slice(0,1).toUpperCase())}</div><div><strong>${esc(c.name||'Customer')}</strong><p>${esc(c.email)} · ${c.registered?'Registered account':'Guest checkout'}</p></div><div class="customer-stats"><span>${c.orders} order${c.orders===1?'':'s'}</span><strong>${money(c.total)}</strong></div></div>`).join('')||'<p class="empty-copy">No customers yet.</p>';
 }

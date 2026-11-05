@@ -108,6 +108,21 @@
     return by;
   }
 
+  let loadedRowIds = null;
+
+  // Delete rows this page loaded that are no longer in the editor's list.
+  async function deleteRemoved(table, keptIds){
+    const before = loadedRowIds?.[table];
+    if(!before) return;
+    const kept = new Set(keptIds.filter(Boolean));
+    const removed = before.filter(id=>!kept.has(id));
+    loadedRowIds[table] = [...kept];
+    if(!removed.length) return;
+    const sb = await client();
+    const {error} = await sb.from(table).delete().in('id', removed);
+    if(error){ loadedRowIds[table] = [...kept, ...removed]; throw new Error(`Could not remove deleted ${table.replace(/_/g,' ')}: ${error.message}`); }
+  }
+
   async function loadLegacySite(){
     const [
       products, variants, inventory, media, collections, cp,
@@ -223,7 +238,20 @@
       translations:translations.get(`benefit:${b.id}`)||{}
     }));
 
-    const navItems = nav.filter(n=>!n.parent_id).sort((a,b)=>(a.position||0)-(b.position||0)).map(n=>({
+    // Remember exactly which rows this page loaded, so a save can delete the
+    // ones the editor removed (and nothing it never saw).
+    loadedRowIds = {
+      navigation_items: nav.filter(n=>!n.parent_id).map(n=>n.id),
+      community_entities: community.map(x=>x.id),
+      benefits: benefits.map(b=>b.id),
+      pages: pages.filter(p=>p.handle!=='home').map(p=>p.id)
+    };
+    // Show each menu link once, even if older saves stored it twice.
+    const seenNav = new Set();
+    const navItems = nav.filter(n=>!n.parent_id).sort((a,b)=>(a.position||0)-(b.position||0)).filter(n=>{
+      const key=`${String(n.label||'').trim().toLowerCase()}|${String(n.item_type||'')}|${String(n.href||'').trim().toLowerCase()}`;
+      if(seenNav.has(key)) return false; seenNav.add(key); return true;
+    }).map(n=>({
       _dbId:n.id,label:n.label,type:n.item_type,href:n.href||'',visible:n.visible!==false
     }));
 
@@ -501,6 +529,7 @@
       benefitPayload.push({id:b._dbId,title:b.title,subtitle:b.subtitle||'',external_icon_url:b.icon||null,active:true,position:i+1});
     }
     await upsert('benefits',benefitPayload,'id');
+    await deleteRemoved('benefits',benefitPayload.map(b=>b.id));
 
     // Navigation
     const navPayload=[];
@@ -509,6 +538,7 @@
       navPayload.push({id:n._dbId,location:'header',label:n.label,item_type:n.type||'link',href:n.href||null,visible:n.visible!==false,position:i+1});
     }
     await upsert('navigation_items',navPayload,'id');
+    await deleteRemoved('navigation_items',navPayload.map(n=>n.id));
 
     // Social links: replace current simple list
     const {error:delSocial}=await sb.from('social_links').delete().neq('platform','__never__');
@@ -557,6 +587,7 @@
       }
     }
     await upsert('community_entities',communityPayload,'id');
+    await deleteRemoved('community_entities',communityPayload.map(c=>c.id));
 
     // Pages + homepage blocks
     let {data:homeRows}=await sb.from('pages').select('id').eq('handle','home').limit(1);
@@ -588,6 +619,8 @@
       const {data:eb}=await sb.from('page_blocks').select('id').eq('page_id',p._dbId).eq('block_type','editorial_text').limit(1);
       await upsert('page_blocks',{id:eb?.[0]?.id||uuid(),page_id:p._dbId,block_type:'editorial_text',position:1,visible:true,settings:{body:p.body||''}},'id');
     }
+
+    await deleteRemoved('pages',(site.pages||[]).map(p=>p._dbId));
 
     // Subscriptions / bundles / discounts
     const planPayload=[];

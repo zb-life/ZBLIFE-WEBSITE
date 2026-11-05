@@ -475,3 +475,5 @@ body:not(.admin-page) .pj-mood-options .scent-chip img.pj-mood-thumb{
   width:100%!important;height:auto!important;padding:0!important;
   object-fit:cover!important;
 }
+
+.zb-img-failed{visibility:hidden!important}
