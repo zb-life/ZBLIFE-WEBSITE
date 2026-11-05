@@ -401,3 +401,6 @@ async function initStorefrontTranslationEdit(){
 
 document.addEventListener('DOMContentLoaded',()=>{applyTheme();renderNav();applyBranding();renderBenefits();bindNav();bindStorePreferences();ensureCartDrawer();renderCartUI();bindCart();renderShipping();document.addEventListener('click',e=>{const b=e.target.closest('.announcement-arrow');if(!b)return;const row=b.parentElement?.querySelector('.announcement-scroll');if(row)row.scrollBy({left:(b.classList.contains('announcement-next')?1:-1)*Math.max(280,row.clientWidth*.72),behavior:'smooth'})});requestAnimationFrame(()=>applyStorefrontTranslations())});
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initStorefrontTranslationEdit,0));
+
+// If a photo fails to load, hide it (its soft background stays) instead of showing a broken-image icon.
+document.addEventListener('error',e=>{const t=e.target;if(t&&t.tagName==='IMG'&&!document.body?.classList.contains('admin-page'))t.classList.add('zb-img-failed')},true);
