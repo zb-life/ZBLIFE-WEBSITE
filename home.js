@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded',async()=>{
-  if(window.zbHomeRefreshPromise){try{await window.zbHomeRefreshPromise}catch(e){console.warn('Homepage refresh:',e)}}
+  if(window.zbSiteReady)await window.zbSiteReady;
   const s=getSite(),product=getPrimaryCatalogProduct(s),variants=getProductVariants(product);
   const locale=currentLocale(),ct=s.localization?.contentTranslations?.[locale]||{};
   document.getElementById('heroEyebrow').textContent=ct.heroEyebrow||s.homepage.eyebrow;
@@ -129,7 +129,8 @@ document.addEventListener('DOMContentLoaded',async()=>{
 
 
 // v17.1 editable homepage mood cards
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
   const site=getSite();
   const defaultsMood=[
     {key:'post',title:'Post-workout',subtitle:'Cool down. Clean up. Keep moving.',scent:'Mint',image:'',visible:true},
@@ -160,7 +161,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 
 
 // v17.2 dedicated editable Visual Journal
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
   const site=getSite(),host=document.getElementById('visualJournalGrid');if(!host)return;
   const eyebrow=document.getElementById('journalEyebrow'),title=document.getElementById('journalTitle');
   if(eyebrow)eyebrow.textContent=site.homepage?.journalEyebrow||'ZB / VISUAL JOURNAL';
@@ -181,22 +183,13 @@ document.addEventListener('DOMContentLoaded',()=>{
 });
 
 
-/* v18.5 — reveal homepage only after CMS-backed render completes */
-document.addEventListener('DOMContentLoaded',()=>{
-  const reveal=()=>{
-    if(!window.zbHomeRefreshPending&&(sessionStorage.getItem('zb_supabase_hydrated_v1')==='1'||document.documentElement.dataset.zbHydrationFallback==='1')){
-      requestAnimationFrame(()=>document.body.classList.remove('zb-home-loading'));
-    }
-  };
-  reveal();
-  window.addEventListener('zb:supabase-ready',reveal,{once:true});
-  window.addEventListener('zb:home-refresh-complete',reveal,{once:true});
-  setTimeout(()=>{if(!window.zbHomeRefreshPending&&document.documentElement.dataset.zbHydrationFallback==='1')reveal()},2500);
-  // Safety net: never leave the homepage hidden, even if loading store data stalls.
-  setTimeout(()=>document.body.classList.remove('zb-home-loading'),7000);
+/* Reveal only after all CMS-backed sections have rendered. */
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
+  requestAnimationFrame(()=>document.body.classList.remove('zb-home-loading'));
 });
 
-
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
   if(typeof applySeoMeta==='function')applySeoMeta({home:true});
 });

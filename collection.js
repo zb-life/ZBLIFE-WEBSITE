@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
   const site=getSite(),key=new URLSearchParams(location.search).get('collection');
   const c=(site.collections||[]).find(x=>x.id===key||x.handle===key)||site.collections?.[0];
   if(!c)return;
