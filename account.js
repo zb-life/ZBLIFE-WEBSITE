@@ -21,11 +21,20 @@ function setAccountMode(mode='login',updateUrl=true){
 
 async function renderAccount(){
   const site=getSite();
-  if(site.features?.customerAccounts===false){
-    document.querySelector('.account-shell').innerHTML=`<section class="account-disabled"><span class="eyebrow">CUSTOMER ACCOUNTS</span><h1>${tr('accountsHidden','ACCOUNTS ARE CURRENTLY HIDDEN.')}</h1><p>${tr('guestContinue','You can continue shopping and checking out as a guest.')}</p><a class="btn btn-dark" href="index.html">${tr('backToStore','BACK TO STORE')}</a></section>`;
-    return
-  }
+  // A hidden customer-account feature must not disable staff login.
+  const staffLoginRequested=new URLSearchParams(location.search).get('admin')==='1';
   const {data:{user}}=await sb.auth.getUser();
+  if(site.features?.customerAccounts===false && !staffLoginRequested){
+    if(!user){
+      document.querySelector('.account-shell').innerHTML=`<section class="account-disabled"><span class="eyebrow">CUSTOMER ACCOUNTS</span><h1>${tr('accountsHidden','ACCOUNTS ARE CURRENTLY HIDDEN.')}</h1><p>${tr('guestContinue','You can continue shopping and checking out as a guest.')}</p><a class="btn btn-dark" href="index.html">${tr('backToStore','BACK TO STORE')}</a></section>`;
+      return;
+    }
+    const {data:staffRoles,error:staffError}=await sb.from('user_roles').select('role').eq('user_id',user.id);
+    if(!staffError && !(staffRoles||[]).some(r=>['admin','editor','sales','fulfilment'].includes(r.role))){
+      document.querySelector('.account-shell').innerHTML=`<section class="account-disabled"><span class="eyebrow">CUSTOMER ACCOUNTS</span><h1>${tr('accountsHidden','ACCOUNTS ARE CURRENTLY HIDDEN.')}</h1><p>${tr('guestContinue','You can continue shopping and checking out as a guest.')}</p><a class="btn btn-dark" href="index.html">${tr('backToStore','BACK TO STORE')}</a></section>`;
+      return;
+    }
+  }
   const auth=document.getElementById('accountAuth'),dash=document.getElementById('accountDashboard');
   if(!user){
     auth.hidden=false; dash.hidden=true;
@@ -42,7 +51,15 @@ async function renderAccount(){
   document.getElementById('profileName').textContent=fullName||'Customer';
   document.getElementById('profileEmail').textContent=user.email||'';
   const adminTools=document.getElementById('accountAdminTools');
-  if(adminTools)adminTools.hidden=!(roles||[]).some(r=>['admin','editor','sales','fulfilment'].includes(r.role));
+  const hasStaffRole=(roles||[]).some(r=>['admin','editor','sales','fulfilment'].includes(r.role));
+  if(adminTools)adminTools.hidden=!hasStaffRole;
+  if(new URLSearchParams(location.search).get('admin')==='1'&&!hasStaffRole){
+    const message=document.createElement('p');
+    message.className='account-message error';
+    message.setAttribute('role','alert');
+    message.textContent='Signed in, but this account does not currently have an Admin or Editor role in Supabase. Please check the account used or ask an existing administrator to verify its role. Signing in with an email listed under store settings does not automatically grant admin access.';
+    dash.prepend(message);
+  }
 
   const orders=await ZBSupa.loadOrdersForUser();
   document.getElementById('accountOrders').innerHTML=orders.length?orders.map(o=>{
