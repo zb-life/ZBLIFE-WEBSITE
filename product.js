@@ -135,7 +135,8 @@ function updatePrice(){
   document.getElementById('pdpPrice').textContent=money(price);const btn=document.getElementById('addToBag');if(btn)btn.innerHTML=`<span>${tr('addToBag','ADD TO BAG')}</span><b>${money(price)}</b>`;
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
+document.addEventListener('DOMContentLoaded',async()=>{
+  if(window.zbSiteReady)await window.zbSiteReady;
   renderPDP();
   document.addEventListener('click',e=>{
     const gi=e.target.closest('[data-gallery-index]');if(gi){activeMediaIndex=Number(gi.dataset.galleryIndex);renderProductGallery(currentCatalogProduct);return}
