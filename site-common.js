@@ -399,7 +399,7 @@ async function initStorefrontTranslationEdit(){
   setTimeout(markInlineContentTargets,60);setTimeout(markInlineContentTargets,300);new MutationObserver(()=>markInlineContentTargets()).observe(document.body,{childList:true,subtree:true})
 }
 
-document.addEventListener('DOMContentLoaded',()=>{applyTheme();renderNav();applyBranding();renderBenefits();bindNav();bindStorePreferences();ensureCartDrawer();renderCartUI();bindCart();renderShipping();document.addEventListener('click',e=>{const b=e.target.closest('.announcement-arrow');if(!b)return;const row=b.parentElement?.querySelector('.announcement-scroll');if(row)row.scrollBy({left:(b.classList.contains('announcement-next')?1:-1)*Math.max(280,row.clientWidth*.72),behavior:'smooth'})});requestAnimationFrame(()=>applyStorefrontTranslations())});
+document.addEventListener('DOMContentLoaded',async()=>{if(window.zbSiteReady)await window.zbSiteReady;applyTheme();renderNav();applyBranding();renderBenefits();bindNav();bindStorePreferences();ensureCartDrawer();renderCartUI();bindCart();renderShipping();document.addEventListener('click',e=>{const b=e.target.closest('.announcement-arrow');if(!b)return;const row=b.parentElement?.querySelector('.announcement-scroll');if(row)row.scrollBy({left:(b.classList.contains('announcement-next')?1:-1)*Math.max(280,row.clientWidth*.72),behavior:'smooth'})});requestAnimationFrame(()=>applyStorefrontTranslations())});
 document.addEventListener('DOMContentLoaded',()=>setTimeout(initStorefrontTranslationEdit,0));
 
 // If a photo fails to load, hide it (its soft background stays) instead of showing a broken-image icon.
