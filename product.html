@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZIONBURG — Refreshing Body Wipes</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="rhode.css"><style>html.zb-booting{background:#fbfaf7}html.zb-booting body{opacity:0}body{transition:opacity .2s ease}</style><script>/* Hide the page until fresh store data is in, so visitors never see placeholder photos or old menus. Max 5s. */(function(){try{var c=JSON.parse(localStorage.getItem('zb_editorial_v15')||'null'),t=c&&Date.parse(c._supabaseLoadedAt);if(!(t&&Date.now()-t<10*60*1000)){document.documentElement.classList.add('zb-booting');setTimeout(function(){document.documentElement.classList.remove('zb-booting')},5000)}}catch(e){}})();</script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZIONBURG — Refreshing Body Wipes</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="rhode.css"><style>html.zb-booting{background:#fbfaf7}html.zb-booting body{opacity:0}body{transition:opacity .2s ease}</style><script>/* Always verify published content before displaying storefront images. */document.documentElement.classList.add('zb-booting');</script></head>
 <body class="pdp-v2 pinterest-pdp">
 <div class="announcement" data-shipping-announcement></div>
 <header class="site-header product-site-header"><a class="brand header-brand" href="index.html"><span class="brand-desktop">ZIONBURG</span><span class="brand-mobile">ZB</span></a><nav data-site-nav></nav><div class="header-actions"><button class="icon-btn bag-pill" id="cartBtn">BAG <span id="cartCount">0</span></button></div></header>
@@ -17,5 +17,15 @@
 
 </main>
 <footer><a class="brand" href="index.html">ZIONBURG</a><div>PEOPLE. PERFORMANCE. A CLEANER TOMORROW.</div><div class="footer-nav" data-footer-nav></div><div>© 2026 ZIONBURG</div></footer>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>(async()=>{const h=document.documentElement;try{if(h.classList.contains("zb-booting")){const changed=await Promise.race([ZBSupa.hydrateSiteCache({force:true}),new Promise(r=>setTimeout(()=>r(false),4500))]);if(changed){location.reload();return}}else if(sessionStorage.getItem("zb_supabase_hydrated_v1")!=="1"){ZBSupa.hydrateSiteCache({force:true}).catch(()=>{})}}catch(e){console.warn("Supabase preload:",e)}h.classList.remove("zb-booting")})();</script><script src="site-common.js"></script><script src="mood-ui.js"></script><script src="product.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-runtime.js"></script><script>/* Shared first-load gate: all image sections wait for Supabase before rendering. */
+ window.zbSiteReady=Promise.race([
+   ZBSupa.hydrateSiteCache({force:true}),
+   new Promise(resolve=>setTimeout(()=>resolve(false),8000))
+ ]).catch(error=>{console.warn('Storefront data load:',error);return false});
+ 
+ window.zbSiteReady.finally(()=>{
+   
+   requestAnimationFrame(()=>document.documentElement.classList.remove('zb-booting'));
+ });
+ </script><script src="site-common.js"></script><script src="mood-ui.js"></script><script src="product.js"></script>
 </body></html>
